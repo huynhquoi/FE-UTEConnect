@@ -1,70 +1,128 @@
 "use client";
 
-import XInput from "@/components/global/shared/XInput";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Separator } from "@radix-ui/react-select";
-import Link from "next/link";
+import XCard from "@/components/core/XCard";
+import XInput from "@/components/core/XInput";
+import { LOGIN_IMAGE } from "@/theme/imageLink";
+import theme from "@/theme/themeConfig";
+import { Button, Card, ConfigProvider, Form, Image, Input } from "antd";
+import "./style.scss";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const FormSchema = z.object({
-  userName: z.string(),
-  password: z.string(),
-});
+import { useEffect, useState } from "react";
+import { loginApi } from "@/api/auth";
+import { getProfileUser } from "@/store/slice";
+import { useDispatch } from "react-redux";
+import { ApiResponse } from "@/api/type";
+import { profileUserApi } from "@/api/user";
 
 const LoginPage = () => {
   const router = useRouter();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-  });
-
+  const [form] = Form.useForm();
   const [formValue, setFormValue] = useState({
-    userName: "",
+    email: "",
     password: "",
   });
+  const [submit, setSubmit] = useState(false);
+  const dispatch = useDispatch();
+  const onFinish = (value: any) => {
+    console.log("Success", value);
+    setFormValue({
+      email: value.email,
+      password: value.password,
+    });
+    setSubmit(true);
+  };
+
+  useEffect(() => {
+    if (!submit) {
+      return;
+    }
+    const fetchData = async () => {
+      try {
+        await loginApi(formValue);
+        const response: ApiResponse = await profileUserApi();
+        dispatch(getProfileUser(response?.data));
+        setSubmit(false);
+        router.push("/");
+      } catch (error: any) {
+        console.log(error.response.data);
+      }
+    };
+    fetchData();
+  }, [formValue]);
+
   return (
     <>
-      <Card style={{ width: "512px" }}>
-        <CardHeader>
-          <CardTitle className="font-bold text-xl">ĐĂNG NHẬP</CardTitle>
-          <CardDescription>
-            Bắt đầu bằng việc đăng nhập với chúng tôi
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <Form {...form}>
-            <form className="w-full space-y-6">
-              <XInput
-                label="Tên đăng nhập"
-                required
-                placeholder="Tên đăng nhập"
-              />
-              <XInput label="Mật khẩu" required placeholder="Mật khẩu" />
-              <Button type="submit" className="w-full">
-                Đăng nhập
-              </Button>
-              <Separator className="my-4" />
-              <div className=" flex items-center justify-center">
-                <span>
-                  Bạn chưa có tài khoản? 
-                  <Link href={"./register"} style={{color: "red"}}> Đăng ký ngay</Link>
-                </span>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+      <ConfigProvider theme={theme}>
+        <XCard title="" className="max-w-[60vw] w-[50vw]">
+          <div className="flex justify-between">
+            <Image
+              width={450}
+              src={LOGIN_IMAGE}
+              preview={false}
+              className="rounded-md"
+            />
+            <Card
+              bordered={false}
+              style={{ width: "25vw" }}
+              className="login__card"
+            >
+              <p className="font-bold text-xl mb-5">Đăng nhập</p>
+              <Form
+                id="login_form"
+                onFinish={onFinish}
+                form={form}
+                onSubmitCapture={(e) => e.preventDefault}
+              >
+                <Form.Item
+                  name="email"
+                  rules={[
+                    { required: true, message: "Không được bỏ trống ô này" },
+                  ]}
+                >
+                  <XInput
+                    label="Tên đăng nhập"
+                    placeholder="Nhập tên đăng nhập"
+                    useLabel={true}
+                    required={true}
+                  ></XInput>
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  rules={[
+                    { required: true, message: "Không được bỏ trống ô này" },
+                  ]}
+                >
+                  <XInput
+                    label="Mật khẩu"
+                    placeholder="Nhập tên mật khẩu"
+                    useLabel={true}
+                    required={true}
+                    type="password"
+                  ></XInput>
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    htmlType="submit"
+                    style={{ background: "#000", color: "#fff" }}
+                    className="w-full"
+                  >
+                    Đăng nhập
+                  </Button>
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    style={{ background: "#fff", color: "#000" }}
+                    className="w-full"
+                    href="register"
+                  >
+                    Đăng ký
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Card>
+          </div>
+        </XCard>
+      </ConfigProvider>
     </>
   );
 };

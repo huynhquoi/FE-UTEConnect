@@ -1,7 +1,9 @@
-import { redirect, useRouter } from "next/navigation";
+"use client"
 
-const Home = () => {
-  redirect("./home");
+import { redirect } from "next/navigation";
+
+const AppPage = () => {
+  redirect("home");
 };
 
-export default Home;
+export default AppPage;
