@@ -1,16 +1,10 @@
-export const API = "https://quanlituyendung-be.vercel.app";
+export const API = "https://forum-be-1fdw.onrender.com";
+export const GRAPHQL_API = "https://forum-be-1fdw.onrender.com/graphql";
 
 //auth
-const API_AUTH = `${API}/api/auth`;
-export const API_AUTH_LOGIN = `${API_AUTH}/login`;
-export const API_AUTH_REGISTER = `${API_AUTH}/register`;
-export const API_AUTH_LOGOUT = `${API_AUTH}/logout`;
-
-//user
-const API_USER = `${API}/api/user`;
-export const API_GET_USER_PROFILE = `${API_USER}/profile`;
-export const API_PUT_USER_PROFILE = `${API_USER}/profile`;
-export const API_GET_LIST_USER = `${API_USER}/list`;
+export const API_AUTH_LOGIN = `${API}/login`;
+export const API_AUTH_REGISTER = `${API}/register`;
+export const API_AUTH_LOGOUT = `${API}/logout`;
 
 export const GET_METHOD = "GET";
 export const POST_METHOD = "POST";

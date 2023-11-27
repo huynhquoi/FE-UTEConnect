@@ -1,6 +1,7 @@
 "use client";
 
 import { Affix, Card, ConfigProvider, Menu, MenuProps } from "antd";
+import { useRouter } from "next/navigation";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -22,22 +23,24 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem("Tài khoản của bạn", "account", null, [
-    getItem("Quản lý tài khoản", "manager"),
+    getItem("Quản lý tài khoản", "account_manager"),
     getItem("Đăng xuất", "logout"),
   ]),
 
-  getItem("Công ty của bạn", "your_company", null, [
-    getItem("Công ty hiện tại", "current_company"),
-    getItem("Công ty bạn đang theo dõi", "follow_company"),
+  getItem("Bài đăng", "post", null, [
+    getItem("Đang theo dõi", "follow_post"),
+    getItem("Bài đăng của tôi", "my_post"),
   ]),
 
-  getItem("Công việc của bạn", "your job", null, [
-    getItem("Oông việc bạn đang theo dõi", "follow_job"),
+  getItem("Diễn đàn", "forum", null, [
+    getItem("Đang tham gia", "participate_forum"),
   ]),
 ];
 
 const ActionMenu = () => {
+  const router = useRouter();
   const onClick: MenuProps["onClick"] = (e) => {
+    router.push(`/home/${e.key}`)
     console.log("click", e);
   };
   return (

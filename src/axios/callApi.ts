@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 const ACCESS_TOKEN = localStorage.getItem("access_token");
 
@@ -10,7 +10,7 @@ export const callApi = async (endpoint: string, method: string, data?: any) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${ACCESS_TOKEN}`,
     },
-    data: data,
+    params: data,
   });
 
   return response.data;

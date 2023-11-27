@@ -1,54 +1,39 @@
 "use client";
 
 import { RootState } from "@/store";
-import { Affix, Button, ConfigProvider, Dropdown, Menu, MenuProps } from "antd";
+import {
+  Affix,
+  Button,
+  ConfigProvider,
+  Dropdown,
+  Image,
+  Menu,
+  MenuProps,
+} from "antd";
 import { Header } from "antd/es/layout/layout";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import XImage from "../core/XImage";
 
 const MainHeader = () => {
   const items: MenuProps["items"] = [
     {
-      label: "Việc làm IT",
-      key: "job",
-      children: [
-        {
-          label: "Kỹ năng",
-          key: "job_skill",
-        },
-        {
-          label: "Cấp bậc",
-          key: "job_level",
-        },
-        {
-          label: "Thành phố",
-          key: "job_city",
-        },
-      ],
+      label: "Trang chủ",
+      key: "home",
     },
     {
-      label: "Công ty IT",
-      key: "IT_company",
-      children: [
-        {
-          label: "Công ty IT tốt nhất",
-          key: "company",
-        },
-        {
-          label: "Review công ty IT",
-          key: "review_company",
-        },
-      ],
+      label: "Chủ đề",
+      key: "home/tag",
     },
     {
-      label: "Blog IT",
-      key: "blog",
+      label: "Diễn đàn",
+      key: "home/forum",
     },
   ];
 
   const router = useRouter();
   const onHandleClick = (e: any) => {
-    router.push(`/home/${e.key}`);
+    router.push(`/${e.key}`);
   };
 
   const profileUser = useSelector(
@@ -78,7 +63,8 @@ const MainHeader = () => {
           <div style={{ width: "99vw" }}>
             <Header className="flex items-center justify-between">
               <div className="flex items-center">
-                <div className="font-bold text-lg mb-[2px]">IT Recruitment</div>
+                <XImage preview={false} onClick={() => router.push("/")}  width={28} src="https://cdn.haitrieu.com/wp-content/uploads/2021/09/Logo-DH-Su-Pham-Ky-Thuat-TP-Ho-Chi-Minh-HCMUTE.png" />
+                <div className="font-bold text-lg mb-[2px] ml-2">UTE Connect</div>
                 <Menu
                   onClick={onHandleClick}
                   style={{ width: "600px" }}

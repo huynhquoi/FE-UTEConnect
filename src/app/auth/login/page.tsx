@@ -12,13 +12,12 @@ import { loginApi } from "@/api/auth";
 import { getProfileUser } from "@/store/slice";
 import { useDispatch } from "react-redux";
 import { ApiResponse } from "@/api/type";
-import { profileUserApi } from "@/api/user";
 
 const LoginPage = () => {
   const router = useRouter();
   const [form] = Form.useForm();
   const [formValue, setFormValue] = useState({
-    email: "",
+    username: "",
     password: "",
   });
   const [submit, setSubmit] = useState(false);
@@ -26,7 +25,7 @@ const LoginPage = () => {
   const onFinish = (value: any) => {
     console.log("Success", value);
     setFormValue({
-      email: value.email,
+      username: value.email,
       password: value.password,
     });
     setSubmit(true);
@@ -39,8 +38,6 @@ const LoginPage = () => {
     const fetchData = async () => {
       try {
         await loginApi(formValue);
-        const response: ApiResponse = await profileUserApi();
-        dispatch(getProfileUser(response?.data));
         setSubmit(false);
         router.push("/");
       } catch (error: any) {

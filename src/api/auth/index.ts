@@ -1,11 +1,26 @@
 import { callApi } from "@/axios/callApi";
-import { API_AUTH_LOGIN, POST_METHOD } from "../type";
+import { API_AUTH_LOGIN, API_AUTH_REGISTER, POST_METHOD } from "../type";
 
 type LoginType = {
-  email: string;
+  username: string;
   password: string;
 };
 export const loginApi = async (data: LoginType) => {
   const response = await callApi(API_AUTH_LOGIN, POST_METHOD, data);
   localStorage.setItem("access_token", response?.data?.access_token);
 };
+
+type RegisterType = {
+  username: string;
+  password: string;
+  fullname: string;
+  email: string;
+  gender: string;
+  birthday: string;
+  phone: string;
+  address: string;
+}
+
+export const registerApi =async (data:  RegisterType) => {
+  await callApi(API_AUTH_REGISTER, POST_METHOD, data);
+}

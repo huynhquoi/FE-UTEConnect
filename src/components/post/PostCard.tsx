@@ -5,12 +5,12 @@ import Meta from "antd/es/card/Meta";
 import "./style.scss";
 import XImage from "../core/XImage";
 
-type JobCardProps = {
+type PostCardProps = {
   title: string;
   src?: string;
 };
 
-const JobCard = ({ title, src }: JobCardProps) => {
+const PostCard = ({ title, src }: PostCardProps) => {
   return (
     <>
       <Card style={{ width: "90%", marginTop: 20 }} className="job_card">
@@ -52,11 +52,11 @@ const JobCard = ({ title, src }: JobCardProps) => {
         ></div>
         <div className="flex items-center justify-between">
           <Button>Xem chi tiết</Button>
-          <Button>Ứng tuyển ngay</Button>
+          <Button>Theo dõi</Button>
         </div>
       </Card>
     </>
   );
 };
 
-export default JobCard;
+export default PostCard;
