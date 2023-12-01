@@ -1,9 +1,12 @@
-"use client"
+"use client";
 
 import { redirect } from "next/navigation";
 
 const AppPage = () => {
-  redirect("home");
+  if (!!localStorage.getItem("response")) {
+    redirect("home");
+  }
+  redirect("auth");
 };
 
 export default AppPage;

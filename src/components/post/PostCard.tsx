@@ -13,7 +13,7 @@ type PostCardProps = {
 const PostCard = ({ title, src }: PostCardProps) => {
   return (
     <>
-      <Card style={{ width: "90%", marginTop: 20 }} className="job_card">
+      <Card style={{ width: "94%", marginTop: 20 }} className="job_card">
         <Meta
           avatar={
             <Avatar

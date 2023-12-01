@@ -9,9 +9,6 @@ import "./style.scss";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { loginApi } from "@/api/auth";
-import { getProfileUser } from "@/store/slice";
-import { useDispatch } from "react-redux";
-import { ApiResponse } from "@/api/type";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -21,7 +18,6 @@ const LoginPage = () => {
     password: "",
   });
   const [submit, setSubmit] = useState(false);
-  const dispatch = useDispatch();
   const onFinish = (value: any) => {
     console.log("Success", value);
     setFormValue({
@@ -37,8 +33,9 @@ const LoginPage = () => {
     }
     const fetchData = async () => {
       try {
-        await loginApi(formValue);
+        const responseLogin = await loginApi(formValue);
         setSubmit(false);
+        localStorage.setItem("response", responseLogin.id);
         router.push("/");
       } catch (error: any) {
         console.log(error.response.data);

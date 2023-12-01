@@ -5,6 +5,7 @@ import StyledComponentsRegistry from "../lib/AntdRegistry";
 
 import "./globals.css";
 import { StoreProvider } from "@/store/StoreProvider";
+import { ApolloWrapper } from "@/lib/ApolloProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,9 +17,11 @@ export const metadata = {
 const RootLayout = ({ children }: React.PropsWithChildren) => (
   <html lang="en">
     <body className={inter.className}>
-      <StoreProvider>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-      </StoreProvider>
+      <ApolloWrapper>
+        <StoreProvider>
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        </StoreProvider>
+      </ApolloWrapper>
     </body>
   </html>
 );
