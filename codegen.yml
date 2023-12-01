@@ -1,0 +1,6 @@
+overwrite: true
+schema: ${NEXT_PUBLIC_GRAPHQL_ENDPOINT}
+documents: "src/api/**/*.graphql"
+generates:
+  ./src/graphql/controller-types.ts:
+    plugins: ["typescript", "typescript-operations", "typescript-react-apollo"]

@@ -2,6 +2,7 @@
 
 import { Affix, Card, ConfigProvider, Menu, MenuProps } from "antd";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -23,24 +24,38 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem("Tài khoản của bạn", "account", null, [
-    getItem("Quản lý tài khoản", "account_manager"),
-    getItem("Đăng xuất", "logout"),
+    getItem("Quản lý tài khoản", "/home/account_manager"),
+    getItem("Đăng xuất", "/auth/logout"),
   ]),
 
   getItem("Bài đăng", "post", null, [
-    getItem("Đang theo dõi", "follow_post"),
-    getItem("Bài đăng của tôi", "my_post"),
+    getItem("Đang theo dõi", "/home/follow_post"),
+    getItem("Bài đăng của tôi", "/home/my_post"),
   ]),
 
   getItem("Diễn đàn", "forum", null, [
-    getItem("Đang tham gia", "participate_forum"),
+    getItem("Đang tham gia", "/home/participate_forum"),
   ]),
 ];
 
-const ActionMenu = () => {
+type ActionMenuProps = {
+  className: string;
+};
+
+const ActionMenu = ({ className }: ActionMenuProps) => {
+  const [id, setId] = useState("");
+
+  useEffect(() => {
+    setId(localStorage.getItem("response") as string);
+  }, []);
+
   const router = useRouter();
   const onClick: MenuProps["onClick"] = (e) => {
-    router.push(`/home/${e.key}`)
+    if (e.key === "/home/account_manager") {
+      router.push(`${e.key}/${id}`);
+    } else {
+      router.push(`${e.key}`);
+    }
     console.log("click", e);
   };
   return (
@@ -55,13 +70,15 @@ const ActionMenu = () => {
         }}
       >
         <Affix offsetTop={60}>
-          <Menu
-            onClick={onClick}
-            style={{ width: 256, maxHeight: 256 }}
-            mode="vertical"
-            items={items}
-            className="rounded-lg"
-          />
+          <div className={className}>
+            <Menu
+              onClick={onClick}
+              style={{ width: 256, maxHeight: 256 }}
+              mode="vertical"
+              items={items}
+              className="rounded-lg"
+            />
+          </div>
         </Affix>
       </ConfigProvider>
     </>

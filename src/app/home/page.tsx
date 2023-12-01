@@ -13,7 +13,7 @@ import {
   Row,
   Select,
 } from "antd";
-import "./style.scss"
+import "./style.scss";
 
 const HomePage = () => {
   const [form] = Form.useForm();
@@ -39,12 +39,8 @@ const HomePage = () => {
         }}
       >
         <Row style={{ width: "full-width" }}>
-          <Col
-            span={6}
-            style={{ display: "flex !important" }}
-            className="justify-end"
-          >
-            <ActionMenu />
+          <Col span={6}>
+            <ActionMenu className="w-full flex items-center justify-end" />
           </Col>
           <Col span={12}>
             <div
@@ -54,7 +50,7 @@ const HomePage = () => {
               <Card
                 className="search_card"
                 title="Tìm kiếm"
-                style={{ width: "90%" }}
+                style={{ width: "94%" }}
               >
                 <Form
                   form={form}

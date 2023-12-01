@@ -11,13 +11,9 @@ export const metadata = {
 };
 
 const LoginLayout = ({ children }: React.PropsWithChildren) => (
-  <html lang="en">
-    <body className={inter.className}>
-      <div className="flex items-center justify-center w-[100vw] h-[100vh]">
-        {children}
-      </div>
-    </body>
-  </html>
+  <div className="flex items-center justify-center w-[100vw] h-[100vh]">
+    {children}
+  </div>
 );
 
 export default LoginLayout;

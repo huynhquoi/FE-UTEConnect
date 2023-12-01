@@ -1,0 +1,32 @@
+query GetAccount {
+  account {
+    userid
+    username
+    fullname
+    email
+    address
+    role {
+      roleid
+    }
+    phone
+    image
+    gender
+    birthday
+  }
+}
+
+query GetAccountByPk($userId: String!) {
+  find_account_by_id(userid: $userId) {
+    username
+    fullname
+    email
+    address
+    role {
+      roleid
+    }
+    phone
+    image
+    gender
+    birthday
+  }
+}
