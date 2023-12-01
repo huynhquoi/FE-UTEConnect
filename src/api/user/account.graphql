@@ -30,3 +30,9 @@ query GetAccountByPk($userId: String!) {
     birthday
   }
 }
+
+mutation UpdateAccount($user: UserRequest) {
+  account_update(user: $user) {
+    userid
+  }
+}

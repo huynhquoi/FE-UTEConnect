@@ -28,9 +28,6 @@ type RegisterForm = {
   fullname: string;
   email: string;
   gender: string;
-  birthday: string;
-  phone: string;
-  address: string;
 };
 
 const RegisterPage = () => {
@@ -44,9 +41,6 @@ const RegisterPage = () => {
       fullname: value.fullname,
       email: value.email,
       gender: value.gender,
-      birthday: value.birthday,
-      phone: value.phone,
-      address: value.address,
     });
     console.log("Success", value);
     setSubmit(true);
@@ -74,16 +68,10 @@ const RegisterPage = () => {
     fullname: "",
     email: "",
     gender: "",
-    birthday: "",
-    phone: "",
-    address: "",
   });
 
   const onGenderChange = (value: string) => {
     form.setFieldValue("gender", value);
-  };
-  const onBirthdayChange: DatePickerProps["onChange"] = (date, dateString) => {
-    form.setFieldValue("birthday", dateString);
   };
 
   return (
@@ -178,47 +166,6 @@ const RegisterPage = () => {
                       <Option value="other">Khác</Option>
                     </Select>
                   </div>
-                </Form.Item>
-                <Form.Item
-                  name="birthday"
-                  rules={[
-                    { required: true, message: "Không được bỏ trống ô này" },
-                  ]}
-                >
-                  <div className="font-bold flex mb-1">
-                    Ngày sinh
-                    <p className="text-red-600"> *</p>
-                  </div>
-                  <DatePicker
-                    onChange={onBirthdayChange}
-                    placeholder="Chọn ngày sinh của bạn"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="phone"
-                  rules={[
-                    { required: true, message: "Không được bỏ trống ô này" },
-                  ]}
-                >
-                  <XInput
-                    label="Số điện thoại"
-                    placeholder="Nhập số điện thoại"
-                    useLabel={true}
-                    required={true}
-                  ></XInput>
-                </Form.Item>
-                <Form.Item
-                  name="address"
-                  rules={[
-                    { required: true, message: "Không được bỏ trống ô này" },
-                  ]}
-                >
-                  <XInput
-                    label="Địa chỉ"
-                    placeholder="Nhập địa chỉ"
-                    useLabel={true}
-                    required={true}
-                  ></XInput>
                 </Form.Item>
                 <Form.Item>
                   <Button

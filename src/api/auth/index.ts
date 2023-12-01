@@ -17,9 +17,6 @@ type RegisterType = {
   fullname: string;
   email: string;
   gender: string;
-  birthday: string;
-  phone: string;
-  address: string;
 }
 
 export const registerApi =async (data:  RegisterType) => {

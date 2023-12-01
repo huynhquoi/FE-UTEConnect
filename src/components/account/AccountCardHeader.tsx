@@ -7,16 +7,18 @@ import {
   ConfigProvider,
   DatePicker,
   DatePickerProps,
+  Flex,
   Form,
   Modal,
   Row,
   Select,
+  Space,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import XInput from "../core/XInput";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { User } from "@/graphql/controller-types";
+import { User, useUpdateAccountMutation } from "@/graphql/controller-types";
 import { format } from "date-fns";
 import dayjs from "dayjs";
 
@@ -36,11 +38,11 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
     address: "",
   });
 
+  const [updateAccount] = useUpdateAccountMutation();
+
   const profileUser = useSelector(
     (state: RootState) => state.sliceReducer.profileUser
   ) as User;
-
-  console.log(profileUser);
 
   const onGenderChange = (value: string) => {
     form.setFieldValue("gender", value);
@@ -49,9 +51,27 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
     form.setFieldValue("birthday", dateString);
   };
 
-  const onFinish = () => {
-    console.log(formValue);
+  const onFinish = (e: any) => {
+    updateAccount({
+      variables: {
+        user: {
+          ...e,
+          userid: localStorage.getItem("response") as string,
+        },
+      },
+    })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
+
+  useEffect(() => {
+    form.setFieldValue("gender", profileUser?.gender);
+    form.setFieldValue("birthday", profileUser?.birthday);
+  }, [profileUser]);
 
   return (
     <>
@@ -72,7 +92,9 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
                 style={{ height: "100%" }}
               >
                 <div className="flex flex-col items-start">
-                  <div className="font-bold text-4xl ml-4">Kinse Tom</div>
+                  <div className="font-bold text-4xl ml-4">
+                    {profileUser?.fullname}
+                  </div>
                   <div className=" text-lg ml-4 mt-2">Bạn đã có 4 bài viết</div>
                 </div>
                 <div className="flex items-start">
@@ -87,12 +109,13 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
         </Card>
         <Modal
           open={editVisible}
-          title="Chỉnh sửa thông tin cá nhân"
-          onOk={() => setEditVisible(false)}
-          onCancel={() => setEditVisible(false)}
+          title={
+            <div className="font-bold text-xl">Chỉnh sửa thông tin cá nhân</div>
+          }
           maskClosable={false}
           width={800}
           centered
+          onCancel={() => setEditVisible(false)}
           okButtonProps={{
             style: {
               backgroundColor: "#000000",
@@ -100,9 +123,21 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
               boxShadow: "none",
             },
           }}
+          footer={false}
           {...props}
         >
-          <Form id="account_form" onFinish={onFinish} form={form}>
+          <Form
+            id="account_form"
+            form={form}
+            onFinish={onFinish}
+            initialValues={{
+              ["username"]: profileUser?.username as string,
+              ["fullname"]: profileUser?.fullname as string,
+              ["email"]: profileUser?.email as string,
+              ["phone"]: (profileUser?.phone as string) || "",
+              ["address"]: (profileUser?.address as string) || "",
+            }}
+          >
             <Form.Item
               name="username"
               rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
@@ -111,7 +146,6 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
                 label="Tên đăng nhập"
                 placeholder="Nhập tên đăng nhập hoặc email"
                 useLabel={true}
-                defaultValue={profileUser?.username as string}
               ></XInput>
             </Form.Item>
             <Form.Item
@@ -122,7 +156,6 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
                 label="Tên của bạn"
                 placeholder="Nhập tên của bạn"
                 useLabel={true}
-                defaultValue={profileUser?.fullname as string}
               ></XInput>
             </Form.Item>
             <Form.Item
@@ -133,7 +166,6 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
                 label="Email"
                 placeholder="Nhập email của bạn"
                 useLabel={true}
-                defaultValue={profileUser?.email as string}
               ></XInput>
             </Form.Item>
             <Form.Item
@@ -146,7 +178,7 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
                   placeholder={"Chọn giới tính "}
                   allowClear
                   onChange={onGenderChange}
-                  defaultValue={profileUser?.gender as string}
+                  defaultValue={profileUser?.gender}
                 >
                   <Option value="male">Nam</Option>
                   <Option value="female">Nữ</Option>
@@ -154,10 +186,7 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
                 </Select>
               </div>
             </Form.Item>
-            <Form.Item
-              name="birthday"
-              rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
-            >
+            <Form.Item name="birthday">
               <div>
                 <div className="font-bold flex mb-1">Ngày sinh</div>
                 <DatePicker
@@ -168,28 +197,44 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
                 />
               </div>
             </Form.Item>
-            <Form.Item
-              name="phone"
-              rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
-            >
+            <Form.Item name="phone">
               <XInput
                 label="Số điện thoại"
                 placeholder="Nhập số điện thoại"
                 useLabel={true}
-                defaultValue={profileUser?.phone as string}
               ></XInput>
             </Form.Item>
-            <Form.Item
-              name="address"
-              rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
-            >
+            <Form.Item name="address">
               <XInput
                 label="Địa chỉ"
                 placeholder="Nhập địa chỉ"
                 useLabel={true}
-                defaultValue={profileUser?.address as string}
               ></XInput>
             </Form.Item>
+            <Flex justify="end">
+              <Space>
+                <Form.Item style={{ margin: 0 }}>
+                  <Button
+                    onClick={() => setEditVisible(false)}
+                    style={{ width: "112px" }}
+                  >
+                    Hủy
+                  </Button>
+                </Form.Item>
+                <Form.Item style={{ margin: 0 }}>
+                  <Button
+                    htmlType="submit"
+                    style={{
+                      width: "112px",
+                      background: "#000",
+                      color: "#fff",
+                    }}
+                  >
+                    Chỉnh sửa
+                  </Button>
+                </Form.Item>
+              </Space>
+            </Flex>
           </Form>
         </Modal>
       </ConfigProvider>

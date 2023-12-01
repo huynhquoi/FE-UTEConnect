@@ -17,7 +17,7 @@ const UserDisplay = ({ user }: UserDisplayProps) => {
           icon={user?.image ? null : <UserOutlined />}
           style={{ backgroundColor: '#000000', color: '#ffffff' }}
         />
-        <div className="ml-2">{user?.username}</div>
+        <div className="ml-2">{user?.fullname}</div>
       </div>
     </>
   );
