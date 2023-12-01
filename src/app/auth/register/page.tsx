@@ -60,7 +60,7 @@ const RegisterPage = () => {
       try {
         await registerApi(formValue);
         setSubmit(false);
-        // router.push("/");
+        router.push("/auth/login");
       } catch (error: any) {
         console.log(error.response.data);
       }
@@ -163,19 +163,21 @@ const RegisterPage = () => {
                     { required: true, message: "Không được bỏ trống ô này" },
                   ]}
                 >
-                  <div className="font-bold flex mb-1">
-                    Giới tính
-                    <p className="text-red-600"> *</p>
+                  <div>
+                    <div className="font-bold flex mb-1">
+                      Giới tính
+                      <p className="text-red-600"> *</p>
+                    </div>
+                    <Select
+                      placeholder={"Chọn giới tính "}
+                      allowClear
+                      onChange={onGenderChange}
+                    >
+                      <Option value="male">Nam</Option>
+                      <Option value="female">Nữ</Option>
+                      <Option value="other">Khác</Option>
+                    </Select>
                   </div>
-                  <Select
-                    placeholder={"Chọn giới tính "}
-                    allowClear
-                    onChange={onGenderChange}
-                  >
-                    <Option value="male">Nam</Option>
-                    <Option value="female">Nữ</Option>
-                    <Option value="other">Khác</Option>
-                  </Select>
                 </Form.Item>
                 <Form.Item
                   name="birthday"

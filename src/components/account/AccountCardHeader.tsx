@@ -13,7 +13,6 @@ import {
   Select,
 } from "antd";
 import { useState } from "react";
-import AccountForm from "./AccountForm";
 import XInput from "../core/XInput";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -141,29 +140,33 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
               name="gender"
               rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
             >
-              <div className="font-bold flex mb-1">Giới tính</div>
-              <Select
-                placeholder={"Chọn giới tính "}
-                allowClear
-                onChange={onGenderChange}
-                defaultValue={profileUser?.gender as string}
-              >
-                <Option value="male">Nam</Option>
-                <Option value="female">Nữ</Option>
-                <Option value="other">Khác</Option>
-              </Select>
+              <div>
+                <div className="font-bold flex mb-1">Giới tính</div>
+                <Select
+                  placeholder={"Chọn giới tính "}
+                  allowClear
+                  onChange={onGenderChange}
+                  defaultValue={profileUser?.gender as string}
+                >
+                  <Option value="male">Nam</Option>
+                  <Option value="female">Nữ</Option>
+                  <Option value="other">Khác</Option>
+                </Select>
+              </div>
             </Form.Item>
             <Form.Item
               name="birthday"
               rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
             >
-              <div className="font-bold flex mb-1">Ngày sinh</div>
-              <DatePicker
-                defaultValue={dayjs(profileUser?.birthday, "YYYY-MM-DD")}
-                onChange={onBirthdayChange}
-                placeholder="Chọn ngày sinh của bạn"
-                style={{ width: "100%" }}
-              />
+              <div>
+                <div className="font-bold flex mb-1">Ngày sinh</div>
+                <DatePicker
+                  defaultValue={dayjs(profileUser?.birthday, "YYYY-MM-DD")}
+                  onChange={onBirthdayChange}
+                  placeholder="Chọn ngày sinh của bạn"
+                  style={{ width: "100%" }}
+                />
+              </div>
             </Form.Item>
             <Form.Item
               name="phone"
