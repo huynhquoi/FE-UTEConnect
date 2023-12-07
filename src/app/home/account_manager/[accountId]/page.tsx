@@ -3,11 +3,25 @@
 import AccountCardHeader from "@/components/account/AccountCardHeader";
 import ActionMenu from "@/components/home/ActionMenu";
 import PostCard from "@/components/post/PostCard";
+import {
+  Post,
+  User,
+  useGetAccountByPkQuery,
+  useGetPostByUserIdQuery,
+  useGetPostQuery,
+} from "@/graphql/controller-types";
 import { Col, ConfigProvider, Row } from "antd";
 import { useParams } from "next/navigation";
 
 const AccountDetailPage = () => {
   const params = useParams();
+  const { data } = useGetPostByUserIdQuery({
+    variables: { userId: params.accountId as string },
+  });
+
+  const { data: user } = useGetAccountByPkQuery({
+    variables: { userId: params.accountId as string },
+  });
 
   return (
     <>
@@ -30,7 +44,11 @@ const AccountDetailPage = () => {
               style={{ width: "100%" }}
               className=" flex flex-col items-center justify-center"
             >
-              <AccountCardHeader style={{ width: "100%" }} />
+              <AccountCardHeader
+                user={user?.find_account_by_id as User}
+                style={{ width: "100%" }}
+                post={data?.find_post_by_userid?.length as number}
+              />
             </div>
             <Row>
               <Col span={4}>
@@ -40,14 +58,9 @@ const AccountDetailPage = () => {
               </Col>
               <Col span={20}>
                 <div className="w-full flex-col flex items-end justify-end">
-                  <PostCard
-                    title="Back-end Development"
-                    src="https://img.freepik.com/free-photo/group-of-people-working-out-business-plan-in-an-office_1303-15861.jpg?w=1380&t=st=1700810701~exp=1700811301~hmac=8c50b88f8722c19d4c1a6b21bf043b4d26f9c869be506a9067f57da54eaef25c"
-                  />
-                  <PostCard
-                    title="Back-end Development"
-                    src="https://img.freepik.com/free-photo/group-of-people-working-out-business-plan-in-an-office_1303-15861.jpg?w=1380&t=st=1700810701~exp=1700811301~hmac=8c50b88f8722c19d4c1a6b21bf043b4d26f9c869be506a9067f57da54eaef25c"
-                  />
+                  {data?.find_post_by_userid?.map((p) => (
+                    <PostCard key={p?.postid} post={p as Post} />
+                  ))}
                 </div>
               </Col>
             </Row>

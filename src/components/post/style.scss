@@ -3,3 +3,22 @@
     padding: 16px 16px !important;
   }
 }
+
+.card_comment-item {
+  margin-top: 8px;
+  .ant-card-body {
+    padding: 24px 16px 0px 16px !important;
+  }
+  .ant-timeline {
+    .ant-timeline-item-head-custom {
+      background: #f4f4f5 !important;
+    }
+    .ant-timeline-item-last {
+      padding-bottom: 4px;
+    }
+  }
+}
+
+.card_comment-item:first-child {
+  margin-top: 0px;
+}

@@ -1,0 +1,18 @@
+query GetNotification($userid: String) {
+  find_all_notice_by_userid(userid: $userid) {
+    noiticeid
+    createday
+    user_notice {
+      userid
+      fullname
+    }
+    content
+    isseen
+  }
+}
+
+mutation UpdateSeenNotification($noticeid: Int) {
+  update_isseen_true(noticeid: $noticeid) {
+    noiticeid
+  }
+}

@@ -1,0 +1,30 @@
+mutation CreateFollow($userid: String, $postid: Int) {
+  create_bookmark(userid: $userid, postid: $postid) {
+    bookmarkid
+  }
+}
+
+mutation CreateFollowUser($userid: String, $followerid: String) {
+  create_follow(userid: $userid, followerid: $followerid)
+}
+
+mutation DeleteFollowUser($userid: String, $followerid: String) {
+  delete_follow(userid: $userid, followerid: $followerid)
+}
+
+query GetAllFollowUser($followerid: String) {
+  get_all_user_by_follower(followerid: $followerid) {
+    username
+    fullname
+    email
+    address
+    role {
+      roleid
+    }
+    phone
+    image
+    gender
+    birthday
+    userid
+  }
+}

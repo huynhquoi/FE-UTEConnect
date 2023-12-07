@@ -3,14 +3,35 @@
 import { Avatar, Button, Card } from "antd";
 import Meta from "antd/es/card/Meta";
 import "./style.scss";
-import XImage from "../core/XImage";
+import { Post, useCreateFollowMutation } from "@/graphql/controller-types";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 type PostCardProps = {
-  title: string;
   src?: string;
+  post: Post;
 };
 
-const PostCard = ({ title, src }: PostCardProps) => {
+const PostCard = ({ src, post }: PostCardProps) => {
+  const router = useRouter();
+  const [followId, setFollowId] = useState(0);
+  const [followUserId, setUserFollowId] = useState("");
+
+  const [CreateFollow] = useCreateFollowMutation();
+
+  useEffect(() => {
+    if (!followId) {
+      return;
+    }
+    CreateFollow({
+      variables: {
+        postid: followId,
+        userid: followUserId,
+      },
+    });
+    setFollowId(0);
+  }, [CreateFollow, followId, followUserId]);
   return (
     <>
       <Card style={{ width: "94%", marginTop: 20 }} className="job_card">
@@ -21,38 +42,38 @@ const PostCard = ({ title, src }: PostCardProps) => {
               src="https://xsgames.co/randomusers/avatar.php?g=pixel"
             />
           }
-          title="Card title"
-          description="This is the description"
+          title={post.user_post?.fullname}
+          description={
+            <>{dayjs(post?.createday).format("DD/MM/YYYY, HH:mm")}</>
+          }
         />
         <div
           style={{ borderBottom: "1px solid #f4f4f4" }}
           className="my-2 mx-[-16px]"
         ></div>
-        <div v-html="true">
-          <p className="font-bold text-xl mb-2">{title}</p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et
-            vestibulum sapien. Donec iaculis pellentesque ullamcorper. Aliquam
-            viverra ultricies dolor, sit amet ullamcorper neque faucibus ac.
-            Maecenas volutpat velit ut maximus malesuada. Maecenas sit amet
-            augue sagittis, vestibulum purus at, malesuada sapien. Ut
-            scelerisque magna at magna bibendum aliquam. Quisque feugiat lorem a
-            risus porttitor mattis non mattis neque. Donec eu augue ligula.
-            Nullam nisl dolor, faucibus eget interdum id, laoreet sed lectus.
-            Morbi vitae lorem sed odio ullamcorper sodales ut eget lacus. Etiam
-            nec viverra mauris. Quisque eget tincidunt augue, vel volutpat dui.
-            Aliquam in magna eget erat sollicitudin pulvinar consequat sed
-            metus.
-          </p>
-        </div>
-        {!!src && <XImage className="mt-2" preview={false} src={src} />}
+        <p className="font-bold text-xl mb-2">{post.title}</p>
         <div
           style={{ borderBottom: "1px solid #f4f4f4" }}
           className="my-2 mx-[-16px]"
         ></div>
         <div className="flex items-center justify-between">
-          <Button>Xem chi tiết</Button>
-          <Button>Theo dõi</Button>
+          <Button
+            onClick={() => {
+              router.push(`/home/post/${post.postid}`);
+            }}
+          >
+            Xem chi tiết
+          </Button>
+          {localStorage.getItem("response") !== post?.user_post?.userid && (
+            <Button
+              onClick={() => {
+                setFollowId(post?.postid);
+                setUserFollowId(localStorage.getItem("response") as string);
+              }}
+            >
+              Theo dõi
+            </Button>
+          )}
         </div>
       </Card>
     </>

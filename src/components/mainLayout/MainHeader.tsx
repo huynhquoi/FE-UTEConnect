@@ -3,21 +3,25 @@
 import { RootState } from "@/store";
 import {
   Affix,
+  Badge,
   Button,
   ConfigProvider,
+  DrawerProps,
   Dropdown,
   Image,
   Menu,
   MenuProps,
+  Space,
 } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import XImage from "../core/XImage";
 import { User, useGetAccountByPkQuery } from "@/graphql/controller-types";
 import { getProfileUser } from "@/store/slice";
 import UserDisplay from "../shared/UserDisplay";
 import { useEffect, useState } from "react";
+import XNotification from "../core/XNotification";
 
 const items: MenuProps["items"] = [
   {
@@ -36,7 +40,7 @@ const items: MenuProps["items"] = [
 
 const MainHeader = () => {
   const dispatch = useDispatch();
-  const [id, setId] = useState("");
+  const [id, setId] = useState(localStorage.getItem("response") as string);
   const router = useRouter();
   const onHandleClick = (e: any) => {
     router.push(`/${e.key}`);
@@ -51,7 +55,6 @@ const MainHeader = () => {
   });
 
   useEffect(() => {
-    setId(localStorage.getItem("response") as string);
     if (!id) {
       return;
     }
@@ -102,9 +105,11 @@ const MainHeader = () => {
                 ></Menu>
               </div>
               {profileUser?.email && (
-                <>
+                <Space size={"large"}>
+                  <XNotification />
+
                   <UserDisplay user={profileUser} />
-                </>
+                </Space>
               )}
             </Header>
             <div className="border-b-black border-b-2"></div>

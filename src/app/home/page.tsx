@@ -14,14 +14,24 @@ import {
   Select,
 } from "antd";
 import "./style.scss";
+import {
+  Post,
+  useGetPostByKeyWordsQuery,
+  useGetPostQuery,
+} from "@/graphql/controller-types";
+import { useEffect, useState } from "react";
 
 const HomePage = () => {
   const [form] = Form.useForm();
+  const [keywords, setKeywords] = useState("");
+  const { data, loading, fetchMore } = useGetPostByKeyWordsQuery({
+    variables: { keyword: keywords },
+  });
+  useEffect(() => {
+    fetchMore({ variables: { keyword: keywords } });
+  }, [fetchMore, keywords]);
   const onFinish = (value: any) => {
-    console.log("search", value);
-  };
-  const onChange = (value: string) => {
-    form.setFieldValue("city", value);
+    setKeywords(value.keyword);
   };
   return (
     <>
@@ -66,22 +76,9 @@ const HomePage = () => {
                 </Form>
               </Card>
 
-              <PostCard
-                title="Back-end Development"
-                src="https://img.freepik.com/free-photo/group-of-people-working-out-business-plan-in-an-office_1303-15861.jpg?w=1380&t=st=1700810701~exp=1700811301~hmac=8c50b88f8722c19d4c1a6b21bf043b4d26f9c869be506a9067f57da54eaef25c"
-              />
-              <PostCard
-                title="Back-end Development"
-                src="https://img.freepik.com/free-photo/group-of-people-working-out-business-plan-in-an-office_1303-15861.jpg?w=1380&t=st=1700810701~exp=1700811301~hmac=8c50b88f8722c19d4c1a6b21bf043b4d26f9c869be506a9067f57da54eaef25c"
-              />
-              <PostCard
-                title="Back-end Development"
-                src="https://img.freepik.com/free-photo/group-of-people-working-out-business-plan-in-an-office_1303-15861.jpg?w=1380&t=st=1700810701~exp=1700811301~hmac=8c50b88f8722c19d4c1a6b21bf043b4d26f9c869be506a9067f57da54eaef25c"
-              />
-              <PostCard
-                title="Back-end Development"
-                src="https://img.freepik.com/free-photo/group-of-people-working-out-business-plan-in-an-office_1303-15861.jpg?w=1380&t=st=1700810701~exp=1700811301~hmac=8c50b88f8722c19d4c1a6b21bf043b4d26f9c869be506a9067f57da54eaef25c"
-              />
+              {data?.find_post_by_keyword?.map((p) => (
+                <PostCard key={p?.postid} post={p as Post} />
+              ))}
             </div>
           </Col>
           <Col span={6}></Col>

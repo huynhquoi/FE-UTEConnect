@@ -18,27 +18,37 @@ import { useEffect, useState } from "react";
 import XInput from "../core/XInput";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { User, useUpdateAccountMutation } from "@/graphql/controller-types";
+import {
+  User,
+  useCreateFollowUserMutation,
+  useCreatePostMutation,
+  useGetPostQuery,
+  useUpdateAccountMutation,
+} from "@/graphql/controller-types";
 import { format } from "date-fns";
 import dayjs from "dayjs";
+import XEditor from "../core/XEditor";
+import XUpload from "../core/XUpload";
+import FollowButton from "../shared/FollowButon";
 
 const { Option } = Select;
 
-const AccountCardHeader = ({ ...props }: CardProps) => {
-  const [form] = Form.useForm();
-  const [submit, setSubmit] = useState(false);
-  const [editVisible, setEditVisible] = useState(false);
-  const [formValue, setFormValue] = useState({
-    username: "",
-    fullname: "",
-    email: "",
-    gender: "",
-    birthday: "",
-    phone: "",
-    address: "",
-  });
+type AccountCardHeaderProps = {
+  user?: User;
+  post: Number;
+};
 
+const AccountCardHeader = ({
+  user,
+  post,
+  ...props
+}: CardProps & AccountCardHeaderProps) => {
+  const [form] = Form.useForm();
+  const [formPost] = Form.useForm();
+  const [editVisible, setEditVisible] = useState(false);
+  const [createVisible, setCreateVisible] = useState(false);
   const [updateAccount] = useUpdateAccountMutation();
+  const [createPost] = useCreatePostMutation();
 
   const profileUser = useSelector(
     (state: RootState) => state.sliceReducer.profileUser
@@ -56,8 +66,29 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
       variables: {
         user: {
           ...e,
-          userid: localStorage.getItem("response") as string,
+          userid: user?.userid,
         },
+      },
+    })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
+  const onFinishCreate = (e: any) => {
+    createPost({
+      variables: {
+        post: {
+          ...e,
+          requiredreputation: 50,
+        },
+        user: {
+          userid: user?.userid,
+        },
+        topic: {},
       },
     })
       .then(() => {
@@ -73,6 +104,7 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
     form.setFieldValue("birthday", profileUser?.birthday);
   }, [profileUser]);
 
+  
   return (
     <>
       <ConfigProvider>
@@ -93,16 +125,30 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
               >
                 <div className="flex flex-col items-start">
                   <div className="font-bold text-4xl ml-4">
-                    {profileUser?.fullname}
+                    {user?.fullname}
                   </div>
-                  <div className=" text-lg ml-4 mt-2">Bạn đã có 4 bài viết</div>
+                  <div className=" text-lg ml-4 mt-2">
+                    {post?.toString() || "0"} bài viết
+                  </div>
                 </div>
-                <div className="flex items-start">
-                  <Button>Đăng bài</Button>
-                  <Button className="ml-2" onClick={() => setEditVisible(true)}>
-                    Chỉnh sửa tài khoản
-                  </Button>
-                </div>
+                {profileUser?.userid === user?.userid ? (
+                  <div className="flex items-start">
+                    <Button onClick={() => setCreateVisible(true)}>
+                      Đăng bài
+                    </Button>
+                    <Button
+                      className="ml-2"
+                      onClick={() => setEditVisible(true)}
+                    >
+                      Chỉnh sửa tài khoản
+                    </Button>
+                  </div>
+                ) : (
+                  <FollowButton
+                    userId={user?.userid as string}
+                    followerId={profileUser?.userid}
+                  />
+                )}
               </div>
             </Col>
           </Row>
@@ -231,6 +277,92 @@ const AccountCardHeader = ({ ...props }: CardProps) => {
                     }}
                   >
                     Chỉnh sửa
+                  </Button>
+                </Form.Item>
+              </Space>
+            </Flex>
+          </Form>
+        </Modal>
+        <Modal
+          open={createVisible}
+          title={
+            <div className="font-bold text-xl">Chỉnh sửa thông tin cá nhân</div>
+          }
+          maskClosable={false}
+          width={800}
+          centered
+          onCancel={() => setCreateVisible(false)}
+          okButtonProps={{
+            style: {
+              backgroundColor: "#000000",
+              color: "#ffffff",
+              boxShadow: "none",
+            },
+          }}
+          footer={false}
+          {...props}
+        >
+          <Form id="account_form" form={formPost} onFinish={onFinishCreate}>
+            <Form.Item
+              name="title"
+              rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
+            >
+              <XInput
+                label="Tiêu đề bài viết"
+                placeholder="Nhập tiêu đề bài viết"
+                useLabel={true}
+                required={true}
+              ></XInput>
+            </Form.Item>
+            <Form.Item
+              name="content"
+              rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
+            >
+              <div className="">
+                <div className="font-bold flex mb-1">Ảnh</div>
+                <XUpload />
+              </div>
+            </Form.Item>
+            <Form.Item
+              name="content"
+              rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
+            >
+              <div className="">
+                <div className="font-bold flex mb-1">
+                  Nội dung
+                  <p className="text-red-600"> *</p>
+                </div>
+                <XEditor
+                  onChange={(e: any) => formPost.setFieldValue("content", e)}
+                  value={formPost.getFieldValue("content")}
+                  placeholder="Nhập nội dung bài viết"
+                />
+              </div>
+            </Form.Item>
+            <Flex justify="end">
+              <Space>
+                <Form.Item style={{ margin: 0 }}>
+                  <Button
+                    onClick={() => {
+                      setCreateVisible(false);
+                      formPost.setFieldValue("title", null);
+                      formPost.setFieldValue("content", null);
+                    }}
+                    style={{ width: "112px" }}
+                  >
+                    Hủy
+                  </Button>
+                </Form.Item>
+                <Form.Item style={{ margin: 0 }}>
+                  <Button
+                    htmlType="submit"
+                    style={{
+                      width: "112px",
+                      background: "#000",
+                      color: "#fff",
+                    }}
+                  >
+                    Tạo
                   </Button>
                 </Form.Item>
               </Space>

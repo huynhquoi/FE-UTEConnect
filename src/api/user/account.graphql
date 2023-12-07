@@ -28,6 +28,7 @@ query GetAccountByPk($userId: String!) {
     image
     gender
     birthday
+    userid
   }
 }
 
