@@ -34,6 +34,13 @@ const RegisterPage = () => {
   const [form] = Form.useForm();
   const [submit, setSubmit] = useState(false);
   const router = useRouter();
+  const [formValue, setFormValue] = useState({
+    username: "",
+    password: "",
+    fullname: "",
+    email: "",
+    gender: "",
+  });
   const onFinish = (value: any) => {
     setFormValue({
       username: value.username,
@@ -61,14 +68,6 @@ const RegisterPage = () => {
     };
     fetchData();
   }, [formValue, router, submit]);
-
-  const [formValue, setFormValue] = useState({
-    username: "",
-    password: "",
-    fullname: "",
-    email: "",
-    gender: "",
-  });
 
   const onGenderChange = (value: string) => {
     form.setFieldValue("gender", value);
