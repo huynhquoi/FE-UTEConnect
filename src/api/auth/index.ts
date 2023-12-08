@@ -7,8 +7,12 @@ type LoginType = {
 };
 export const loginApi = async (data: LoginType) => {
   const response = await callApi(API_AUTH_LOGIN, POST_METHOD, data);
-  window.localStorage.setItem("access_token", response?.accesstoken);
-  return response
+  if (typeof window === "undefined") {
+    return;
+  } else {
+    localStorage.setItem("access_token", response?.accesstoken);
+  }
+  return response;
 };
 
 type RegisterType = {
@@ -17,8 +21,8 @@ type RegisterType = {
   fullname: string;
   email: string;
   gender: string;
-}
+};
 
-export const registerApi =async (data:  RegisterType) => {
+export const registerApi = async (data: RegisterType) => {
   await callApi(API_AUTH_REGISTER, POST_METHOD, data);
-}
+};
