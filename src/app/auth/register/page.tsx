@@ -60,7 +60,7 @@ const RegisterPage = () => {
       }
     };
     fetchData();
-  }, [submit]);
+  }, [formValue, router, submit]);
 
   const [formValue, setFormValue] = useState({
     username: "",

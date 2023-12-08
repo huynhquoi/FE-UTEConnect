@@ -45,7 +45,7 @@ const LoginPage = () => {
       }
     };
     fetchData();
-  }, [formValue]);
+  }, [formValue, router, submit]);
 
   return (
     <>

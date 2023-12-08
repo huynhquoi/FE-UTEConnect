@@ -70,7 +70,7 @@ const MainHeader = () => {
     }
     getMe({ variables: { userId: id } });
     dispatch(getProfileUser(data?.find_account_by_id as User));
-  }, [loading, id]);
+  }, [loading, id, getMe, dispatch, data?.find_account_by_id]);
 
   const profileUser = useSelector(
     (state: RootState) => state.sliceReducer.profileUser

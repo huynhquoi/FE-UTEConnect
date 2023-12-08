@@ -18,7 +18,7 @@ const XNotification = () => {
   const [notiIsSeen, setNotiIsSeen] = useState(0);
   const user = useGlobalStore();
   const { data, fetchMore } = useGetNotificationQuery({
-    variables: { userid: user.userid },
+    variables: { userid: user?.userid },
   });
 
   const [UpdateSeen] = useUpdateSeenNotificationMutation();
@@ -31,8 +31,8 @@ const XNotification = () => {
       variables: { noticeid: notiIsSeen },
     });
     setNotiIsSeen(0);
-    fetchMore({ variables: { userid: user.userid } });
-  }, [UpdateSeen, fetchMore, notiIsSeen]);
+    fetchMore({ variables: { userid: user?.userid } });
+  }, [UpdateSeen, fetchMore, notiIsSeen, user?.userid]);
 
   const showDefaultDrawer = () => {
     setSize("default");

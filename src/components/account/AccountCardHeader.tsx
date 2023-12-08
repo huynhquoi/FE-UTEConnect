@@ -102,7 +102,7 @@ const AccountCardHeader = ({
   useEffect(() => {
     form.setFieldValue("gender", profileUser?.gender);
     form.setFieldValue("birthday", profileUser?.birthday);
-  }, [profileUser]);
+  }, [form, profileUser]);
 
   
   return (
