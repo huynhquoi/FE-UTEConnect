@@ -35,7 +35,7 @@ export type BookmarkRequest = {
 
 export type Comment = {
   __typename?: 'Comment';
-  comment_comment?: Maybe<Array<Maybe<Comment>>>;
+  comment_comment?: Maybe<Comment>;
   commentid: Scalars['Int']['output'];
   content?: Maybe<Scalars['String']['output']>;
   createday?: Maybe<Scalars['LocalDateTime']['output']>;
@@ -452,8 +452,20 @@ export type Query = {
 };
 
 
+export type QueryAccountArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryCheck_Comment_In_CommentArgs = {
   commentid?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryCommentArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -469,6 +481,7 @@ export type QueryFind_All_Bookmark_By_UseridArgs = {
 
 export type QueryFind_All_Comment_By_CommentparentidArgs = {
   commentparentid?: InputMaybe<Scalars['Int']['input']>;
+  postid?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -551,6 +564,12 @@ export type QueryList_Commentdislike_By_CommentidArgs = {
 
 export type QueryList_Commentlike_By_CommentidArgs = {
   commentid?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryPostArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Report = {
@@ -687,7 +706,15 @@ export type GetPostCommentQueryVariables = Exact<{
 }>;
 
 
-export type GetPostCommentQuery = { __typename?: 'Query', find_all_comment_by_postid?: Array<{ __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, comment_comment?: Array<{ __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null> | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null> | null };
+export type GetPostCommentQuery = { __typename?: 'Query', find_all_comment_by_postid?: Array<{ __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, comment_comment?: { __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null> | null };
+
+export type GetCommentChildQueryVariables = Exact<{
+  commentparentid?: InputMaybe<Scalars['Int']['input']>;
+  postid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetCommentChildQuery = { __typename?: 'Query', find_all_comment_by_commentparentid?: Array<{ __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, comment_comment?: { __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null> | null };
 
 export type CreateFollowMutationVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -917,6 +944,53 @@ export type GetPostCommentQueryHookResult = ReturnType<typeof useGetPostCommentQ
 export type GetPostCommentLazyQueryHookResult = ReturnType<typeof useGetPostCommentLazyQuery>;
 export type GetPostCommentSuspenseQueryHookResult = ReturnType<typeof useGetPostCommentSuspenseQuery>;
 export type GetPostCommentQueryResult = Apollo.QueryResult<GetPostCommentQuery, GetPostCommentQueryVariables>;
+export const GetCommentChildDocument = gql`
+    query GetCommentChild($commentparentid: Int, $postid: Int) {
+  find_all_comment_by_commentparentid(
+    commentparentid: $commentparentid
+    postid: $postid
+  ) {
+    ...Comment
+    comment_comment {
+      ...Comment
+    }
+  }
+}
+    ${CommentFragmentDoc}`;
+
+/**
+ * __useGetCommentChildQuery__
+ *
+ * To run a query within a React component, call `useGetCommentChildQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCommentChildQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCommentChildQuery({
+ *   variables: {
+ *      commentparentid: // value for 'commentparentid'
+ *      postid: // value for 'postid'
+ *   },
+ * });
+ */
+export function useGetCommentChildQuery(baseOptions?: Apollo.QueryHookOptions<GetCommentChildQuery, GetCommentChildQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCommentChildQuery, GetCommentChildQueryVariables>(GetCommentChildDocument, options);
+      }
+export function useGetCommentChildLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCommentChildQuery, GetCommentChildQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCommentChildQuery, GetCommentChildQueryVariables>(GetCommentChildDocument, options);
+        }
+export function useGetCommentChildSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCommentChildQuery, GetCommentChildQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCommentChildQuery, GetCommentChildQueryVariables>(GetCommentChildDocument, options);
+        }
+export type GetCommentChildQueryHookResult = ReturnType<typeof useGetCommentChildQuery>;
+export type GetCommentChildLazyQueryHookResult = ReturnType<typeof useGetCommentChildLazyQuery>;
+export type GetCommentChildSuspenseQueryHookResult = ReturnType<typeof useGetCommentChildSuspenseQuery>;
+export type GetCommentChildQueryResult = Apollo.QueryResult<GetCommentChildQuery, GetCommentChildQueryVariables>;
 export const CreateFollowDocument = gql`
     mutation CreateFollow($userid: String, $postid: Int) {
   create_bookmark(userid: $userid, postid: $postid) {

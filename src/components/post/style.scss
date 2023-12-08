@@ -6,10 +6,16 @@
 
 .card_comment-item {
   margin-top: 8px;
+  .ant-card-bordered {
+    border: none !important;
+  }
   .ant-card-body {
-    padding: 24px 16px 0px 16px !important;
+    padding: 24px 18px 0px 18px !important;
   }
   .ant-timeline {
+    .ant-timeline-item {
+      padding-bottom: 0;
+    }
     .ant-timeline-item-head-custom {
       background: #f4f4f5 !important;
     }
@@ -21,4 +27,14 @@
 
 .card_comment-item:first-child {
   margin-top: 0px;
+}
+
+.dot_comment {
+  border-left: 2px solid #e6e6e7;
+  border-bottom: 2px solid #e6e6e7;
+  border-bottom-left-radius: 8px;
+  margin-left: 18px;
+  margin-top: -6px;
+  width: 20px;
+  height: 44px;
 }

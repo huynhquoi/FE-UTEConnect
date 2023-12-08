@@ -41,3 +41,15 @@ query GetPostComment($postid: Int) {
     }
   }
 }
+
+query GetCommentChild($commentparentid: Int, $postid: Int) {
+  find_all_comment_by_commentparentid(
+    commentparentid: $commentparentid
+    postid: $postid
+  ) {
+    ...Comment
+    comment_comment {
+      ...Comment
+    }
+  }
+}

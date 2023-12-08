@@ -15,7 +15,7 @@ import { useParams } from "next/navigation";
 
 const AccountDetailPage = () => {
   const params = useParams();
-  const { data } = useGetPostByUserIdQuery({
+  const { data, loading } = useGetPostByUserIdQuery({
     variables: { userId: params.accountId as string },
   });
 
@@ -59,7 +59,11 @@ const AccountDetailPage = () => {
               <Col span={20}>
                 <div className="w-full flex-col flex items-end justify-end">
                   {data?.find_post_by_userid?.map((p) => (
-                    <PostCard key={p?.postid} post={p as Post} />
+                    <PostCard
+                      loading={loading}
+                      key={p?.postid}
+                      post={p as Post}
+                    />
                   ))}
                 </div>
               </Col>

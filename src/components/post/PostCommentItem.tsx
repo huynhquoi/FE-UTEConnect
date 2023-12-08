@@ -4,7 +4,7 @@ import {
   Comment,
   User,
   useCreateCommentChildMutation,
-  useGetPostCommentQuery,
+  useGetCommentChildQuery,
 } from "@/graphql/controller-types";
 import { Avatar, Button, Card, Flex, Form, Space, Timeline } from "antd";
 import { UserOutlined } from "@ant-design/icons";
@@ -28,9 +28,10 @@ const PostCommentItem = ({ comment }: PostCommentItemProps) => {
   const [reply, setReply] = useState(false);
 
   const [createComment] = useCreateCommentChildMutation();
-  const { data, fetchMore } = useGetPostCommentQuery({
+  const { data, fetchMore } = useGetCommentChildQuery({
     variables: {
       postid: comment?.post_comment?.postid,
+      commentparentid: comment?.commentid,
     },
   });
 
@@ -54,6 +55,7 @@ const PostCommentItem = ({ comment }: PostCommentItemProps) => {
         },
       });
     });
+    setReply(false);
     form.setFieldValue("comment", null);
     setContent("");
   }, [
@@ -107,70 +109,88 @@ const PostCommentItem = ({ comment }: PostCommentItemProps) => {
                         __html: comment?.content as string,
                       }}
                     ></div>
+                    {!reply ? (
+                      <Button
+                        type="text"
+                        style={{ fontSize: "12px", padding: 0 }}
+                        onClick={() => setReply(true)}
+                      >
+                        Phản hồi
+                      </Button>
+                    ) : (
+                      <Form
+                        form={form}
+                        onFinish={onFinish}
+                        id="comment_form"
+                        className="mt-4"
+                      >
+                        <Form.Item
+                          name="comment"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Không được bỏ trống ô này",
+                            },
+                          ]}
+                        >
+                          <XEditComment
+                            value={form.getFieldValue("comment")}
+                            onChange={(e: any) =>
+                              form.setFieldValue("comment", e)
+                            }
+                            placeholder="Nhập bình luận"
+                          />
+                        </Form.Item>
+                        <Form.Item name="comment">
+                          <Flex justify="end">
+                            <Button
+                              htmlType="submit"
+                              style={{
+                                background: "#000",
+                                color: "#fff",
+                                padding: "0 16px",
+                                paddingBottom: "2px",
+                              }}
+                            >
+                              <SendOutlined className="text-lg" />
+                            </Button>
+                          </Flex>
+                        </Form.Item>
+                      </Form>
+                    )}
                   </Space>
                 </>
               ),
             },
-            ...(comment?.comment_comment?.length
-              ? [
-                  {
-                    dot: <div className=""></div>,
-                    children: comment?.comment_comment?.map((c) => (
-                      <PostCommentItem
-                        key={c?.commentid}
-                        comment={c as Comment}
-                      />
-                    )),
-                  },
-                ]
+            ...(data?.find_all_comment_by_commentparentid?.length
+              ? data?.find_all_comment_by_commentparentid?.map((c) => ({
+                  dot: <div className="dot_comment"></div>,
+                  children: (
+                    <PostCommentItem
+                      key={c?.commentid}
+                      comment={c as Comment}
+                    />
+                  ),
+                }))
               : []),
+            // ...(data?.find_all_comment_by_commentparentid?.length
+            //   ? [
+            //       {
+            //         dot: <div className="dot_comment"></div>,
+            //         children: data?.find_all_comment_by_commentparentid?.map(
+            //           (c) => (
+            //             <PostCommentItem
+            //               key={c?.commentid}
+            //               comment={c as Comment}
+            //             />
+            //           )
+            //         ),
+            //       },
+            //     ]
+            //   : []),
           ]}
         ></Timeline>
       </Card>
-      {!reply ? (
-        <Space className="mt-2">
-          <Button
-            type="text"
-            style={{ fontSize: "12px" }}
-            onClick={() => setReply(true)}
-          >
-            Phản hồi
-          </Button>
-        </Space>
-      ) : (
-        <Form
-          form={form}
-          onFinish={onFinish}
-          id="comment_form"
-          className="mt-4"
-        >
-          <Form.Item
-            name="comment"
-            rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
-          >
-            <XEditComment
-              value={form.getFieldValue("comment")}
-              onChange={(e: any) => form.setFieldValue("comment", e)}
-              placeholder="Nhập bình luận"
-            />
-          </Form.Item>
-          <Form.Item name="comment">
-            <Flex justify="end">
-              <Button
-                htmlType="submit"
-                style={{
-                  background: "#000",
-                  color: "#fff",
-                  padding: "0 16px",
-                  paddingBottom: "2px",
-                }}
-              >
-                <SendOutlined className="text-lg" />
-              </Button>
-            </Flex>
-          </Form.Item>
-        </Form>
-      )}
     </>
   );
 };

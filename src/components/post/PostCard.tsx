@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, Card } from "antd";
+import { Avatar, Button, Card, CardProps } from "antd";
 import Meta from "antd/es/card/Meta";
 import "./style.scss";
 import { Post, useCreateFollowMutation } from "@/graphql/controller-types";
@@ -14,7 +14,7 @@ type PostCardProps = {
   post: Post;
 };
 
-const PostCard = ({ src, post }: PostCardProps) => {
+const PostCard = ({ src, post, ...props }: PostCardProps & CardProps) => {
   const router = useRouter();
   const user = useGlobalStore();
   const [followId, setFollowId] = useState(0);
@@ -36,7 +36,11 @@ const PostCard = ({ src, post }: PostCardProps) => {
   }, [CreateFollow, followId, followUserId]);
   return (
     <>
-      <Card style={{ width: "94%", marginTop: 20 }} className="job_card">
+      <Card
+        style={{ width: "94%", marginTop: 20 }}
+        {...props}
+        className="job_card"
+      >
         <Meta
           avatar={
             <Avatar
