@@ -30,6 +30,7 @@ import dayjs from "dayjs";
 import XEditor from "../core/XEditor";
 import XUpload from "../core/XUpload";
 import FollowButton from "../shared/FollowButon";
+import { useImageStore } from "@/hook/useImage";
 
 const { Option } = Select;
 
@@ -49,6 +50,7 @@ const AccountCardHeader = ({
   const [createVisible, setCreateVisible] = useState(false);
   const [updateAccount] = useUpdateAccountMutation();
   const [createPost] = useCreatePostMutation();
+  const image = useImageStore();
 
   const profileUser = useSelector(
     (state: RootState) => state.sliceReducer.profileUser
@@ -78,6 +80,13 @@ const AccountCardHeader = ({
       });
   };
 
+  useEffect(() => {
+    if (!formPost.getFieldValue("image")) {
+      return;
+    }
+    formPost.setFieldValue("image", image);
+  }, [formPost, image]);
+
   const onFinishCreate = (e: any) => {
     createPost({
       variables: {
@@ -104,7 +113,6 @@ const AccountCardHeader = ({
     form.setFieldValue("birthday", profileUser?.birthday);
   }, [form, profileUser]);
 
-  
   return (
     <>
       <ConfigProvider>
@@ -315,12 +323,14 @@ const AccountCardHeader = ({
               ></XInput>
             </Form.Item>
             <Form.Item
-              name="content"
+              name="image"
               rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
             >
-              <div className="">
+              <div style={{width: "100%"}}>
                 <div className="font-bold flex mb-1">Ảnh</div>
-                <XUpload />
+                <Flex align="center" justify="center">
+                  <XUpload />
+                </Flex>
               </div>
             </Form.Item>
             <Form.Item

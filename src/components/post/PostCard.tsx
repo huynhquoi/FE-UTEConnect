@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useGlobalStore } from "@/hook/useUser";
+import XImage from "../core/XImage";
 
 type PostCardProps = {
   src?: string;
@@ -58,6 +59,7 @@ const PostCard = ({ src, post, ...props }: PostCardProps & CardProps) => {
           className="my-2 mx-[-16px]"
         ></div>
         <p className="font-bold text-xl mb-2">{post.title}</p>
+        <XImage preview={false} src={post?.image as string} />
         <div
           style={{ borderBottom: "1px solid #f4f4f4" }}
           className="my-2 mx-[-16px]"

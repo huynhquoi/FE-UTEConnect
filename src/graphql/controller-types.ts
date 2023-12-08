@@ -761,31 +761,33 @@ export type UpdateSeenNotificationMutationVariables = Exact<{
 
 export type UpdateSeenNotificationMutation = { __typename?: 'Mutation', update_isseen_true?: { __typename?: 'Notice', noiticeid: number } | null };
 
+export type PostFragment = { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null };
+
 export type GetPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
+export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
 
 export type GetPostByUserIdQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
+export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
 
 export type GetPostByKeyWordsQueryVariables = Exact<{
   keyword?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPostByKeyWordsQuery = { __typename?: 'Query', find_post_by_keyword?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
+export type GetPostByKeyWordsQuery = { __typename?: 'Query', find_post_by_keyword?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
 
 export type GetPostByPkQueryVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetPostByPkQuery = { __typename?: 'Query', find_post_by_id?: { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null };
+export type GetPostByPkQuery = { __typename?: 'Query', find_post_by_id?: { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null };
 
 export type CreatePostMutationVariables = Exact<{
   post?: InputMaybe<PostRequest>;
@@ -829,6 +831,22 @@ export const CommentFragmentDoc = gql`
   createday
   updateday
   content
+}
+    `;
+export const PostFragmentDoc = gql`
+    fragment Post on Post {
+  postid
+  title
+  content
+  createday
+  user_post {
+    fullname
+    userid
+  }
+  updateday
+  ishide
+  isdelete
+  image
 }
     `;
 export const CreateCommentDocument = gql`
@@ -1223,20 +1241,10 @@ export type UpdateSeenNotificationMutationOptions = Apollo.BaseMutationOptions<U
 export const GetPostDocument = gql`
     query GetPost {
   post {
-    postid
-    title
-    content
-    createday
-    user_post {
-      fullname
-      userid
-    }
-    updateday
-    ishide
-    isdelete
+    ...Post
   }
 }
-    `;
+    ${PostFragmentDoc}`;
 
 /**
  * __useGetPostQuery__
@@ -1272,20 +1280,10 @@ export type GetPostQueryResult = Apollo.QueryResult<GetPostQuery, GetPostQueryVa
 export const GetPostByUserIdDocument = gql`
     query GetPostByUserId($userId: String) {
   find_post_by_userid(userid: $userId) {
-    postid
-    title
-    content
-    createday
-    user_post {
-      fullname
-      userid
-    }
-    updateday
-    ishide
-    isdelete
+    ...Post
   }
 }
-    `;
+    ${PostFragmentDoc}`;
 
 /**
  * __useGetPostByUserIdQuery__
@@ -1322,20 +1320,10 @@ export type GetPostByUserIdQueryResult = Apollo.QueryResult<GetPostByUserIdQuery
 export const GetPostByKeyWordsDocument = gql`
     query GetPostByKeyWords($keyword: String) {
   find_post_by_keyword(keyword: $keyword) {
-    postid
-    title
-    content
-    createday
-    user_post {
-      fullname
-      userid
-    }
-    updateday
-    ishide
-    isdelete
+    ...Post
   }
 }
-    `;
+    ${PostFragmentDoc}`;
 
 /**
  * __useGetPostByKeyWordsQuery__
@@ -1372,20 +1360,10 @@ export type GetPostByKeyWordsQueryResult = Apollo.QueryResult<GetPostByKeyWordsQ
 export const GetPostByPkDocument = gql`
     query GetPostByPk($postid: Int) {
   find_post_by_id(postid: $postid) {
-    postid
-    title
-    content
-    createday
-    user_post {
-      fullname
-      userid
-    }
-    updateday
-    ishide
-    isdelete
+    ...Post
   }
 }
-    `;
+    ${PostFragmentDoc}`;
 
 /**
  * __useGetPostByPkQuery__
