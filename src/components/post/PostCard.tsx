@@ -7,6 +7,7 @@ import { Post, useCreateFollowMutation } from "@/graphql/controller-types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { useGlobalStore } from "@/hook/useUser";
 
 type PostCardProps = {
   src?: string;
@@ -15,6 +16,7 @@ type PostCardProps = {
 
 const PostCard = ({ src, post }: PostCardProps) => {
   const router = useRouter();
+  const user = useGlobalStore();
   const [followId, setFollowId] = useState(0);
   const [followUserId, setUserFollowId] = useState("");
 
@@ -64,11 +66,11 @@ const PostCard = ({ src, post }: PostCardProps) => {
           >
             Xem chi tiết
           </Button>
-          {localStorage.getItem("response") !== post?.user_post?.userid && (
+          {user?.userid !== post?.user_post?.userid && (
             <Button
               onClick={() => {
                 setFollowId(post?.postid);
-                setUserFollowId(localStorage.getItem("response") as string);
+                setUserFollowId(user?.userid);
               }}
             >
               Theo dõi

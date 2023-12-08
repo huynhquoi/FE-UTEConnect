@@ -7,7 +7,7 @@ type LoginType = {
 };
 export const loginApi = async (data: LoginType) => {
   const response = await callApi(API_AUTH_LOGIN, POST_METHOD, data);
-  localStorage.setItem("access_token", response?.accesstoken);
+  window.localStorage.setItem("access_token", response?.accesstoken);
   return response
 };
 

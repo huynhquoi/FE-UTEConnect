@@ -1,5 +1,6 @@
 "use client";
 
+import { useGlobalStore } from "@/hook/useUser";
 import { Affix, Card, ConfigProvider, Menu, MenuProps } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -44,10 +45,11 @@ type ActionMenuProps = {
 
 const ActionMenu = ({ className }: ActionMenuProps) => {
   const [id, setId] = useState("");
+  const user = useGlobalStore();
 
   useEffect(() => {
-    setId(localStorage.getItem("response") as string);
-  }, []);
+    setId(user?.userid);
+  }, [user?.userid]);
 
   const router = useRouter();
   const onClick: MenuProps["onClick"] = (e) => {

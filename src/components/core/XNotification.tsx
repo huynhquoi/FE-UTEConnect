@@ -10,13 +10,15 @@ import UserDisplay from "../shared/UserDisplay";
 import "./style.scss";
 import { useEffect, useState } from "react";
 import { AlertFilled } from "@ant-design/icons";
+import { useGlobalStore } from "@/hook/useUser";
 
 const XNotification = () => {
   const [open, setOpen] = useState(false);
   const [size, setSize] = useState<DrawerProps["size"]>();
   const [notiIsSeen, setNotiIsSeen] = useState(0);
+  const user = useGlobalStore();
   const { data, fetchMore } = useGetNotificationQuery({
-    variables: { userid: localStorage.getItem("response") },
+    variables: { userid: user.userid },
   });
 
   const [UpdateSeen] = useUpdateSeenNotificationMutation();
@@ -29,7 +31,7 @@ const XNotification = () => {
       variables: { noticeid: notiIsSeen },
     });
     setNotiIsSeen(0);
-    fetchMore({ variables: { userid: localStorage.getItem("response") } });
+    fetchMore({ variables: { userid: user.userid } });
   }, [UpdateSeen, fetchMore, notiIsSeen]);
 
   const showDefaultDrawer = () => {

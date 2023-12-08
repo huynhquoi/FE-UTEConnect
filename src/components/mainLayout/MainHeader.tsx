@@ -40,7 +40,7 @@ const items: MenuProps["items"] = [
 
 const MainHeader = () => {
   const dispatch = useDispatch();
-  const [id, setId] = useState(localStorage.getItem("response") as string);
+  const [id, setId] = useState("");
   const router = useRouter();
   const onHandleClick = (e: any) => {
     router.push(`/${e.key}`);
@@ -55,7 +55,17 @@ const MainHeader = () => {
   });
 
   useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    setId(localStorage?.getItem("response") as string);
+  }, []);
+
+  useEffect(() => {
     if (!id) {
+      return;
+    }
+    if (typeof window === "undefined") {
       return;
     }
     getMe({ variables: { userId: id } });

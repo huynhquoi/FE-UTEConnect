@@ -3,8 +3,12 @@
 import { redirect } from "next/navigation";
 
 const Logout = () => {
-  localStorage.removeItem("response");
-  redirect("/");
+  if (typeof window === "undefined") {
+    return;
+  } else {
+    localStorage.removeItem("response");
+    redirect("/");
+  }
 };
 
 export default Logout;

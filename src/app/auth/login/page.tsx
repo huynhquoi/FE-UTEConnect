@@ -31,6 +31,9 @@ const LoginPage = () => {
     if (!submit) {
       return;
     }
+    if(typeof window === "undefined") {
+      return;
+    }
     const fetchData = async () => {
       try {
         const responseLogin = await loginApi(formValue);
