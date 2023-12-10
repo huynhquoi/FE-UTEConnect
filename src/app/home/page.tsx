@@ -4,6 +4,7 @@ import XInput from "@/components/core/XInput";
 import ActionMenu from "@/components/home/ActionMenu";
 import PostCard from "@/components/post/PostCard";
 import {
+  Avatar,
   Button,
   Card,
   Col,
@@ -12,21 +13,33 @@ import {
   Input,
   Row,
   Select,
+  Skeleton,
 } from "antd";
 import "./style.scss";
 import {
   Post,
+  useGetAllFollowPostQuery,
   useGetPostByKeyWordsQuery,
   useGetPostQuery,
 } from "@/graphql/controller-types";
 import { useEffect, useState } from "react";
+import { useGlobalStore } from "@/hook/useUser";
+import Meta from "antd/es/card/Meta";
 
 const HomePage = () => {
+  const user = useGlobalStore();
   const [form] = Form.useForm();
   const [keywords, setKeywords] = useState("");
   const { data, loading, fetchMore } = useGetPostByKeyWordsQuery({
     variables: { keyword: keywords },
   });
+
+  const { data: followPost } =
+    useGetAllFollowPostQuery({
+      variables: {
+        userid: user?.userid,
+      },
+    });
   useEffect(() => {
     fetchMore({ variables: { keyword: keywords } });
   }, [fetchMore, keywords]);
@@ -76,9 +89,31 @@ const HomePage = () => {
                 </Form>
               </Card>
 
-              {data?.find_post_by_keyword?.map((p) => (
-                <PostCard key={p?.postid} post={p as Post} />
-              ))}
+              {!loading ? (
+                data?.find_post_by_keyword
+                  ?.filter((e) => !e?.isdelete)
+                  .map((p) => (
+                    <PostCard
+                      isFollow={followPost?.find_all_bookmark_by_userid
+                        ?.map((e) => e?.post_bookmark?.postid)
+                        .some((e) => e === p?.postid)}
+                      key={p?.postid}
+                      post={p as Post}
+                    />
+                  ))
+              ) : (
+                <Card style={{ width: "94%", marginTop: 20 }}>
+                  <Skeleton loading={loading} avatar active>
+                    <Meta
+                      avatar={
+                        <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
+                      }
+                      title="Card title"
+                      description="This is the description"
+                    />
+                  </Skeleton>
+                </Card>
+              )}
             </div>
           </Col>
           <Col span={6}></Col>

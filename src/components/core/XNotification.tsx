@@ -3,7 +3,7 @@ import {
   useGetNotificationQuery,
   useUpdateSeenNotificationMutation,
 } from "@/graphql/controller-types";
-import { Badge, Drawer, DrawerProps, List, Space } from "antd";
+import { Badge, Drawer, DrawerProps, Empty, List, Space } from "antd";
 import dayjs from "dayjs";
 import UserDisplay from "../shared/UserDisplay";
 
@@ -94,7 +94,9 @@ const XNotification = () => {
               </List.Item>
             )}
           />
-        ) : null}
+        ) : (
+          <Empty style={{marginTop: 20}} description={"Không có thông báo"} />
+        )}
       </Drawer>
     </>
   );

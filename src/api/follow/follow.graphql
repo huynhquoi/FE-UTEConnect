@@ -4,6 +4,10 @@ mutation CreateFollow($userid: String, $postid: Int) {
   }
 }
 
+mutation DeleteFollow($userid: String, $postid: Int) {
+  delete_bookmark(userid: $userid, postid: $postid) 
+}
+
 mutation CreateFollowUser($userid: String, $followerid: String) {
   create_follow(userid: $userid, followerid: $followerid)
 }
@@ -26,5 +30,18 @@ query GetAllFollowUser($followerid: String) {
     gender
     birthday
     userid
+  }
+}
+
+query GetAllFollowPost($userid: String) {
+  find_all_bookmark_by_userid(userid: $userid) {
+    bookmarkid
+    post_bookmark {
+      postid
+    }
+    user_bookmark {
+      userid
+    }
+    createday
   }
 }

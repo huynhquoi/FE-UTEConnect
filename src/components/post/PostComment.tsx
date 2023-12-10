@@ -77,6 +77,7 @@ const PostComment = ({ postId }: PostCommentProps) => {
           rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
         >
           <XEditComment
+            style={{ marginTop: 12 }}
             value={form.getFieldValue("comment")}
             onChange={(e: any) => form.setFieldValue("comment", e)}
             placeholder="Nhập bình luận"

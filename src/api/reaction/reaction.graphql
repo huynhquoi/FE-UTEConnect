@@ -1,0 +1,39 @@
+query GetPostLike($postid: Int) {
+  find_all_likepost_by_postid(postid: $postid)
+}
+
+query GetPostDislike($postid: Int) {
+  find_all_dislikepost_by_postid(postid: $postid)
+}
+
+query GetCommentLike($commentid: Int) {
+  find_all_likecomment_by_commentid(commentid: $commentid)
+}
+
+query GetCommentDislike($commentid: Int) {
+  find_all_dislikecomment_by_commentid(commentid: $commentid)
+}
+
+mutation CreatePostReaction($userid: String, $postid: Int, $iconid: Int) {
+  create_icon_for_postlike(userid: $userid, postid: $postid, iconid: $iconid)
+}
+
+mutation DeletePostReaction($userid: String, $postid: Int, $iconid: Int) {
+  delete_icon_for_postlike(userid: $userid, postid: $postid, iconid: $iconid)
+}
+
+mutation CreateCommentReaction($userid: String, $commentid: Int, $iconid: Int) {
+  create_icon_for_commentlike(
+    userid: $userid
+    commentid: $commentid
+    iconid: $iconid
+  )
+}
+
+mutation DeleteCommentReaction($userid: String, $commentid: Int, $iconid: Int) {
+  delete_icon_for_commentlike(
+    userid: $userid
+    commentid: $commentid
+    iconid: $iconid
+  )
+}

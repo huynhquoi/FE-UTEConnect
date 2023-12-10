@@ -12,6 +12,7 @@ query GetAccount {
     image
     gender
     birthday
+    reputation
   }
 }
 

@@ -3,10 +3,22 @@
 import ActionMenu from "@/components/home/ActionMenu";
 import PostComment from "@/components/post/PostComment";
 import { useGetPostByPkQuery } from "@/graphql/controller-types";
-import { Avatar, Card, Col, ConfigProvider, Divider, Row } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Col,
+  ConfigProvider,
+  Divider,
+  Flex,
+  Row,
+  Space,
+} from "antd";
 import Meta from "antd/es/card/Meta";
 import dayjs from "dayjs";
 import { useParams } from "next/navigation";
+import "./style.scss";
+import PostAction from "@/components/post/PostAction";
 
 const PostDetailPage = () => {
   const params = useParams();
@@ -66,8 +78,13 @@ const PostDetailPage = () => {
                     __html: data?.find_post_by_id?.content as string,
                   }}
                 />
-                <Divider />
-                <PostComment postId={parseInt(params.postid as string) }/>
+                <Divider style={{ marginBottom: "4px" }} />
+                <PostAction
+                  postId={data?.find_post_by_id?.postid as number}
+                  userId={data?.find_post_by_id?.user_post?.userid as string}
+                />
+                <Divider style={{ marginTop: "4px" }} />
+                <PostComment postId={parseInt(params.postid as string)} />
               </Card>
             </div>
           </Col>

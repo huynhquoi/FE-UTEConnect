@@ -428,11 +428,13 @@ export type Query = {
   find_all_likepost_by_postid?: Maybe<Scalars['Int']['output']>;
   /**     Notice */
   find_all_notice_by_userid?: Maybe<Array<Maybe<Notice>>>;
+  find_commentlike_by_commentid_and_userid?: Maybe<Comment_Like>;
   find_notice_by_userid_type_subject?: Maybe<Notice>;
   find_post_by_id?: Maybe<Post>;
   find_post_by_keyword?: Maybe<Array<Maybe<Post>>>;
   find_post_by_topicid?: Maybe<Array<Maybe<Post>>>;
   find_post_by_userid?: Maybe<Array<Maybe<Post>>>;
+  find_postlike_by_postid_and_userid?: Maybe<Post_Like>;
   /**    Follow */
   get_all_follower_by_user?: Maybe<Array<Maybe<User>>>;
   get_all_user_by_follower?: Maybe<Array<Maybe<User>>>;
@@ -515,6 +517,12 @@ export type QueryFind_All_Notice_By_UseridArgs = {
 };
 
 
+export type QueryFind_Commentlike_By_Commentid_And_UseridArgs = {
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryFind_Notice_By_Userid_Type_SubjectArgs = {
   subject?: InputMaybe<Scalars['Int']['input']>;
   typee?: InputMaybe<Scalars['Int']['input']>;
@@ -538,6 +546,12 @@ export type QueryFind_Post_By_TopicidArgs = {
 
 
 export type QueryFind_Post_By_UseridArgs = {
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryFind_Postlike_By_Postid_And_UseridArgs = {
+  postid?: InputMaybe<Scalars['Int']['input']>;
   userid?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -724,6 +738,14 @@ export type CreateFollowMutationVariables = Exact<{
 
 export type CreateFollowMutation = { __typename?: 'Mutation', create_bookmark?: { __typename?: 'Bookmark', bookmarkid: number } | null };
 
+export type DeleteFollowMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  postid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteFollowMutation = { __typename?: 'Mutation', delete_bookmark?: string | null };
+
 export type CreateFollowUserMutationVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
   followerid?: InputMaybe<Scalars['String']['input']>;
@@ -746,6 +768,13 @@ export type GetAllFollowUserQueryVariables = Exact<{
 
 
 export type GetAllFollowUserQuery = { __typename?: 'Query', get_all_user_by_follower?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
+
+export type GetAllFollowPostQueryVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetAllFollowPostQuery = { __typename?: 'Query', find_all_bookmark_by_userid?: Array<{ __typename?: 'Bookmark', bookmarkid: number, createday?: any | null, post_bookmark?: { __typename?: 'Post', postid: number } | null, user_bookmark?: { __typename?: 'User', userid: string } | null } | null> | null };
 
 export type GetNotificationQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -798,10 +827,81 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'Mutation', create_post?: string | null };
 
+export type DeletePostByPkMutationVariables = Exact<{
+  postid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeletePostByPkMutation = { __typename?: 'Mutation', delete_post_by_pk?: string | null };
+
+export type GetPostLikeQueryVariables = Exact<{
+  postid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetPostLikeQuery = { __typename?: 'Query', find_all_likepost_by_postid?: number | null };
+
+export type GetPostDislikeQueryVariables = Exact<{
+  postid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetPostDislikeQuery = { __typename?: 'Query', find_all_dislikepost_by_postid?: number | null };
+
+export type GetCommentLikeQueryVariables = Exact<{
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetCommentLikeQuery = { __typename?: 'Query', find_all_likecomment_by_commentid?: number | null };
+
+export type GetCommentDislikeQueryVariables = Exact<{
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetCommentDislikeQuery = { __typename?: 'Query', find_all_dislikecomment_by_commentid?: number | null };
+
+export type CreatePostReactionMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  postid?: InputMaybe<Scalars['Int']['input']>;
+  iconid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreatePostReactionMutation = { __typename?: 'Mutation', create_icon_for_postlike?: string | null };
+
+export type DeletePostReactionMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  postid?: InputMaybe<Scalars['Int']['input']>;
+  iconid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeletePostReactionMutation = { __typename?: 'Mutation', delete_icon_for_postlike?: string | null };
+
+export type CreateCommentReactionMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+  iconid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreateCommentReactionMutation = { __typename?: 'Mutation', create_icon_for_commentlike?: string | null };
+
+export type DeleteCommentReactionMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+  iconid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteCommentReactionMutation = { __typename?: 'Mutation', delete_icon_for_commentlike?: string | null };
+
 export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAccountQuery = { __typename?: 'Query', account?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
+export type GetAccountQuery = { __typename?: 'Query', account?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
 
 export type GetAccountByPkQueryVariables = Exact<{
   userId: Scalars['String']['input'];
@@ -1043,6 +1143,38 @@ export function useCreateFollowMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateFollowMutationHookResult = ReturnType<typeof useCreateFollowMutation>;
 export type CreateFollowMutationResult = Apollo.MutationResult<CreateFollowMutation>;
 export type CreateFollowMutationOptions = Apollo.BaseMutationOptions<CreateFollowMutation, CreateFollowMutationVariables>;
+export const DeleteFollowDocument = gql`
+    mutation DeleteFollow($userid: String, $postid: Int) {
+  delete_bookmark(userid: $userid, postid: $postid)
+}
+    `;
+export type DeleteFollowMutationFn = Apollo.MutationFunction<DeleteFollowMutation, DeleteFollowMutationVariables>;
+
+/**
+ * __useDeleteFollowMutation__
+ *
+ * To run a mutation, you first call `useDeleteFollowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFollowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFollowMutation, { data, loading, error }] = useDeleteFollowMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      postid: // value for 'postid'
+ *   },
+ * });
+ */
+export function useDeleteFollowMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFollowMutation, DeleteFollowMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteFollowMutation, DeleteFollowMutationVariables>(DeleteFollowDocument, options);
+      }
+export type DeleteFollowMutationHookResult = ReturnType<typeof useDeleteFollowMutation>;
+export type DeleteFollowMutationResult = Apollo.MutationResult<DeleteFollowMutation>;
+export type DeleteFollowMutationOptions = Apollo.BaseMutationOptions<DeleteFollowMutation, DeleteFollowMutationVariables>;
 export const CreateFollowUserDocument = gql`
     mutation CreateFollowUser($userid: String, $followerid: String) {
   create_follow(userid: $userid, followerid: $followerid)
@@ -1158,6 +1290,53 @@ export type GetAllFollowUserQueryHookResult = ReturnType<typeof useGetAllFollowU
 export type GetAllFollowUserLazyQueryHookResult = ReturnType<typeof useGetAllFollowUserLazyQuery>;
 export type GetAllFollowUserSuspenseQueryHookResult = ReturnType<typeof useGetAllFollowUserSuspenseQuery>;
 export type GetAllFollowUserQueryResult = Apollo.QueryResult<GetAllFollowUserQuery, GetAllFollowUserQueryVariables>;
+export const GetAllFollowPostDocument = gql`
+    query GetAllFollowPost($userid: String) {
+  find_all_bookmark_by_userid(userid: $userid) {
+    bookmarkid
+    post_bookmark {
+      postid
+    }
+    user_bookmark {
+      userid
+    }
+    createday
+  }
+}
+    `;
+
+/**
+ * __useGetAllFollowPostQuery__
+ *
+ * To run a query within a React component, call `useGetAllFollowPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllFollowPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllFollowPostQuery({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetAllFollowPostQuery(baseOptions?: Apollo.QueryHookOptions<GetAllFollowPostQuery, GetAllFollowPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllFollowPostQuery, GetAllFollowPostQueryVariables>(GetAllFollowPostDocument, options);
+      }
+export function useGetAllFollowPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllFollowPostQuery, GetAllFollowPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllFollowPostQuery, GetAllFollowPostQueryVariables>(GetAllFollowPostDocument, options);
+        }
+export function useGetAllFollowPostSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllFollowPostQuery, GetAllFollowPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllFollowPostQuery, GetAllFollowPostQueryVariables>(GetAllFollowPostDocument, options);
+        }
+export type GetAllFollowPostQueryHookResult = ReturnType<typeof useGetAllFollowPostQuery>;
+export type GetAllFollowPostLazyQueryHookResult = ReturnType<typeof useGetAllFollowPostLazyQuery>;
+export type GetAllFollowPostSuspenseQueryHookResult = ReturnType<typeof useGetAllFollowPostSuspenseQuery>;
+export type GetAllFollowPostQueryResult = Apollo.QueryResult<GetAllFollowPostQuery, GetAllFollowPostQueryVariables>;
 export const GetNotificationDocument = gql`
     query GetNotification($userid: String) {
   find_all_notice_by_userid(userid: $userid) {
@@ -1430,6 +1609,329 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const DeletePostByPkDocument = gql`
+    mutation DeletePostByPk($postid: Int) {
+  delete_post_by_pk(postid: $postid)
+}
+    `;
+export type DeletePostByPkMutationFn = Apollo.MutationFunction<DeletePostByPkMutation, DeletePostByPkMutationVariables>;
+
+/**
+ * __useDeletePostByPkMutation__
+ *
+ * To run a mutation, you first call `useDeletePostByPkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostByPkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostByPkMutation, { data, loading, error }] = useDeletePostByPkMutation({
+ *   variables: {
+ *      postid: // value for 'postid'
+ *   },
+ * });
+ */
+export function useDeletePostByPkMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostByPkMutation, DeletePostByPkMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostByPkMutation, DeletePostByPkMutationVariables>(DeletePostByPkDocument, options);
+      }
+export type DeletePostByPkMutationHookResult = ReturnType<typeof useDeletePostByPkMutation>;
+export type DeletePostByPkMutationResult = Apollo.MutationResult<DeletePostByPkMutation>;
+export type DeletePostByPkMutationOptions = Apollo.BaseMutationOptions<DeletePostByPkMutation, DeletePostByPkMutationVariables>;
+export const GetPostLikeDocument = gql`
+    query GetPostLike($postid: Int) {
+  find_all_likepost_by_postid(postid: $postid)
+}
+    `;
+
+/**
+ * __useGetPostLikeQuery__
+ *
+ * To run a query within a React component, call `useGetPostLikeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostLikeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostLikeQuery({
+ *   variables: {
+ *      postid: // value for 'postid'
+ *   },
+ * });
+ */
+export function useGetPostLikeQuery(baseOptions?: Apollo.QueryHookOptions<GetPostLikeQuery, GetPostLikeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostLikeQuery, GetPostLikeQueryVariables>(GetPostLikeDocument, options);
+      }
+export function useGetPostLikeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostLikeQuery, GetPostLikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostLikeQuery, GetPostLikeQueryVariables>(GetPostLikeDocument, options);
+        }
+export function useGetPostLikeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostLikeQuery, GetPostLikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostLikeQuery, GetPostLikeQueryVariables>(GetPostLikeDocument, options);
+        }
+export type GetPostLikeQueryHookResult = ReturnType<typeof useGetPostLikeQuery>;
+export type GetPostLikeLazyQueryHookResult = ReturnType<typeof useGetPostLikeLazyQuery>;
+export type GetPostLikeSuspenseQueryHookResult = ReturnType<typeof useGetPostLikeSuspenseQuery>;
+export type GetPostLikeQueryResult = Apollo.QueryResult<GetPostLikeQuery, GetPostLikeQueryVariables>;
+export const GetPostDislikeDocument = gql`
+    query GetPostDislike($postid: Int) {
+  find_all_dislikepost_by_postid(postid: $postid)
+}
+    `;
+
+/**
+ * __useGetPostDislikeQuery__
+ *
+ * To run a query within a React component, call `useGetPostDislikeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostDislikeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostDislikeQuery({
+ *   variables: {
+ *      postid: // value for 'postid'
+ *   },
+ * });
+ */
+export function useGetPostDislikeQuery(baseOptions?: Apollo.QueryHookOptions<GetPostDislikeQuery, GetPostDislikeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostDislikeQuery, GetPostDislikeQueryVariables>(GetPostDislikeDocument, options);
+      }
+export function useGetPostDislikeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostDislikeQuery, GetPostDislikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostDislikeQuery, GetPostDislikeQueryVariables>(GetPostDislikeDocument, options);
+        }
+export function useGetPostDislikeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostDislikeQuery, GetPostDislikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostDislikeQuery, GetPostDislikeQueryVariables>(GetPostDislikeDocument, options);
+        }
+export type GetPostDislikeQueryHookResult = ReturnType<typeof useGetPostDislikeQuery>;
+export type GetPostDislikeLazyQueryHookResult = ReturnType<typeof useGetPostDislikeLazyQuery>;
+export type GetPostDislikeSuspenseQueryHookResult = ReturnType<typeof useGetPostDislikeSuspenseQuery>;
+export type GetPostDislikeQueryResult = Apollo.QueryResult<GetPostDislikeQuery, GetPostDislikeQueryVariables>;
+export const GetCommentLikeDocument = gql`
+    query GetCommentLike($commentid: Int) {
+  find_all_likecomment_by_commentid(commentid: $commentid)
+}
+    `;
+
+/**
+ * __useGetCommentLikeQuery__
+ *
+ * To run a query within a React component, call `useGetCommentLikeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCommentLikeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCommentLikeQuery({
+ *   variables: {
+ *      commentid: // value for 'commentid'
+ *   },
+ * });
+ */
+export function useGetCommentLikeQuery(baseOptions?: Apollo.QueryHookOptions<GetCommentLikeQuery, GetCommentLikeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCommentLikeQuery, GetCommentLikeQueryVariables>(GetCommentLikeDocument, options);
+      }
+export function useGetCommentLikeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCommentLikeQuery, GetCommentLikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCommentLikeQuery, GetCommentLikeQueryVariables>(GetCommentLikeDocument, options);
+        }
+export function useGetCommentLikeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCommentLikeQuery, GetCommentLikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCommentLikeQuery, GetCommentLikeQueryVariables>(GetCommentLikeDocument, options);
+        }
+export type GetCommentLikeQueryHookResult = ReturnType<typeof useGetCommentLikeQuery>;
+export type GetCommentLikeLazyQueryHookResult = ReturnType<typeof useGetCommentLikeLazyQuery>;
+export type GetCommentLikeSuspenseQueryHookResult = ReturnType<typeof useGetCommentLikeSuspenseQuery>;
+export type GetCommentLikeQueryResult = Apollo.QueryResult<GetCommentLikeQuery, GetCommentLikeQueryVariables>;
+export const GetCommentDislikeDocument = gql`
+    query GetCommentDislike($commentid: Int) {
+  find_all_dislikecomment_by_commentid(commentid: $commentid)
+}
+    `;
+
+/**
+ * __useGetCommentDislikeQuery__
+ *
+ * To run a query within a React component, call `useGetCommentDislikeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCommentDislikeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCommentDislikeQuery({
+ *   variables: {
+ *      commentid: // value for 'commentid'
+ *   },
+ * });
+ */
+export function useGetCommentDislikeQuery(baseOptions?: Apollo.QueryHookOptions<GetCommentDislikeQuery, GetCommentDislikeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCommentDislikeQuery, GetCommentDislikeQueryVariables>(GetCommentDislikeDocument, options);
+      }
+export function useGetCommentDislikeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCommentDislikeQuery, GetCommentDislikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCommentDislikeQuery, GetCommentDislikeQueryVariables>(GetCommentDislikeDocument, options);
+        }
+export function useGetCommentDislikeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCommentDislikeQuery, GetCommentDislikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCommentDislikeQuery, GetCommentDislikeQueryVariables>(GetCommentDislikeDocument, options);
+        }
+export type GetCommentDislikeQueryHookResult = ReturnType<typeof useGetCommentDislikeQuery>;
+export type GetCommentDislikeLazyQueryHookResult = ReturnType<typeof useGetCommentDislikeLazyQuery>;
+export type GetCommentDislikeSuspenseQueryHookResult = ReturnType<typeof useGetCommentDislikeSuspenseQuery>;
+export type GetCommentDislikeQueryResult = Apollo.QueryResult<GetCommentDislikeQuery, GetCommentDislikeQueryVariables>;
+export const CreatePostReactionDocument = gql`
+    mutation CreatePostReaction($userid: String, $postid: Int, $iconid: Int) {
+  create_icon_for_postlike(userid: $userid, postid: $postid, iconid: $iconid)
+}
+    `;
+export type CreatePostReactionMutationFn = Apollo.MutationFunction<CreatePostReactionMutation, CreatePostReactionMutationVariables>;
+
+/**
+ * __useCreatePostReactionMutation__
+ *
+ * To run a mutation, you first call `useCreatePostReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostReactionMutation, { data, loading, error }] = useCreatePostReactionMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      postid: // value for 'postid'
+ *      iconid: // value for 'iconid'
+ *   },
+ * });
+ */
+export function useCreatePostReactionMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostReactionMutation, CreatePostReactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostReactionMutation, CreatePostReactionMutationVariables>(CreatePostReactionDocument, options);
+      }
+export type CreatePostReactionMutationHookResult = ReturnType<typeof useCreatePostReactionMutation>;
+export type CreatePostReactionMutationResult = Apollo.MutationResult<CreatePostReactionMutation>;
+export type CreatePostReactionMutationOptions = Apollo.BaseMutationOptions<CreatePostReactionMutation, CreatePostReactionMutationVariables>;
+export const DeletePostReactionDocument = gql`
+    mutation DeletePostReaction($userid: String, $postid: Int, $iconid: Int) {
+  delete_icon_for_postlike(userid: $userid, postid: $postid, iconid: $iconid)
+}
+    `;
+export type DeletePostReactionMutationFn = Apollo.MutationFunction<DeletePostReactionMutation, DeletePostReactionMutationVariables>;
+
+/**
+ * __useDeletePostReactionMutation__
+ *
+ * To run a mutation, you first call `useDeletePostReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostReactionMutation, { data, loading, error }] = useDeletePostReactionMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      postid: // value for 'postid'
+ *      iconid: // value for 'iconid'
+ *   },
+ * });
+ */
+export function useDeletePostReactionMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostReactionMutation, DeletePostReactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostReactionMutation, DeletePostReactionMutationVariables>(DeletePostReactionDocument, options);
+      }
+export type DeletePostReactionMutationHookResult = ReturnType<typeof useDeletePostReactionMutation>;
+export type DeletePostReactionMutationResult = Apollo.MutationResult<DeletePostReactionMutation>;
+export type DeletePostReactionMutationOptions = Apollo.BaseMutationOptions<DeletePostReactionMutation, DeletePostReactionMutationVariables>;
+export const CreateCommentReactionDocument = gql`
+    mutation CreateCommentReaction($userid: String, $commentid: Int, $iconid: Int) {
+  create_icon_for_commentlike(
+    userid: $userid
+    commentid: $commentid
+    iconid: $iconid
+  )
+}
+    `;
+export type CreateCommentReactionMutationFn = Apollo.MutationFunction<CreateCommentReactionMutation, CreateCommentReactionMutationVariables>;
+
+/**
+ * __useCreateCommentReactionMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentReactionMutation, { data, loading, error }] = useCreateCommentReactionMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      commentid: // value for 'commentid'
+ *      iconid: // value for 'iconid'
+ *   },
+ * });
+ */
+export function useCreateCommentReactionMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentReactionMutation, CreateCommentReactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentReactionMutation, CreateCommentReactionMutationVariables>(CreateCommentReactionDocument, options);
+      }
+export type CreateCommentReactionMutationHookResult = ReturnType<typeof useCreateCommentReactionMutation>;
+export type CreateCommentReactionMutationResult = Apollo.MutationResult<CreateCommentReactionMutation>;
+export type CreateCommentReactionMutationOptions = Apollo.BaseMutationOptions<CreateCommentReactionMutation, CreateCommentReactionMutationVariables>;
+export const DeleteCommentReactionDocument = gql`
+    mutation DeleteCommentReaction($userid: String, $commentid: Int, $iconid: Int) {
+  delete_icon_for_commentlike(
+    userid: $userid
+    commentid: $commentid
+    iconid: $iconid
+  )
+}
+    `;
+export type DeleteCommentReactionMutationFn = Apollo.MutationFunction<DeleteCommentReactionMutation, DeleteCommentReactionMutationVariables>;
+
+/**
+ * __useDeleteCommentReactionMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentReactionMutation, { data, loading, error }] = useDeleteCommentReactionMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      commentid: // value for 'commentid'
+ *      iconid: // value for 'iconid'
+ *   },
+ * });
+ */
+export function useDeleteCommentReactionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommentReactionMutation, DeleteCommentReactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCommentReactionMutation, DeleteCommentReactionMutationVariables>(DeleteCommentReactionDocument, options);
+      }
+export type DeleteCommentReactionMutationHookResult = ReturnType<typeof useDeleteCommentReactionMutation>;
+export type DeleteCommentReactionMutationResult = Apollo.MutationResult<DeleteCommentReactionMutation>;
+export type DeleteCommentReactionMutationOptions = Apollo.BaseMutationOptions<DeleteCommentReactionMutation, DeleteCommentReactionMutationVariables>;
 export const GetAccountDocument = gql`
     query GetAccount {
   account {
@@ -1445,6 +1947,7 @@ export const GetAccountDocument = gql`
     image
     gender
     birthday
+    reputation
   }
 }
     `;

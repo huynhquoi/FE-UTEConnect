@@ -10,7 +10,8 @@ import {
   useGetPostByUserIdQuery,
   useGetPostQuery,
 } from "@/graphql/controller-types";
-import { Col, ConfigProvider, Row } from "antd";
+import { Avatar, Card, Col, ConfigProvider, Empty, Row, Skeleton } from "antd";
+import Meta from "antd/es/card/Meta";
 import { useParams } from "next/navigation";
 
 const AccountDetailPage = () => {
@@ -57,14 +58,39 @@ const AccountDetailPage = () => {
                 </div>
               </Col>
               <Col span={20}>
-                <div className="w-full flex-col flex items-end justify-end">
-                  {data?.find_post_by_userid?.map((p) => (
-                    <PostCard
-                      loading={loading}
-                      key={p?.postid}
-                      post={p as Post}
-                    />
-                  ))}
+                <div
+                  className={`w-full flex-col flex ${
+                    data?.find_post_by_userid?.length
+                      ? "items-end  justify-end"
+                      : "items-center  justify-center"
+                  }`}
+                >
+                  {!loading ? (
+                    data?.find_post_by_userid?.length ? (
+                      data?.find_post_by_userid
+                        ?.filter((e) => !e?.isdelete)
+                        .map((p) => (
+                          <PostCard key={p?.postid} post={p as Post} />
+                        ))
+                    ) : (
+                      <Empty
+                        style={{ marginTop: 20 }}
+                        description={"Bạn chưa có bài viết nào"}
+                      />
+                    )
+                  ) : (
+                    <Card style={{ width: "94%", marginTop: 20 }}>
+                      <Skeleton loading={loading} avatar active>
+                        <Meta
+                          avatar={
+                            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
+                          }
+                          title="Card title"
+                          description="This is the description"
+                        />
+                      </Skeleton>
+                    </Card>
+                  )}
                 </div>
               </Col>
             </Row>

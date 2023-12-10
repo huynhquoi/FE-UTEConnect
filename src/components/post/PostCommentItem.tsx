@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import XEditComment from "../core/XEditComment";
 import { SendOutlined } from "@ant-design/icons";
 import { useGlobalStore } from "@/hook/useUser";
+import CommentAction from "./CommentAction";
 
 type PostCommentItemProps = {
   comment: Comment;
@@ -109,55 +110,58 @@ const PostCommentItem = ({ comment }: PostCommentItemProps) => {
                         __html: comment?.content as string,
                       }}
                     ></div>
-                    {!reply ? (
-                      <Button
-                        type="text"
-                        style={{ fontSize: "12px", padding: 0 }}
-                        onClick={() => setReply(true)}
-                      >
-                        Phản hồi
-                      </Button>
-                    ) : (
-                      <Form
-                        form={form}
-                        onFinish={onFinish}
-                        id="comment_form"
-                        className="mt-4"
-                      >
-                        <Form.Item
-                          name="comment"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Không được bỏ trống ô này",
-                            },
-                          ]}
+                    <Flex>
+                      <CommentAction commentId={comment?.commentid} />
+                      {!reply ? (
+                        <Button
+                          type="text"
+                          style={{ fontSize: "12px", padding: 0 }}
+                          onClick={() => setReply(true)}
                         >
-                          <XEditComment
-                            value={form.getFieldValue("comment")}
-                            onChange={(e: any) =>
-                              form.setFieldValue("comment", e)
-                            }
-                            placeholder="Nhập bình luận"
-                          />
-                        </Form.Item>
-                        <Form.Item name="comment">
-                          <Flex justify="end">
-                            <Button
-                              htmlType="submit"
-                              style={{
-                                background: "#000",
-                                color: "#fff",
-                                padding: "0 16px",
-                                paddingBottom: "2px",
-                              }}
-                            >
-                              <SendOutlined className="text-lg" />
-                            </Button>
-                          </Flex>
-                        </Form.Item>
-                      </Form>
-                    )}
+                          Phản hồi
+                        </Button>
+                      ) : (
+                        <Form
+                          form={form}
+                          onFinish={onFinish}
+                          id="comment_form"
+                          className="mt-4"
+                        >
+                          <Form.Item
+                            name="comment"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Không được bỏ trống ô này",
+                              },
+                            ]}
+                          >
+                            <XEditComment
+                              value={form.getFieldValue("comment")}
+                              onChange={(e: any) =>
+                                form.setFieldValue("comment", e)
+                              }
+                              placeholder="Nhập bình luận"
+                            />
+                          </Form.Item>
+                          <Form.Item name="comment">
+                            <Flex justify="end">
+                              <Button
+                                htmlType="submit"
+                                style={{
+                                  background: "#000",
+                                  color: "#fff",
+                                  padding: "0 16px",
+                                  paddingBottom: "2px",
+                                }}
+                              >
+                                <SendOutlined className="text-lg" />
+                              </Button>
+                            </Flex>
+                          </Form.Item>
+                        </Form>
+                      )}
+                    </Flex>
                   </Space>
                 </>
               ),
@@ -173,21 +177,6 @@ const PostCommentItem = ({ comment }: PostCommentItemProps) => {
                   ),
                 }))
               : []),
-            // ...(data?.find_all_comment_by_commentparentid?.length
-            //   ? [
-            //       {
-            //         dot: <div className="dot_comment"></div>,
-            //         children: data?.find_all_comment_by_commentparentid?.map(
-            //           (c) => (
-            //             <PostCommentItem
-            //               key={c?.commentid}
-            //               comment={c as Comment}
-            //             />
-            //           )
-            //         ),
-            //       },
-            //     ]
-            //   : []),
           ]}
         ></Timeline>
       </Card>

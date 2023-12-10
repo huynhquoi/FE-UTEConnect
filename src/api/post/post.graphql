@@ -45,3 +45,7 @@ mutation CreatePost(
 ) {
   create_post(post: $post, user: $user, topic: $topic)
 }
+
+mutation DeletePostByPk($postid: Int) {
+  delete_post_by_pk(postid: $postid)
+}
