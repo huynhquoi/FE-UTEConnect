@@ -9,7 +9,10 @@ fragment Post on Post {
   }
   updateday
   ishide
-
+  topic_post {
+    topicid
+    topicname
+  }
   isdelete
   image
   requiredreputation
@@ -35,6 +38,12 @@ query GetPostByKeyWords($keyword: String) {
 
 query GetPostByPk($postid: Int) {
   find_post_by_id(postid: $postid) {
+    ...Post
+  }
+}
+
+query GetPostByTopic($topicid:[Int]) {
+  find_post_by_topicid(topicid: $topicid) {
     ...Post
   }
 }

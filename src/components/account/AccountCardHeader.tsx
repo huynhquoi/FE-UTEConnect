@@ -21,6 +21,7 @@ import { RootState } from "@/store";
 import {
   User,
   useCreatePostMutation,
+  useGetAllTopicQuery,
   useGetPostByUserIdQuery,
   useUpdateAccountMutation,
 } from "@/graphql/controller-types";
@@ -46,9 +47,11 @@ const AccountCardHeader = ({
   const [formPost] = Form.useForm();
   const [editVisible, setEditVisible] = useState(false);
   const [createVisible, setCreateVisible] = useState(false);
+  const [selectTopic, setSelectTopic] = useState(0);
   const [updateAccount] = useUpdateAccountMutation();
   const [createPost] = useCreatePostMutation();
   const { fetchMore: fetchPost } = useGetPostByUserIdQuery({});
+  const { data: topic } = useGetAllTopicQuery();
   const image = useImageStore();
 
   const profileUser = useSelector(
@@ -95,7 +98,9 @@ const AccountCardHeader = ({
         user: {
           userid: user?.userid,
         },
-        topic: {},
+        topic: {
+          topicid: selectTopic,
+        },
       },
     })
       .then(() => {
@@ -299,9 +304,7 @@ const AccountCardHeader = ({
         </Modal>
         <Modal
           open={createVisible}
-          title={
-            <div className="font-bold text-xl">Chỉnh sửa thông tin cá nhân</div>
-          }
+          title={<div className="font-bold text-xl">Đăng bài viết</div>}
           maskClosable={false}
           width={800}
           centered
@@ -316,6 +319,23 @@ const AccountCardHeader = ({
           footer={false}
           {...props}
         >
+          <div style={{ width: "100%", marginBottom: "24px" }}>
+            <div className="font-bold flex mb-1">Chủ đề</div>
+            <Select
+              placeholder={"Chọn chủ đề cho bài viết"}
+              allowClear
+              onChange={(e) => {
+                setSelectTopic(e as number);
+              }}
+              style={{ width: "100%" }}
+            >
+              {topic?.topic?.map((t) => (
+                <Option value={t?.topicid} key={t?.topicid}>
+                  {t?.topicname}
+                </Option>
+              ))}
+            </Select>
+          </div>
           <Form id="account_form" form={formPost} onFinish={onFinishCreate}>
             <Form.Item
               name="title"

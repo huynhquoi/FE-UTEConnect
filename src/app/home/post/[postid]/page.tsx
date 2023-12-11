@@ -3,14 +3,7 @@
 import ActionMenu from "@/components/home/ActionMenu";
 import PostComment from "@/components/post/PostComment";
 import { useGetPostByPkQuery } from "@/graphql/controller-types";
-import {
-  Avatar,
-  Card,
-  Col,
-  ConfigProvider,
-  Divider,
-  Row,
-} from "antd";
+import { Avatar, Card, Col, ConfigProvider, Divider, Row, Tag } from "antd";
 import Meta from "antd/es/card/Meta";
 import dayjs from "dayjs";
 import { useParams } from "next/navigation";
@@ -70,6 +63,11 @@ const PostDetailPage = () => {
                 <p className="font-bold text-xl mb-2">
                   {data?.find_post_by_id?.title}
                 </p>
+                {data?.find_post_by_id?.topic_post?.topicid ? (
+                  <Tag color="#000000" className="mb-2">
+                    {data?.find_post_by_id?.topic_post?.topicname}
+                  </Tag>
+                ) : null}
                 <div
                   dangerouslySetInnerHTML={{
                     __html: data?.find_post_by_id?.content as string,

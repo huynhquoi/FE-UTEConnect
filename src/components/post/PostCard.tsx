@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, Card, CardProps, Flex, Modal } from "antd";
+import { Avatar, Button, Card, CardProps, Flex, Modal, Tag } from "antd";
 import Meta from "antd/es/card/Meta";
 import "./style.scss";
 import {
@@ -28,6 +28,7 @@ const PostCard = ({
   src,
   post,
   isFollow,
+  className,
   ...props
 }: PostCardProps & CardProps) => {
   const router = useRouter();
@@ -130,7 +131,7 @@ const PostCard = ({
       <Card
         style={{ width: "94%", marginTop: 20 }}
         {...props}
-        className="job_card"
+        className={`job_card ${className}`}
       >
         <Meta
           avatar={
@@ -175,6 +176,11 @@ const PostCard = ({
             className="my-2 mx-[-16px]"
           ></div>
           <p className="font-bold text-xl mb-2">{post.title}</p>
+          {post?.topic_post?.topicid ? (
+            <Tag color="#000000" className="mb-2">
+              {post?.topic_post?.topicname}
+            </Tag>
+          ) : null}
           <XImage preview={false} src={post?.image as string} />
           <div
             style={{ borderBottom: "1px solid #f4f4f4" }}

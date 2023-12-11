@@ -18,6 +18,7 @@ import {
 } from "@/graphql/controller-types";
 import { useGlobalStore } from "@/hook/useUser";
 import Meta from "antd/es/card/Meta";
+import "./style.scss"
 
 const FollowPostPage = () => {
   const user = useGlobalStore();
@@ -56,6 +57,7 @@ const FollowPostPage = () => {
                 data?.find_all_bookmark_by_userid?.length ? (
                   data?.find_all_bookmark_by_userid?.map((p) => (
                     <PostCard
+                      className="post_card"
                       isFollow={true}
                       key={p?.post_bookmark?.postid}
                       post={p?.post_bookmark as Post}

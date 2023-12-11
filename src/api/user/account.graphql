@@ -30,6 +30,7 @@ query GetAccountByPk($userId: String!) {
     gender
     birthday
     userid
+    reputation
   }
 }
 
