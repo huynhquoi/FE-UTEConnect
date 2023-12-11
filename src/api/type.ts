@@ -1,4 +1,4 @@
-export const API = "https://7241-42-114-102-242.ngrok-free.app";
+export const API = "https://forum-be-1fdw.onrender.com";
 
 //auth
 export const API_AUTH_LOGIN = `${API}/login`;

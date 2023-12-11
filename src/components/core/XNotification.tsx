@@ -29,9 +29,10 @@ const XNotification = () => {
     }
     UpdateSeen({
       variables: { noticeid: notiIsSeen },
+    }).then(() => {
+      fetchMore({ variables: { userid: user?.userid } });
     });
     setNotiIsSeen(0);
-    fetchMore({ variables: { userid: user?.userid } });
   }, [UpdateSeen, fetchMore, notiIsSeen, user?.userid]);
 
   const showDefaultDrawer = () => {
@@ -95,7 +96,7 @@ const XNotification = () => {
             )}
           />
         ) : (
-          <Empty style={{marginTop: 20}} description={"Không có thông báo"} />
+          <Empty style={{ marginTop: 20 }} description={"Không có thông báo"} />
         )}
       </Drawer>
     </>
