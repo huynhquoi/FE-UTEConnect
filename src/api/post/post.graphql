@@ -12,6 +12,7 @@ fragment Post on Post {
 
   isdelete
   image
+  requiredreputation
 }
 
 query GetPost {

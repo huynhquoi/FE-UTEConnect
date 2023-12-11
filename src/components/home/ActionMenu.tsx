@@ -34,9 +34,9 @@ const items: MenuItem[] = [
     getItem("Bài đăng của tôi", "/home/my_post"),
   ]),
 
-  getItem("Diễn đàn", "forum", null, [
-    getItem("Đang tham gia", "/home/participate_forum"),
-  ]),
+  // getItem("Diễn đàn", "forum", null, [
+  //   getItem("Đang tham gia", "/home/participate_forum"),
+  // ]),
 ];
 
 type ActionMenuProps = {

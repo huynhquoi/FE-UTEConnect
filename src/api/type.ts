@@ -1,5 +1,4 @@
-export const API = "https://forum-be-1fdw.onrender.com";
-export const GRAPHQL_API = "https://forum-be-1fdw.onrender.com/graphql";
+export const API = "https://7241-42-114-102-242.ngrok-free.app";
 
 //auth
 export const API_AUTH_LOGIN = `${API}/login`;

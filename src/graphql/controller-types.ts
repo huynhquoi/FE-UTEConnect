@@ -429,12 +429,14 @@ export type Query = {
   /**     Notice */
   find_all_notice_by_userid?: Maybe<Array<Maybe<Notice>>>;
   find_commentlike_by_commentid_and_userid?: Maybe<Comment_Like>;
+  find_commentlike_byuserid?: Maybe<Array<Maybe<Comment_Like>>>;
   find_notice_by_userid_type_subject?: Maybe<Notice>;
   find_post_by_id?: Maybe<Post>;
   find_post_by_keyword?: Maybe<Array<Maybe<Post>>>;
   find_post_by_topicid?: Maybe<Array<Maybe<Post>>>;
   find_post_by_userid?: Maybe<Array<Maybe<Post>>>;
   find_postlike_by_postid_and_userid?: Maybe<Post_Like>;
+  find_postlike_byuserid?: Maybe<Array<Maybe<Post_Like>>>;
   /**    Follow */
   get_all_follower_by_user?: Maybe<Array<Maybe<User>>>;
   get_all_user_by_follower?: Maybe<Array<Maybe<User>>>;
@@ -523,6 +525,11 @@ export type QueryFind_Commentlike_By_Commentid_And_UseridArgs = {
 };
 
 
+export type QueryFind_Commentlike_ByuseridArgs = {
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryFind_Notice_By_Userid_Type_SubjectArgs = {
   subject?: InputMaybe<Scalars['Int']['input']>;
   typee?: InputMaybe<Scalars['Int']['input']>;
@@ -552,6 +559,11 @@ export type QueryFind_Post_By_UseridArgs = {
 
 export type QueryFind_Postlike_By_Postid_And_UseridArgs = {
   postid?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryFind_Postlike_ByuseridArgs = {
   userid?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -774,7 +786,7 @@ export type GetAllFollowPostQueryVariables = Exact<{
 }>;
 
 
-export type GetAllFollowPostQuery = { __typename?: 'Query', find_all_bookmark_by_userid?: Array<{ __typename?: 'Bookmark', bookmarkid: number, createday?: any | null, post_bookmark?: { __typename?: 'Post', postid: number } | null, user_bookmark?: { __typename?: 'User', userid: string } | null } | null> | null };
+export type GetAllFollowPostQuery = { __typename?: 'Query', find_all_bookmark_by_userid?: Array<{ __typename?: 'Bookmark', bookmarkid: number, createday?: any | null, post_bookmark?: { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null, user_bookmark?: { __typename?: 'User', userid: string } | null } | null> | null };
 
 export type GetNotificationQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -790,33 +802,33 @@ export type UpdateSeenNotificationMutationVariables = Exact<{
 
 export type UpdateSeenNotificationMutation = { __typename?: 'Mutation', update_isseen_true?: { __typename?: 'Notice', noiticeid: number } | null };
 
-export type PostFragment = { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null };
+export type PostFragment = { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null };
 
 export type GetPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
+export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
 
 export type GetPostByUserIdQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
+export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
 
 export type GetPostByKeyWordsQueryVariables = Exact<{
   keyword?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPostByKeyWordsQuery = { __typename?: 'Query', find_post_by_keyword?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
+export type GetPostByKeyWordsQuery = { __typename?: 'Query', find_post_by_keyword?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null> | null };
 
 export type GetPostByPkQueryVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetPostByPkQuery = { __typename?: 'Query', find_post_by_id?: { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null };
+export type GetPostByPkQuery = { __typename?: 'Query', find_post_by_id?: { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null };
 
 export type CreatePostMutationVariables = Exact<{
   post?: InputMaybe<PostRequest>;
@@ -898,6 +910,11 @@ export type DeleteCommentReactionMutationVariables = Exact<{
 
 export type DeleteCommentReactionMutation = { __typename?: 'Mutation', delete_icon_for_commentlike?: string | null };
 
+export type GetAllTopicQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllTopicQuery = { __typename?: 'Query', topic?: Array<{ __typename?: 'Topic', topicid: number, topicname?: string | null, createday?: any | null, ishide?: number | null, isdelete?: number | null } | null> | null };
+
 export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -947,6 +964,7 @@ export const PostFragmentDoc = gql`
   ishide
   isdelete
   image
+  requiredreputation
 }
     `;
 export const CreateCommentDocument = gql`
@@ -1296,6 +1314,17 @@ export const GetAllFollowPostDocument = gql`
     bookmarkid
     post_bookmark {
       postid
+      title
+      content
+      createday
+      user_post {
+        fullname
+        userid
+      }
+      updateday
+      ishide
+      isdelete
+      image
     }
     user_bookmark {
       userid
@@ -1932,6 +1961,49 @@ export function useDeleteCommentReactionMutation(baseOptions?: Apollo.MutationHo
 export type DeleteCommentReactionMutationHookResult = ReturnType<typeof useDeleteCommentReactionMutation>;
 export type DeleteCommentReactionMutationResult = Apollo.MutationResult<DeleteCommentReactionMutation>;
 export type DeleteCommentReactionMutationOptions = Apollo.BaseMutationOptions<DeleteCommentReactionMutation, DeleteCommentReactionMutationVariables>;
+export const GetAllTopicDocument = gql`
+    query GetAllTopic {
+  topic {
+    topicid
+    topicname
+    createday
+    ishide
+    isdelete
+  }
+}
+    `;
+
+/**
+ * __useGetAllTopicQuery__
+ *
+ * To run a query within a React component, call `useGetAllTopicQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllTopicQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllTopicQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllTopicQuery(baseOptions?: Apollo.QueryHookOptions<GetAllTopicQuery, GetAllTopicQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllTopicQuery, GetAllTopicQueryVariables>(GetAllTopicDocument, options);
+      }
+export function useGetAllTopicLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllTopicQuery, GetAllTopicQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllTopicQuery, GetAllTopicQueryVariables>(GetAllTopicDocument, options);
+        }
+export function useGetAllTopicSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllTopicQuery, GetAllTopicQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllTopicQuery, GetAllTopicQueryVariables>(GetAllTopicDocument, options);
+        }
+export type GetAllTopicQueryHookResult = ReturnType<typeof useGetAllTopicQuery>;
+export type GetAllTopicLazyQueryHookResult = ReturnType<typeof useGetAllTopicLazyQuery>;
+export type GetAllTopicSuspenseQueryHookResult = ReturnType<typeof useGetAllTopicSuspenseQuery>;
+export type GetAllTopicQueryResult = Apollo.QueryResult<GetAllTopicQuery, GetAllTopicQueryVariables>;
 export const GetAccountDocument = gql`
     query GetAccount {
   account {

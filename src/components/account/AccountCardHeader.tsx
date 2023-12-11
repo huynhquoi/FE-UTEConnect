@@ -92,7 +92,6 @@ const AccountCardHeader = ({
       variables: {
         post: {
           ...e,
-          requiredreputation: 50,
         },
         user: {
           userid: user?.userid,
@@ -137,6 +136,9 @@ const AccountCardHeader = ({
                   </div>
                   <div className=" text-lg ml-4 mt-2">
                     {post?.toString() || "0"} bài viết
+                  </div>
+                  <div className=" text-lg ml-4 mt-2">
+                    {user?.reputation || "0"} reputations
                   </div>
                 </div>
                 {profileUser?.userid === user?.userid ? (
@@ -323,10 +325,21 @@ const AccountCardHeader = ({
               ></XInput>
             </Form.Item>
             <Form.Item
+              name="requiredreputation"
+              rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
+            >
+              <XInput
+                label="Reputation"
+                placeholder="Nhập số điểm cần thiết"
+                useLabel={true}
+                required={true}
+              ></XInput>
+            </Form.Item>
+            <Form.Item
               name="image"
               rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
             >
-              <div style={{width: "100%"}}>
+              <div style={{ width: "100%" }}>
                 <div className="font-bold flex mb-1">Ảnh</div>
                 <Flex align="center" justify="center">
                   <XUpload />

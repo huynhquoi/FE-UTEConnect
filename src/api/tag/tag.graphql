@@ -1,0 +1,9 @@
+query GetAllTopic {
+  topic {
+    topicid
+    topicname
+    createday
+    ishide
+    isdelete
+  }
+}

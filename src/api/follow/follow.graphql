@@ -5,7 +5,7 @@ mutation CreateFollow($userid: String, $postid: Int) {
 }
 
 mutation DeleteFollow($userid: String, $postid: Int) {
-  delete_bookmark(userid: $userid, postid: $postid) 
+  delete_bookmark(userid: $userid, postid: $postid)
 }
 
 mutation CreateFollowUser($userid: String, $followerid: String) {
@@ -38,6 +38,18 @@ query GetAllFollowPost($userid: String) {
     bookmarkid
     post_bookmark {
       postid
+      title
+      content
+      createday
+      user_post {
+        fullname
+        userid
+      }
+      updateday
+      ishide
+
+      isdelete
+      image
     }
     user_bookmark {
       userid
