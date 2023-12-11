@@ -3,45 +3,157 @@ import {
   useDeleteCommentReactionMutation,
   useGetCommentDislikeQuery,
   useGetCommentLikeQuery,
+  useGetListCommentDislikeQuery,
+  useGetListCommentLikeQuery,
 } from "@/graphql/controller-types";
 import { Button, Flex, Space } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import { TYPE_DISLIKE, TYPE_LIKE } from "@/graphql/default-types";
 
 type CommentActionProps = {
+  userId: string;
   commentId: number;
 };
 
-const CommentAction = ({ commentId }: CommentActionProps) => {
-  const [reaction, setReaction] = useState("");
+const CommentAction = ({ commentId, userId }: CommentActionProps) => {
+  const [reaction, setReaction] = useState(0);
+  const [isReactioned, setIsReactioned] = useState(0);
 
   const [CreateReaction] = useCreateCommentReactionMutation();
   const [DeleteReaction] = useDeleteCommentReactionMutation();
 
-  const { data: like } = useGetCommentLikeQuery({
+  const { data: like, fetchMore: fetchLike } = useGetListCommentLikeQuery({
     variables: {
       commentid: commentId,
     },
   });
-  const { data: dislike } = useGetCommentDislikeQuery({
-    variables: {
-      commentid: commentId,
-    },
-  });
+  const { data: dislike, fetchMore: fetchDislike } =
+    useGetListCommentDislikeQuery({
+      variables: {
+        commentid: commentId,
+      },
+    });
+
+  useEffect(() => {
+    if (
+      like?.list_commentlike_by_commentid
+        ?.map((e) => e?.user_commentlike?.userid)
+        .some((c) => c === userId)
+    ) {
+      setIsReactioned(TYPE_LIKE);
+      return;
+    }
+    if (
+      dislike?.list_commentdislike_by_commentid
+        ?.map((e) => e?.user_commentlike?.userid)
+        .some((c) => c === userId)
+    ) {
+      setIsReactioned(TYPE_DISLIKE);
+      return;
+    }
+  }, [
+    dislike?.list_commentdislike_by_commentid,
+    like?.list_commentlike_by_commentid,
+    userId,
+  ]);
+
+  useEffect(() => {
+    if (!reaction) {
+      return;
+    }
+    const fetchData = () => {
+      fetchLike({
+        variables: {
+          commentid: commentId,
+        },
+      });
+      fetchDislike({
+        variables: {
+          commentid: commentId,
+        },
+      });
+    };
+    if (!isReactioned) {
+      CreateReaction({
+        variables: {
+          userid: userId,
+          commentid: commentId,
+          iconid: reaction,
+        },
+      }).then(() => {
+        fetchData();
+      });
+    } else {
+      DeleteReaction({
+        variables: {
+          userid: userId,
+          commentid: commentId,
+          iconid: isReactioned,
+        },
+      }).then(() => {
+        if (isReactioned !== reaction) {
+          CreateReaction({
+            variables: {
+              userid: userId,
+              commentid: commentId,
+              iconid: reaction,
+            },
+          }).then(() => {
+            fetchData();
+          });
+        } else {
+          fetchData();
+          setIsReactioned(0);
+        }
+      });
+    }
+    setReaction(0);
+  }, [
+    CreateReaction,
+    DeleteReaction,
+    commentId,
+    fetchDislike,
+    fetchLike,
+    isReactioned,
+    reaction,
+    userId,
+  ]);
+
   return (
     <>
       <Flex justify="space-between" align="center" className="pr-2">
         <Space>
-          <Button type="text" style={{ fontSize: "12px", padding: 0 }}>
+          <Button
+            onClick={() => setReaction(TYPE_LIKE)}
+            type="text"
+            style={{
+              fontSize: "12px",
+              padding: 0,
+              color: `${isReactioned === TYPE_LIKE ? "#ef4444" : "#000000"}`,
+              ...(isReactioned === TYPE_LIKE ? { fontWeight: "bold" } : null),
+            }}
+          >
             <Flex align="center" justify="space-between">
-              {like?.find_all_likecomment_by_commentid}
+              {like?.list_commentlike_by_commentid?.length}
               <UpOutlined className="ml-2" />
             </Flex>
           </Button>
-          <Button type="text" style={{ fontSize: "12px", padding: 0 }}>
+          <Button
+            onClick={() => setReaction(TYPE_DISLIKE)}
+            type="text"
+            style={{
+              fontSize: "12px",
+              padding: 0,
+              color: `${isReactioned === TYPE_DISLIKE ? "#ef4444" : "#000000"}`,
+              ...(isReactioned === TYPE_DISLIKE
+                ? { fontWeight: "bold" }
+                : null),
+            }}
+          >
             <Flex align="center" justify="space-between">
-              {dislike?.find_all_dislikecomment_by_commentid}
+              {dislike?.list_commentdislike_by_commentid?.length}
               <DownOutlined className="ml-2" />
             </Flex>
           </Button>

@@ -20,7 +20,6 @@ import {
   Post,
   useGetAllFollowPostQuery,
   useGetPostByKeyWordsQuery,
-  useGetPostQuery,
 } from "@/graphql/controller-types";
 import { useEffect, useState } from "react";
 import { useGlobalStore } from "@/hook/useUser";
@@ -34,12 +33,11 @@ const HomePage = () => {
     variables: { keyword: keywords },
   });
 
-  const { data: followPost } =
-    useGetAllFollowPostQuery({
-      variables: {
-        userid: user?.userid,
-      },
-    });
+  const { data: followPost } = useGetAllFollowPostQuery({
+    variables: {
+      userid: user?.userid,
+    },
+  });
   useEffect(() => {
     fetchMore({ variables: { keyword: keywords } });
   }, [fetchMore, keywords]);
@@ -89,31 +87,31 @@ const HomePage = () => {
                 </Form>
               </Card>
 
-              {!loading ? (
-                data?.find_post_by_keyword
-                  ?.filter((e) => !e?.isdelete)
-                  .map((p) => (
-                    <PostCard
-                      isFollow={followPost?.find_all_bookmark_by_userid
-                        ?.map((e) => e?.post_bookmark?.postid)
-                        .some((e) => e === p?.postid)}
-                      key={p?.postid}
-                      post={p as Post}
-                    />
-                  ))
-              ) : (
-                <Card style={{ width: "94%", marginTop: 20 }}>
-                  <Skeleton loading={loading} avatar active>
-                    <Meta
-                      avatar={
-                        <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
-                      }
-                      title="Card title"
-                      description="This is the description"
-                    />
-                  </Skeleton>
-                </Card>
-              )}
+              {!loading
+                ? data?.find_post_by_keyword
+                    ?.filter((e) => !e?.isdelete)
+                    .map((p) => (
+                      <PostCard
+                        isFollow={followPost?.find_all_bookmark_by_userid
+                          ?.map((e) => e?.post_bookmark?.postid)
+                          .some((e) => e === p?.postid)}
+                        key={p?.postid}
+                        post={p as Post}
+                      />
+                    ))
+                : [1, 2, 3, 4].map((e, index) => (
+                    <Card key={index} style={{ width: "94%", marginTop: 20 }}>
+                      <Skeleton loading={loading} avatar active>
+                        <Meta
+                          avatar={
+                            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
+                          }
+                          title="Card title"
+                          description="This is the description"
+                        />
+                      </Skeleton>
+                    </Card>
+                  ))}
             </div>
           </Col>
           <Col span={6}></Col>

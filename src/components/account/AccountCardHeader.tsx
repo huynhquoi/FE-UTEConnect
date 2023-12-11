@@ -20,12 +20,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import {
   User,
-  useCreateFollowUserMutation,
   useCreatePostMutation,
-  useGetPostQuery,
+  useGetPostByUserIdQuery,
   useUpdateAccountMutation,
 } from "@/graphql/controller-types";
-import { format } from "date-fns";
 import dayjs from "dayjs";
 import XEditor from "../core/XEditor";
 import XUpload from "../core/XUpload";
@@ -50,6 +48,7 @@ const AccountCardHeader = ({
   const [createVisible, setCreateVisible] = useState(false);
   const [updateAccount] = useUpdateAccountMutation();
   const [createPost] = useCreatePostMutation();
+  const { fetchMore: fetchPost } = useGetPostByUserIdQuery({});
   const image = useImageStore();
 
   const profileUser = useSelector(
@@ -100,7 +99,12 @@ const AccountCardHeader = ({
       },
     })
       .then(() => {
-        window.location.reload();
+        setCreateVisible(false);
+        fetchPost({
+          variables: {
+            userId: user?.userid,
+          },
+        });
       })
       .catch((err) => {
         console.log(err.message);

@@ -5,14 +5,11 @@ import PostComment from "@/components/post/PostComment";
 import { useGetPostByPkQuery } from "@/graphql/controller-types";
 import {
   Avatar,
-  Button,
   Card,
   Col,
   ConfigProvider,
   Divider,
-  Flex,
   Row,
-  Space,
 } from "antd";
 import Meta from "antd/es/card/Meta";
 import dayjs from "dayjs";

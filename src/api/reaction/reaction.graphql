@@ -10,8 +10,24 @@ query GetCommentLike($commentid: Int) {
   find_all_likecomment_by_commentid(commentid: $commentid)
 }
 
+query GetListCommentLike($commentid: Int) {
+  list_commentlike_by_commentid(commentid: $commentid) {
+    user_commentlike {
+      userid
+    }
+  }
+}
+
 query GetCommentDislike($commentid: Int) {
   find_all_dislikecomment_by_commentid(commentid: $commentid)
+}
+
+query GetListCommentDislike($commentid: Int) {
+  list_commentdislike_by_commentid(commentid: $commentid) {
+    user_commentlike {
+      userid
+    }
+  }
 }
 
 mutation CreatePostReaction($userid: String, $postid: Int, $iconid: Int) {

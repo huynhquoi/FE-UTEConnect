@@ -867,12 +867,26 @@ export type GetCommentLikeQueryVariables = Exact<{
 
 export type GetCommentLikeQuery = { __typename?: 'Query', find_all_likecomment_by_commentid?: number | null };
 
+export type GetListCommentLikeQueryVariables = Exact<{
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetListCommentLikeQuery = { __typename?: 'Query', list_commentlike_by_commentid?: Array<{ __typename?: 'Comment_Like', user_commentlike?: { __typename?: 'User', userid: string } | null } | null> | null };
+
 export type GetCommentDislikeQueryVariables = Exact<{
   commentid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
 export type GetCommentDislikeQuery = { __typename?: 'Query', find_all_dislikecomment_by_commentid?: number | null };
+
+export type GetListCommentDislikeQueryVariables = Exact<{
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetListCommentDislikeQuery = { __typename?: 'Query', list_commentdislike_by_commentid?: Array<{ __typename?: 'Comment_Like', user_commentlike?: { __typename?: 'User', userid: string } | null } | null> | null };
 
 export type CreatePostReactionMutationVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1783,6 +1797,48 @@ export type GetCommentLikeQueryHookResult = ReturnType<typeof useGetCommentLikeQ
 export type GetCommentLikeLazyQueryHookResult = ReturnType<typeof useGetCommentLikeLazyQuery>;
 export type GetCommentLikeSuspenseQueryHookResult = ReturnType<typeof useGetCommentLikeSuspenseQuery>;
 export type GetCommentLikeQueryResult = Apollo.QueryResult<GetCommentLikeQuery, GetCommentLikeQueryVariables>;
+export const GetListCommentLikeDocument = gql`
+    query GetListCommentLike($commentid: Int) {
+  list_commentlike_by_commentid(commentid: $commentid) {
+    user_commentlike {
+      userid
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetListCommentLikeQuery__
+ *
+ * To run a query within a React component, call `useGetListCommentLikeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetListCommentLikeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetListCommentLikeQuery({
+ *   variables: {
+ *      commentid: // value for 'commentid'
+ *   },
+ * });
+ */
+export function useGetListCommentLikeQuery(baseOptions?: Apollo.QueryHookOptions<GetListCommentLikeQuery, GetListCommentLikeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetListCommentLikeQuery, GetListCommentLikeQueryVariables>(GetListCommentLikeDocument, options);
+      }
+export function useGetListCommentLikeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetListCommentLikeQuery, GetListCommentLikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetListCommentLikeQuery, GetListCommentLikeQueryVariables>(GetListCommentLikeDocument, options);
+        }
+export function useGetListCommentLikeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetListCommentLikeQuery, GetListCommentLikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetListCommentLikeQuery, GetListCommentLikeQueryVariables>(GetListCommentLikeDocument, options);
+        }
+export type GetListCommentLikeQueryHookResult = ReturnType<typeof useGetListCommentLikeQuery>;
+export type GetListCommentLikeLazyQueryHookResult = ReturnType<typeof useGetListCommentLikeLazyQuery>;
+export type GetListCommentLikeSuspenseQueryHookResult = ReturnType<typeof useGetListCommentLikeSuspenseQuery>;
+export type GetListCommentLikeQueryResult = Apollo.QueryResult<GetListCommentLikeQuery, GetListCommentLikeQueryVariables>;
 export const GetCommentDislikeDocument = gql`
     query GetCommentDislike($commentid: Int) {
   find_all_dislikecomment_by_commentid(commentid: $commentid)
@@ -1821,6 +1877,48 @@ export type GetCommentDislikeQueryHookResult = ReturnType<typeof useGetCommentDi
 export type GetCommentDislikeLazyQueryHookResult = ReturnType<typeof useGetCommentDislikeLazyQuery>;
 export type GetCommentDislikeSuspenseQueryHookResult = ReturnType<typeof useGetCommentDislikeSuspenseQuery>;
 export type GetCommentDislikeQueryResult = Apollo.QueryResult<GetCommentDislikeQuery, GetCommentDislikeQueryVariables>;
+export const GetListCommentDislikeDocument = gql`
+    query GetListCommentDislike($commentid: Int) {
+  list_commentdislike_by_commentid(commentid: $commentid) {
+    user_commentlike {
+      userid
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetListCommentDislikeQuery__
+ *
+ * To run a query within a React component, call `useGetListCommentDislikeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetListCommentDislikeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetListCommentDislikeQuery({
+ *   variables: {
+ *      commentid: // value for 'commentid'
+ *   },
+ * });
+ */
+export function useGetListCommentDislikeQuery(baseOptions?: Apollo.QueryHookOptions<GetListCommentDislikeQuery, GetListCommentDislikeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetListCommentDislikeQuery, GetListCommentDislikeQueryVariables>(GetListCommentDislikeDocument, options);
+      }
+export function useGetListCommentDislikeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetListCommentDislikeQuery, GetListCommentDislikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetListCommentDislikeQuery, GetListCommentDislikeQueryVariables>(GetListCommentDislikeDocument, options);
+        }
+export function useGetListCommentDislikeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetListCommentDislikeQuery, GetListCommentDislikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetListCommentDislikeQuery, GetListCommentDislikeQueryVariables>(GetListCommentDislikeDocument, options);
+        }
+export type GetListCommentDislikeQueryHookResult = ReturnType<typeof useGetListCommentDislikeQuery>;
+export type GetListCommentDislikeLazyQueryHookResult = ReturnType<typeof useGetListCommentDislikeLazyQuery>;
+export type GetListCommentDislikeSuspenseQueryHookResult = ReturnType<typeof useGetListCommentDislikeSuspenseQuery>;
+export type GetListCommentDislikeQueryResult = Apollo.QueryResult<GetListCommentDislikeQuery, GetListCommentDislikeQueryVariables>;
 export const CreatePostReactionDocument = gql`
     mutation CreatePostReaction($userid: String, $postid: Int, $iconid: Int) {
   create_icon_for_postlike(userid: $userid, postid: $postid, iconid: $iconid)

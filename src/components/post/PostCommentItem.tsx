@@ -75,7 +75,13 @@ const PostCommentItem = ({ comment }: PostCommentItemProps) => {
 
   return (
     <>
-      <Card className="card_comment-item" style={{ background: "#f4f4f5" }}>
+      <Card
+        className="card_comment-item"
+        style={{
+          // background: "#f4f4f5"
+          background: "#fff",
+        }}
+      >
         <Timeline
           items={[
             {
@@ -105,22 +111,33 @@ const PostCommentItem = ({ comment }: PostCommentItemProps) => {
                       </div>
                     </Space>
                     <div
-                      className=""
-                      dangerouslySetInnerHTML={{
-                        __html: comment?.content as string,
+                      className="p-2 rounded-md"
+                      style={{
+                        background: "#f4f4f5",
                       }}
-                    ></div>
-                    <Flex>
-                      <CommentAction commentId={comment?.commentid} />
-                      {!reply ? (
+                    >
+                      <div
+                        className=""
+                        dangerouslySetInnerHTML={{
+                          __html: comment?.content as string,
+                        }}
+                      ></div>
+                    </div>
+                    <Flex vertical>
+                      <Flex>
+                        <CommentAction
+                          userId={user?.userid}
+                          commentId={comment?.commentid}
+                        />
                         <Button
                           type="text"
                           style={{ fontSize: "12px", padding: 0 }}
-                          onClick={() => setReply(true)}
+                          onClick={() => setReply(!reply)}
                         >
                           Phản hồi
                         </Button>
-                      ) : (
+                      </Flex>
+                      {!reply ? null : (
                         <Form
                           form={form}
                           onFinish={onFinish}
