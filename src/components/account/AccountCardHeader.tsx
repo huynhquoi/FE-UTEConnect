@@ -58,11 +58,13 @@ const AccountCardHeader = ({
                   </div>
                 </div>
                 {accountUser?.userid === user?.userid ? (
-                  <div className="flex items-start">
-                    <PostForm />
-                    <AccountForm onReload={() => setReload(true)} />
-                    <GroupForm />
-                  </div>
+                  <>
+                    <div className="flex items-start">
+                      <PostForm />
+                      <AccountForm onReload={() => setReload(true)} />
+                      <GroupForm />
+                    </div>
+                  </>
                 ) : (
                   <>
                     <FollowButton

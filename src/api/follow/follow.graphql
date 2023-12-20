@@ -30,6 +30,25 @@ query GetAllFollowUser($followerid: String) {
     gender
     birthday
     userid
+    reputation
+  }
+}
+
+query GetAllUserFollowAccount($userid: String) {
+  get_all_follower_by_user(userid: $userid) {
+    username
+    fullname
+    email
+    address
+    role {
+      roleid
+    }
+    phone
+    image
+    gender
+    birthday
+    userid
+    reputation
   }
 }
 

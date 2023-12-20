@@ -26,6 +26,8 @@ function getItem(
 const items: MenuItem[] = [
   getItem("Tài khoản của bạn", "account", null, [
     getItem("Quản lý tài khoản", "/home/account_manager"),
+    getItem("Tài khoản tôi đang theo dõi", "/home/follow_user"),
+    getItem("Tài khoản đang theo dõi tôi", "/home/user_follow"),
     getItem("Đăng xuất", "/auth/logout"),
   ]),
 

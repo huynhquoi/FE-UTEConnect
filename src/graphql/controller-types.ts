@@ -897,7 +897,14 @@ export type GetAllFollowUserQueryVariables = Exact<{
 }>;
 
 
-export type GetAllFollowUserQuery = { __typename?: 'Query', get_all_user_by_follower?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
+export type GetAllFollowUserQuery = { __typename?: 'Query', get_all_user_by_follower?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
+
+export type GetAllUserFollowAccountQueryVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetAllUserFollowAccountQuery = { __typename?: 'Query', get_all_follower_by_user?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
 
 export type GetAllFollowPostQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1640,6 +1647,7 @@ export const GetAllFollowUserDocument = gql`
     gender
     birthday
     userid
+    reputation
   }
 }
     `;
@@ -1676,6 +1684,58 @@ export type GetAllFollowUserQueryHookResult = ReturnType<typeof useGetAllFollowU
 export type GetAllFollowUserLazyQueryHookResult = ReturnType<typeof useGetAllFollowUserLazyQuery>;
 export type GetAllFollowUserSuspenseQueryHookResult = ReturnType<typeof useGetAllFollowUserSuspenseQuery>;
 export type GetAllFollowUserQueryResult = Apollo.QueryResult<GetAllFollowUserQuery, GetAllFollowUserQueryVariables>;
+export const GetAllUserFollowAccountDocument = gql`
+    query GetAllUserFollowAccount($userid: String) {
+  get_all_follower_by_user(userid: $userid) {
+    username
+    fullname
+    email
+    address
+    role {
+      roleid
+    }
+    phone
+    image
+    gender
+    birthday
+    userid
+    reputation
+  }
+}
+    `;
+
+/**
+ * __useGetAllUserFollowAccountQuery__
+ *
+ * To run a query within a React component, call `useGetAllUserFollowAccountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllUserFollowAccountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllUserFollowAccountQuery({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetAllUserFollowAccountQuery(baseOptions?: Apollo.QueryHookOptions<GetAllUserFollowAccountQuery, GetAllUserFollowAccountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllUserFollowAccountQuery, GetAllUserFollowAccountQueryVariables>(GetAllUserFollowAccountDocument, options);
+      }
+export function useGetAllUserFollowAccountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllUserFollowAccountQuery, GetAllUserFollowAccountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllUserFollowAccountQuery, GetAllUserFollowAccountQueryVariables>(GetAllUserFollowAccountDocument, options);
+        }
+export function useGetAllUserFollowAccountSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllUserFollowAccountQuery, GetAllUserFollowAccountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllUserFollowAccountQuery, GetAllUserFollowAccountQueryVariables>(GetAllUserFollowAccountDocument, options);
+        }
+export type GetAllUserFollowAccountQueryHookResult = ReturnType<typeof useGetAllUserFollowAccountQuery>;
+export type GetAllUserFollowAccountLazyQueryHookResult = ReturnType<typeof useGetAllUserFollowAccountLazyQuery>;
+export type GetAllUserFollowAccountSuspenseQueryHookResult = ReturnType<typeof useGetAllUserFollowAccountSuspenseQuery>;
+export type GetAllUserFollowAccountQueryResult = Apollo.QueryResult<GetAllUserFollowAccountQuery, GetAllUserFollowAccountQueryVariables>;
 export const GetAllFollowPostDocument = gql`
     query GetAllFollowPost($userid: String) {
   find_all_bookmark_by_userid(userid: $userid) {
