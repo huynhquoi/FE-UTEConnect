@@ -1,30 +1,36 @@
 "use client";
 
-import {
-  Avatar,
-  Card,
-  CardProps,
-  Col,
-  ConfigProvider,
-  Row,
-} from "antd";
+import { Avatar, Card, CardProps, Col, ConfigProvider, Row } from "antd";
 import { User } from "@/graphql/controller-types";
 import FollowButton from "../shared/FollowButon";
 import { useGlobalStore } from "@/hook/useUser";
 import PostForm from "../post/PostForm";
 import AccountForm from "./AccountForm";
+import ReportButton from "../shared/ReportButton";
+import { useEffect, useState } from "react";
+import GroupForm from "../group/GroupForm";
 
 type AccountCardHeaderProps = {
   user?: User;
   post: Number;
+  onReload: () => void;
 };
 
 const AccountCardHeader = ({
   user,
   post,
+  onReload,
   ...props
 }: CardProps & AccountCardHeaderProps) => {
   const accountUser = useGlobalStore();
+  const [reload, setReload] = useState(false);
+  useEffect(() => {
+    if (!reload) {
+      return;
+    }
+    void onReload();
+    setReload(false);
+  }, [onReload, reload]);
   return (
     <>
       <ConfigProvider>
@@ -32,10 +38,7 @@ const AccountCardHeader = ({
           <Row>
             <Col span={4}>
               <div className="ml-5">
-                <Avatar
-                  size={172}
-                  src={user?.image}
-                />
+                <Avatar size={172} src={user?.image} />
               </div>
             </Col>
             <Col span={20}>
@@ -57,13 +60,17 @@ const AccountCardHeader = ({
                 {accountUser?.userid === user?.userid ? (
                   <div className="flex items-start">
                     <PostForm />
-                    <AccountForm />
+                    <AccountForm onReload={() => setReload(true)} />
+                    <GroupForm />
                   </div>
                 ) : (
-                  <FollowButton
-                    userId={user?.userid as string}
-                    followerId={accountUser?.userid}
-                  />
+                  <>
+                    <FollowButton
+                      userId={user?.userid as string}
+                      followerId={accountUser?.userid}
+                    />
+                    <ReportButton userReportId={user?.userid} />
+                  </>
                 )}
               </div>
             </Col>

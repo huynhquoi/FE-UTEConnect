@@ -32,10 +32,10 @@ const items: MenuProps["items"] = [
     label: "Chủ đề",
     key: "home/tag",
   },
-  // {
-  //   label: "Diễn đàn",
-  //   key: "home/forum",
-  // },
+  {
+    label: "Diễn đàn",
+    key: "home/group",
+  },
 ];
 
 const MainHeader = () => {

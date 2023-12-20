@@ -2,13 +2,26 @@
 
 import ActionMenu from "@/components/home/ActionMenu";
 import PostComment from "@/components/post/PostComment";
-import { useGetPostByPkQuery } from "@/graphql/controller-types";
-import { Avatar, Card, Col, ConfigProvider, Divider, Row, Tag } from "antd";
+import {
+  useGetAccountByPkQuery,
+  useGetPostByPkQuery,
+} from "@/graphql/controller-types";
+import {
+  Avatar,
+  Card,
+  Col,
+  ConfigProvider,
+  Divider,
+  Flex,
+  Row,
+  Tag,
+} from "antd";
 import Meta from "antd/es/card/Meta";
 import dayjs from "dayjs";
 import { useParams } from "next/navigation";
 import "./style.scss";
 import PostAction from "@/components/post/PostAction";
+import ReportButton from "@/components/shared/ReportButton";
 
 const PostDetailPage = () => {
   const params = useParams();
@@ -20,7 +33,7 @@ const PostDetailPage = () => {
       <ConfigProvider
         theme={{
           token: {
-            fontSize: 14,
+            fontSize: 16,
             colorPrimary: "#000000",
           },
           components: {
@@ -44,10 +57,21 @@ const PostDetailPage = () => {
                   avatar={
                     <Avatar
                       size={52}
-                      src="https://xsgames.co/randomusers/avatar.php?g=pixel"
+                      src={data?.find_post_by_id?.user_post?.image}
                     />
                   }
-                  title={data?.find_post_by_id?.user_post?.fullname}
+                  title={
+                    <>
+                      <Flex align="center" justify="space-between">
+                        <div className="text-base">
+                          {data?.find_post_by_id?.user_post?.fullname}
+                        </div>
+                        <ReportButton
+                          postReportId={data?.find_post_by_id?.postid}
+                        />
+                      </Flex>
+                    </>
+                  }
                   description={
                     <>
                       {dayjs(data?.find_post_by_id?.createday).format(

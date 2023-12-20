@@ -12,27 +12,30 @@ import {
   Tooltip,
 } from "antd";
 import XInput from "../core/XInput";
-import { useUpdateAccountMutation } from "@/graphql/controller-types";
+import {
+  useCreateGroupMutation,
+} from "@/graphql/controller-types";
 import { useEffect, useState } from "react";
 import { useGlobalStore } from "@/hook/useUser";
-import dayjs from "dayjs";
 import XUploadAvatar from "../core/XUploadAvartar";
 import { useImageStore } from "@/hook/useImage";
 import XImage from "../core/XImage";
 import { ReloadOutlined, CloseOutlined } from "@ant-design/icons";
+import XEditor from "../core/XEditor";
 
 const { Option } = Select;
 
-type AccountFormType = {
-  onReload: () => void;
+type GroupFormType = {
+  //   onReload: () => void;
+  groupId?: number;
 };
 
-const AccountForm = ({ onReload }: AccountFormType) => {
+const GroupForm = ({ groupId }: GroupFormType) => {
   const user = useGlobalStore();
   const [form] = Form.useForm();
   const [editImage, setEditImage] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
-  const [updateAccount] = useUpdateAccountMutation();
+  const [CreateGroup] = useCreateGroupMutation();
 
   const image = useImageStore();
 
@@ -44,42 +47,35 @@ const AccountForm = ({ onReload }: AccountFormType) => {
     setEditImage(false);
   }, [form, image]);
 
-  const onGenderChange = (value: string) => {
-    form.setFieldValue("gender", value);
-  };
-  const onBirthdayChange: DatePickerProps["onChange"] = (date, dateString) => {
-    form.setFieldValue("birthday", dateString);
-  };
-
   const onFinish = (e: any) => {
-    updateAccount({
+    CreateGroup({
       variables: {
-        user: {
-          ...e,
-          userid: user?.userid,
+        group: {
+          description: e?.description,
+          groupname: e?.groupname,
+          reputaion: e?.reputaion,
+          image: e?.image,
         },
+        admin: user?.userid,
       },
-    }).then(() => setEditVisible(false))
-      .then(() => onReload())
+    })
+      .then(() => setEditVisible(false))
+    //   .then(() => onReload())
       .catch((err) => {
         console.log(err.message);
       });
   };
   useEffect(() => {
-    form.setFieldValue("gender", user?.gender);
-    form.setFieldValue("birthday", user?.birthday);
     form.setFieldValue("image", user?.image);
   }, [form, user]);
   return (
     <>
       <Button className="ml-2" onClick={() => setEditVisible(true)}>
-        Chỉnh sửa tài khoản
+        Tạo group
       </Button>
       <Modal
         open={editVisible}
-        title={
-          <div className="font-bold text-xl">Chỉnh sửa thông tin cá nhân</div>
-        }
+        title={<div className="font-bold text-xl">Tạo group</div>}
         maskClosable={false}
         width={800}
         centered
@@ -94,16 +90,10 @@ const AccountForm = ({ onReload }: AccountFormType) => {
         footer={false}
       >
         <Form
-          id="account_form"
+          id="group_form"
           form={form}
           onFinish={onFinish}
-          initialValues={{
-            ["username"]: user?.username as string,
-            ["fullname"]: user?.fullname as string,
-            ["email"]: user?.email as string,
-            ["phone"]: (user?.phone as string) || "",
-            ["address"]: (user?.address as string) || "",
-          }}
+          initialValues={{}}
         >
           <Form.Item
             name="image"
@@ -151,77 +141,41 @@ const AccountForm = ({ onReload }: AccountFormType) => {
             </div>
           </Form.Item>
           <Form.Item
-            name="username"
+            name="groupname"
             rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
           >
             <XInput
-              label="Tên đăng nhập"
-              placeholder="Nhập tên đăng nhập hoặc email"
+              label="Tên nhóm"
+              placeholder="Nhập tên nhóm"
               useLabel={true}
             ></XInput>
           </Form.Item>
           <Form.Item
-            name="fullname"
+            name="reputaion"
             rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
           >
             <XInput
-              label="Tên của bạn"
-              placeholder="Nhập tên của bạn"
+              label="Reputation"
+              placeholder="Nhập số điểm cần thiết"
               useLabel={true}
+              required={true}
             ></XInput>
           </Form.Item>
           <Form.Item
-            name="email"
+            name="description"
             rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
           >
-            <XInput
-              label="Email"
-              placeholder="Nhập email của bạn"
-              useLabel={true}
-            ></XInput>
-          </Form.Item>
-          <Form.Item
-            name="gender"
-            rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
-          >
-            <div>
-              <div className="font-bold flex mb-1">Giới tính</div>
-              <Select
-                placeholder={"Chọn giới tính "}
-                allowClear
-                onChange={onGenderChange}
-                defaultValue={user?.gender}
-              >
-                <Option value="male">Nam</Option>
-                <Option value="female">Nữ</Option>
-                <Option value="other">Khác</Option>
-              </Select>
-            </div>
-          </Form.Item>
-          <Form.Item name="birthday">
-            <div>
-              <div className="font-bold flex mb-1">Ngày sinh</div>
-              <DatePicker
-                defaultValue={dayjs(user?.birthday, "YYYY-MM-DD") || ""}
-                onChange={onBirthdayChange}
-                placeholder="Chọn ngày sinh của bạn"
-                style={{ width: "100%" }}
+            <div className="">
+              <div className="font-bold flex mb-1">
+                Chi tiết
+                <p className="text-red-600"> *</p>
+              </div>
+              <XEditor
+                onChange={(e: any) => form.setFieldValue("description", e)}
+                value={form.getFieldValue("description")}
+                placeholder="Nhập chi tiết"
               />
             </div>
-          </Form.Item>
-          <Form.Item name="phone">
-            <XInput
-              label="Số điện thoại"
-              placeholder="Nhập số điện thoại"
-              useLabel={true}
-            ></XInput>
-          </Form.Item>
-          <Form.Item name="address">
-            <XInput
-              label="Địa chỉ"
-              placeholder="Nhập địa chỉ"
-              useLabel={true}
-            ></XInput>
           </Form.Item>
           <Flex justify="end">
             <Space>
@@ -242,7 +196,7 @@ const AccountForm = ({ onReload }: AccountFormType) => {
                     color: "#fff",
                   }}
                 >
-                  Chỉnh sửa
+                  Tạo
                 </Button>
               </Form.Item>
             </Space>
@@ -253,4 +207,4 @@ const AccountForm = ({ onReload }: AccountFormType) => {
   );
 };
 
-export default AccountForm;
+export default GroupForm;

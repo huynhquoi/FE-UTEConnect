@@ -34,7 +34,7 @@ const FollowPostPage = () => {
       <ConfigProvider
         theme={{
           token: {
-            fontSize: 14,
+            fontSize: 16,
             colorPrimary: "#000000",
           },
           components: {

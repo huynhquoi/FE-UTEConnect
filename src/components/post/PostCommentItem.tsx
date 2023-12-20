@@ -16,6 +16,7 @@ import XEditComment from "../core/XEditComment";
 import { SendOutlined } from "@ant-design/icons";
 import { useGlobalStore } from "@/hook/useUser";
 import CommentAction from "./CommentAction";
+import ReportButton from "../shared/ReportButton";
 
 type PostCommentItemProps = {
   comment: Comment;
@@ -136,6 +137,15 @@ const PostCommentItem = ({ comment }: PostCommentItemProps) => {
                         >
                           Phản hồi
                         </Button>
+                        <ReportButton
+                          type="text"
+                          style={{
+                            fontSize: "12px",
+                            padding: 0,
+                            marginLeft: 4,
+                          }}
+                          commentReportId={comment?.commentid}
+                        />
                       </Flex>
                       {!reply ? null : (
                         <Form

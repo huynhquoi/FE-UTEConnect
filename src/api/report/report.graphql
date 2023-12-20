@@ -1,0 +1,71 @@
+fragment Report on Report {
+  reportid
+  reason
+  content
+  type
+  createday
+  user_report {
+    userid
+    fullname
+    image
+  }
+  post_report {
+    postid
+    title
+  }
+  comment_report {
+    commentid
+    content
+  }
+  user_reporter {
+    userid
+    fullname
+    image
+  }
+}
+
+query getReportByType($type: Int) {
+  get_report_by_type(type: $type) {
+    ...Report
+  }
+}
+
+mutation CreateUserReport(
+  $report: ReportRequest
+  $userid: String
+  $reporterid: String
+) {
+  create_report_user(report: $report, userid: $userid, reporterid: $reporterid)
+}
+
+mutation CreatePostReport(
+  $report: ReportRequest
+  $postid: Int
+  $reporterid: String
+) {
+  create_report_post(report: $report, postid: $postid, reporterid: $reporterid)
+}
+
+mutation CreateCommentReport(
+  $report: ReportRequest
+  $commentid: Int
+  $reporterid: String
+) {
+  create_report_comment(
+    report: $report
+    commentid: $commentid
+    reporterid: $reporterid
+  )
+}
+
+mutation DeleteUserReport($userid: String) {
+  delete_report_by_userid(userid: $userid)
+}
+
+mutation DeletePostReport($postid: Int) {
+  delete_report_by_postid(postid: $postid)
+}
+
+mutation DeleteCommentReport($commentid: Int) {
+  delete_report_by_commentid(commentid: $commentid)
+}

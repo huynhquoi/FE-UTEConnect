@@ -1,0 +1,66 @@
+fragment Group on Group {
+  groupid
+  groupname
+  image
+  createday
+  admin {
+    userid
+    image
+    fullname
+    email
+  }
+  reputaion
+  description
+}
+
+fragment GroupUser on User_Group {
+  user_groupid
+  user_usergroup {
+    userid
+    image
+    fullname
+    reputation
+    email
+  }
+  group_usergroup {
+    ...Group
+  }
+  createday
+  checked
+}
+
+query getGroup($keyword: String) {
+  find_group_by_keyword(keyword: $keyword) {
+    ...Group
+  }
+}
+
+query findUserInGroup($groupid: Int) {
+  get_user_in_group(groupid: $groupid) {
+    ...GroupUser
+  }
+}
+
+mutation CreateGroup($group: GroupRequest, $admin: String) {
+  create_group(group: $group, admin: $admin)
+}
+
+mutation UpdateGroup($group: GroupRequest) {
+  update_group(group: $group)
+}
+
+mutation DeleteGroup($groupid: Int) {
+  delete_group(groupid: $groupid)
+}
+
+mutation JoinGroup($userid: String, $groupid: Int) {
+  join_group(userid: $userid, groupid: $groupid)
+}
+
+mutation LeaveGroup($userid: String, $groupid: Int) {
+    leave_group(userid: $userid, groupid: $groupid)
+}
+
+mutation AcceptUser($userid: String, $groupid: Int, $check:Int) {
+    update_check(userid: $userid, groupid: $groupid, check: $check)
+}

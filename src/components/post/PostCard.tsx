@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useGlobalStore } from "@/hook/useUser";
 import XImage from "../core/XImage";
+import PostAction from "./PostAction";
 
 type PostCardProps = {
   src?: string;
@@ -131,13 +132,13 @@ const PostCard = ({
       <Card
         style={{ width: "94%", marginTop: 20 }}
         {...props}
-        className={`job_card ${className}`}
+        className={`post_card ${className}`}
       >
         <Meta
           avatar={
             <Avatar
               size={52}
-              src="https://xsgames.co/randomusers/avatar.php?g=pixel"
+              src={post?.user_post?.image}
               onClick={() =>
                 router.push(`/home/account_manager/${post?.user_post?.userid}`)
               }
@@ -188,6 +189,7 @@ const PostCard = ({
           ></div>
         </div>
         <div className="flex items-center justify-between">
+          <PostAction postId={post?.postid} userId={post?.user_post?.userid as string} />
           <Button
             onClick={() => {
               router.push(`/home/post/${post.postid}`);

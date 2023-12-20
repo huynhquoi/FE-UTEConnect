@@ -17,27 +17,25 @@ import {
 } from "antd";
 import "./style.scss";
 import {
+  Group,
   Post,
   useGetAllFollowPostQuery,
+  useGetGroupQuery,
   useGetPostByKeyWordsQuery,
 } from "@/graphql/controller-types";
 import { useEffect, useState } from "react";
 import { useGlobalStore } from "@/hook/useUser";
 import Meta from "antd/es/card/Meta";
+import GroupCard from "@/components/group/GroupCard";
 
-const HomePage = () => {
+const GroupPage = () => {
   const user = useGlobalStore();
   const [form] = Form.useForm();
   const [keywords, setKeywords] = useState("");
-  const { data, loading, fetchMore } = useGetPostByKeyWordsQuery({
+  const { data, loading, fetchMore } = useGetGroupQuery({
     variables: { keyword: keywords },
   });
 
-  const { data: followPost } = useGetAllFollowPostQuery({
-    variables: {
-      userid: user?.userid,
-    },
-  });
   useEffect(() => {
     fetchMore({ variables: { keyword: keywords } });
   }, [fetchMore, keywords]);
@@ -88,17 +86,9 @@ const HomePage = () => {
               </Card>
 
               {!loading
-                ? data?.find_post_by_keyword
-                    ?.filter((e) => !e?.isdelete)
-                    .map((p) => (
-                      <PostCard
-                        isFollow={followPost?.find_all_bookmark_by_userid
-                          ?.map((e) => e?.post_bookmark?.postid)
-                          .some((e) => e === p?.postid)}
-                        key={p?.postid}
-                        post={p as Post}
-                      />
-                    ))
+                ? data?.find_group_by_keyword?.map((p) => (
+                    <GroupCard key={p?.groupid} group={p as Group} />
+                  ))
                 : [1, 2, 3, 4].map((e, index) => (
                     <Card key={index} style={{ width: "94%", marginTop: 20 }}>
                       <Skeleton loading={loading} avatar active>
@@ -121,4 +111,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default GroupPage;

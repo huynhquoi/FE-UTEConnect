@@ -13,6 +13,7 @@ import {
 import { Avatar, Card, Col, ConfigProvider, Empty, Row, Skeleton } from "antd";
 import Meta from "antd/es/card/Meta";
 import { useParams } from "next/navigation";
+import "./styles.scss";
 
 const AccountDetailPage = () => {
   const params = useParams();
@@ -20,16 +21,22 @@ const AccountDetailPage = () => {
     variables: { userId: params.accountId as string },
   });
 
-  const { data: user } = useGetAccountByPkQuery({
+  const { data: user, fetchMore } = useGetAccountByPkQuery({
     variables: { userId: params.accountId as string },
   });
+
+  const loadMore = () => {
+    fetchMore({
+      variables: { userId: params.accountId as string },
+    });
+  };
 
   return (
     <>
       <ConfigProvider
         theme={{
           token: {
-            fontSize: 14,
+            fontSize: 16,
             colorPrimary: "#000000",
           },
         }}
@@ -49,6 +56,7 @@ const AccountDetailPage = () => {
                 user={user?.find_account_by_id as User}
                 style={{ width: "100%" }}
                 post={data?.find_post_by_userid?.length as number}
+                onReload={loadMore}
               />
             </div>
             <Row>

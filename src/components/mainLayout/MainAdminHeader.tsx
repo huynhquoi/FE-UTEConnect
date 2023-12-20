@@ -32,6 +32,10 @@ const items: MenuProps["items"] = [
     label: "Diễn đàn",
     key: "admin/forum",
   },
+  {
+    label: "Report",
+    key: "admin/report",
+  },
 ];
 
 const MainAdminHeader = () => {

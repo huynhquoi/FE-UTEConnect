@@ -6,6 +6,7 @@ fragment Post on Post {
   user_post {
     fullname
     userid
+    image
   }
   updateday
   ishide
