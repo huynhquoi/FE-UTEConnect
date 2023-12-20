@@ -17,6 +17,9 @@ fragment Post on Post {
   isdelete
   image
   requiredreputation
+  group_post {
+    groupid
+  }
 }
 
 query GetPost {
@@ -43,8 +46,14 @@ query GetPostByPk($postid: Int) {
   }
 }
 
-query GetPostByTopic($topicid:[Int]) {
+query GetPostByTopic($topicid: [Int]) {
   find_post_by_topicid(topicid: $topicid) {
+    ...Post
+  }
+}
+
+query GetPostInGroup($groupid: Int) {
+  find_post_in_group(groupid: $groupid) {
     ...Post
   }
 }
@@ -55,6 +64,20 @@ mutation CreatePost(
   $topic: TopicRequest
 ) {
   create_post(post: $post, user: $user, topic: $topic)
+}
+
+mutation CreatePostInGroup(
+  $post: PostRequest
+  $user: UserRequest
+  $topic: TopicRequest
+  $groupid: Int
+) {
+  create_post_in_group(
+    post: $post
+    user: $user
+    topic: $topic
+    groupid: $groupid
+  )
 }
 
 mutation DeletePostByPk($postid: Int) {

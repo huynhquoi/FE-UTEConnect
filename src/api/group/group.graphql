@@ -35,6 +35,12 @@ query getGroup($keyword: String) {
   }
 }
 
+query getGroupByUserPk($userid: String) {
+  get_group_by_userid(userid: $userid) {
+    ...Group
+  }
+}
+
 query findUserInGroup($groupid: Int) {
   get_user_in_group(groupid: $groupid) {
     ...GroupUser
@@ -58,9 +64,9 @@ mutation JoinGroup($userid: String, $groupid: Int) {
 }
 
 mutation LeaveGroup($userid: String, $groupid: Int) {
-    leave_group(userid: $userid, groupid: $groupid)
+  leave_group(userid: $userid, groupid: $groupid)
 }
 
-mutation AcceptUser($userid: String, $groupid: Int, $check:Int) {
-    update_check(userid: $userid, groupid: $groupid, check: $check)
+mutation AcceptUser($userid: String, $groupid: Int, $check: Int) {
+  update_check(userid: $userid, groupid: $groupid, check: $check)
 }

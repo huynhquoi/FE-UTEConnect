@@ -518,6 +518,8 @@ export type Query = {
   /**    Follow */
   get_all_follower_by_user?: Maybe<Array<Maybe<User>>>;
   get_all_user_by_follower?: Maybe<Array<Maybe<User>>>;
+  get_group_by_admin?: Maybe<Array<Maybe<Group>>>;
+  get_group_by_userid?: Maybe<Array<Maybe<Group>>>;
   get_list_ban_user?: Maybe<Array<Maybe<User>>>;
   get_list_low_reputation?: Maybe<Array<Maybe<User>>>;
   /**     Report */
@@ -665,6 +667,16 @@ export type QueryGet_All_Follower_By_UserArgs = {
 
 export type QueryGet_All_User_By_FollowerArgs = {
   followerid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGet_Group_By_AdminArgs = {
+  admin?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGet_Group_By_UseridArgs = {
+  userid?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -905,6 +917,13 @@ export type GetGroupQueryVariables = Exact<{
 
 export type GetGroupQuery = { __typename?: 'Query', find_group_by_keyword?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null> | null };
 
+export type GetGroupByUserPkQueryVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetGroupByUserPkQuery = { __typename?: 'Query', get_group_by_userid?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null> | null };
+
 export type FindUserInGroupQueryVariables = Exact<{
   groupid?: InputMaybe<Scalars['Int']['input']>;
 }>;
@@ -973,40 +992,47 @@ export type UpdateSeenNotificationMutationVariables = Exact<{
 
 export type UpdateSeenNotificationMutation = { __typename?: 'Mutation', update_isseen_true?: { __typename?: 'Notice', noiticeid: number } | null };
 
-export type PostFragment = { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null };
+export type PostFragment = { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null };
 
 export type GetPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null };
+export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null } | null> | null };
 
 export type GetPostByUserIdQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null };
+export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null } | null> | null };
 
 export type GetPostByKeyWordsQueryVariables = Exact<{
   keyword?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPostByKeyWordsQuery = { __typename?: 'Query', find_post_by_keyword?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null };
+export type GetPostByKeyWordsQuery = { __typename?: 'Query', find_post_by_keyword?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null } | null> | null };
 
 export type GetPostByPkQueryVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetPostByPkQuery = { __typename?: 'Query', find_post_by_id?: { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null };
+export type GetPostByPkQuery = { __typename?: 'Query', find_post_by_id?: { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null } | null };
 
 export type GetPostByTopicQueryVariables = Exact<{
   topicid?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>>;
 }>;
 
 
-export type GetPostByTopicQuery = { __typename?: 'Query', find_post_by_topicid?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null };
+export type GetPostByTopicQuery = { __typename?: 'Query', find_post_by_topicid?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null } | null> | null };
+
+export type GetPostInGroupQueryVariables = Exact<{
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetPostInGroupQuery = { __typename?: 'Query', find_post_in_group?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null } | null> | null };
 
 export type CreatePostMutationVariables = Exact<{
   post?: InputMaybe<PostRequest>;
@@ -1016,6 +1042,16 @@ export type CreatePostMutationVariables = Exact<{
 
 
 export type CreatePostMutation = { __typename?: 'Mutation', create_post?: string | null };
+
+export type CreatePostInGroupMutationVariables = Exact<{
+  post?: InputMaybe<PostRequest>;
+  user?: InputMaybe<UserRequest>;
+  topic?: InputMaybe<TopicRequest>;
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreatePostInGroupMutation = { __typename?: 'Mutation', create_post_in_group?: string | null };
 
 export type DeletePostByPkMutationVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
@@ -1267,6 +1303,9 @@ export const PostFragmentDoc = gql`
   isdelete
   image
   requiredreputation
+  group_post {
+    groupid
+  }
 }
     `;
 export const ReportFragmentDoc = gql`
@@ -1735,6 +1774,46 @@ export type GetGroupQueryHookResult = ReturnType<typeof useGetGroupQuery>;
 export type GetGroupLazyQueryHookResult = ReturnType<typeof useGetGroupLazyQuery>;
 export type GetGroupSuspenseQueryHookResult = ReturnType<typeof useGetGroupSuspenseQuery>;
 export type GetGroupQueryResult = Apollo.QueryResult<GetGroupQuery, GetGroupQueryVariables>;
+export const GetGroupByUserPkDocument = gql`
+    query getGroupByUserPk($userid: String) {
+  get_group_by_userid(userid: $userid) {
+    ...Group
+  }
+}
+    ${GroupFragmentDoc}`;
+
+/**
+ * __useGetGroupByUserPkQuery__
+ *
+ * To run a query within a React component, call `useGetGroupByUserPkQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupByUserPkQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupByUserPkQuery({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetGroupByUserPkQuery(baseOptions?: Apollo.QueryHookOptions<GetGroupByUserPkQuery, GetGroupByUserPkQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupByUserPkQuery, GetGroupByUserPkQueryVariables>(GetGroupByUserPkDocument, options);
+      }
+export function useGetGroupByUserPkLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupByUserPkQuery, GetGroupByUserPkQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupByUserPkQuery, GetGroupByUserPkQueryVariables>(GetGroupByUserPkDocument, options);
+        }
+export function useGetGroupByUserPkSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetGroupByUserPkQuery, GetGroupByUserPkQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetGroupByUserPkQuery, GetGroupByUserPkQueryVariables>(GetGroupByUserPkDocument, options);
+        }
+export type GetGroupByUserPkQueryHookResult = ReturnType<typeof useGetGroupByUserPkQuery>;
+export type GetGroupByUserPkLazyQueryHookResult = ReturnType<typeof useGetGroupByUserPkLazyQuery>;
+export type GetGroupByUserPkSuspenseQueryHookResult = ReturnType<typeof useGetGroupByUserPkSuspenseQuery>;
+export type GetGroupByUserPkQueryResult = Apollo.QueryResult<GetGroupByUserPkQuery, GetGroupByUserPkQueryVariables>;
 export const FindUserInGroupDocument = gql`
     query findUserInGroup($groupid: Int) {
   get_user_in_group(groupid: $groupid) {
@@ -2245,6 +2324,46 @@ export type GetPostByTopicQueryHookResult = ReturnType<typeof useGetPostByTopicQ
 export type GetPostByTopicLazyQueryHookResult = ReturnType<typeof useGetPostByTopicLazyQuery>;
 export type GetPostByTopicSuspenseQueryHookResult = ReturnType<typeof useGetPostByTopicSuspenseQuery>;
 export type GetPostByTopicQueryResult = Apollo.QueryResult<GetPostByTopicQuery, GetPostByTopicQueryVariables>;
+export const GetPostInGroupDocument = gql`
+    query GetPostInGroup($groupid: Int) {
+  find_post_in_group(groupid: $groupid) {
+    ...Post
+  }
+}
+    ${PostFragmentDoc}`;
+
+/**
+ * __useGetPostInGroupQuery__
+ *
+ * To run a query within a React component, call `useGetPostInGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostInGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostInGroupQuery({
+ *   variables: {
+ *      groupid: // value for 'groupid'
+ *   },
+ * });
+ */
+export function useGetPostInGroupQuery(baseOptions?: Apollo.QueryHookOptions<GetPostInGroupQuery, GetPostInGroupQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostInGroupQuery, GetPostInGroupQueryVariables>(GetPostInGroupDocument, options);
+      }
+export function useGetPostInGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostInGroupQuery, GetPostInGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostInGroupQuery, GetPostInGroupQueryVariables>(GetPostInGroupDocument, options);
+        }
+export function useGetPostInGroupSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostInGroupQuery, GetPostInGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostInGroupQuery, GetPostInGroupQueryVariables>(GetPostInGroupDocument, options);
+        }
+export type GetPostInGroupQueryHookResult = ReturnType<typeof useGetPostInGroupQuery>;
+export type GetPostInGroupLazyQueryHookResult = ReturnType<typeof useGetPostInGroupLazyQuery>;
+export type GetPostInGroupSuspenseQueryHookResult = ReturnType<typeof useGetPostInGroupSuspenseQuery>;
+export type GetPostInGroupQueryResult = Apollo.QueryResult<GetPostInGroupQuery, GetPostInGroupQueryVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($post: PostRequest, $user: UserRequest, $topic: TopicRequest) {
   create_post(post: $post, user: $user, topic: $topic)
@@ -2278,6 +2397,40 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const CreatePostInGroupDocument = gql`
+    mutation CreatePostInGroup($post: PostRequest, $user: UserRequest, $topic: TopicRequest, $groupid: Int) {
+  create_post_in_group(post: $post, user: $user, topic: $topic, groupid: $groupid)
+}
+    `;
+export type CreatePostInGroupMutationFn = Apollo.MutationFunction<CreatePostInGroupMutation, CreatePostInGroupMutationVariables>;
+
+/**
+ * __useCreatePostInGroupMutation__
+ *
+ * To run a mutation, you first call `useCreatePostInGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostInGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostInGroupMutation, { data, loading, error }] = useCreatePostInGroupMutation({
+ *   variables: {
+ *      post: // value for 'post'
+ *      user: // value for 'user'
+ *      topic: // value for 'topic'
+ *      groupid: // value for 'groupid'
+ *   },
+ * });
+ */
+export function useCreatePostInGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostInGroupMutation, CreatePostInGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostInGroupMutation, CreatePostInGroupMutationVariables>(CreatePostInGroupDocument, options);
+      }
+export type CreatePostInGroupMutationHookResult = ReturnType<typeof useCreatePostInGroupMutation>;
+export type CreatePostInGroupMutationResult = Apollo.MutationResult<CreatePostInGroupMutation>;
+export type CreatePostInGroupMutationOptions = Apollo.BaseMutationOptions<CreatePostInGroupMutation, CreatePostInGroupMutationVariables>;
 export const DeletePostByPkDocument = gql`
     mutation DeletePostByPk($postid: Int) {
   delete_post_by_pk(postid: $postid)

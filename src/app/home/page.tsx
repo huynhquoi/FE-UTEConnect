@@ -89,7 +89,7 @@ const HomePage = () => {
 
               {!loading
                 ? data?.find_post_by_keyword
-                    ?.filter((e) => !e?.isdelete)
+                    ?.filter((e) => !e?.isdelete && !e?.group_post?.groupid)
                     .map((p) => (
                       <PostCard
                         isFollow={followPost?.find_all_bookmark_by_userid

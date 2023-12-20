@@ -13,9 +13,10 @@ import {
 type JoinGroupFormProps = {
   typeSend: "join" | "leave";
   groupId: number;
+  onReload: () => void;
 };
 
-const JoinGroupForm = ({ groupId, typeSend }: JoinGroupFormProps) => {
+const JoinGroupForm = ({ groupId, typeSend, onReload }: JoinGroupFormProps) => {
   const user = useGlobalStore();
   const [submit, setSubmit] = useState(false);
   const [joinGroup] = useJoinGroupMutation({});
@@ -32,6 +33,7 @@ const JoinGroupForm = ({ groupId, typeSend }: JoinGroupFormProps) => {
           userid: user?.userid,
         },
       }).then(() => {
+        void onReload();
         setSubmit(false);
       });
     } else {
@@ -41,10 +43,19 @@ const JoinGroupForm = ({ groupId, typeSend }: JoinGroupFormProps) => {
           userid: user?.userid,
         },
       }).then(() => {
+        void onReload();
         setSubmit(false);
       });
     }
-  }, [groupId, joinGroup, leaveGroup, submit, typeSend, user?.userid]);
+  }, [
+    groupId,
+    joinGroup,
+    leaveGroup,
+    onReload,
+    submit,
+    typeSend,
+    user?.userid,
+  ]);
 
   return (
     <>

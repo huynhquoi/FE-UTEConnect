@@ -7,6 +7,8 @@ import XUpload from "../core/XUpload";
 import XEditor from "../core/XEditor";
 import { useEffect, useState } from "react";
 import {
+  Group,
+  useCreatePostInGroupMutation,
   useCreatePostMutation,
   useGetAllTopicQuery,
   useGetPostByUserIdQuery,
@@ -14,12 +16,17 @@ import {
 import { useImageStore } from "@/hook/useImage";
 const { Option } = Select;
 
-const PostForm = () => {
+type PostFormProps = {
+  groupId?: number;
+};
+
+const PostForm = ({ groupId }: PostFormProps) => {
   const user = useGlobalStore();
   const [formPost] = Form.useForm();
   const [createVisible, setCreateVisible] = useState(false);
   const [selectTopic, setSelectTopic] = useState(0);
   const [createPost] = useCreatePostMutation();
+  const [createPostInGroup] = useCreatePostInGroupMutation();
   const { fetchMore: fetchPost } = useGetPostByUserIdQuery({});
   const { data: topic } = useGetAllTopicQuery();
   const image = useImageStore();
@@ -32,30 +39,58 @@ const PostForm = () => {
   }, [formPost, image]);
 
   const onFinishCreate = (e: any) => {
-    createPost({
-      variables: {
-        post: {
-          ...e,
-        },
-        user: {
-          userid: user?.userid,
-        },
-        topic: {
-          topicid: selectTopic,
-        },
-      },
-    })
-      .then(() => {
-        setCreateVisible(false);
-        fetchPost({
-          variables: {
-            userId: user?.userid,
+    if (!groupId) {
+      createPost({
+        variables: {
+          post: {
+            ...e,
           },
-        });
+          user: {
+            userid: user?.userid,
+          },
+          topic: {
+            topicid: selectTopic,
+          },
+        },
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
+        .then(() => {
+          setCreateVisible(false);
+          fetchPost({
+            variables: {
+              userId: user?.userid,
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    } else {
+      createPostInGroup({
+        variables: {
+          post: {
+            ...e,
+          },
+          user: {
+            userid: user?.userid,
+          },
+          topic: {
+            topicid: selectTopic,
+          },
+          groupid: groupId,
+        },
+      })
+        .then(() => {
+          setCreateVisible(false);
+          fetchPost({
+            variables: {
+              userId: user?.userid,
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
   };
 
   return (
@@ -94,7 +129,7 @@ const PostForm = () => {
             ))}
           </Select>
         </div>
-        <Form id="account_form" form={formPost} onFinish={onFinishCreate}>
+        <Form id="post_form" form={formPost} onFinish={onFinishCreate}>
           <Form.Item
             name="title"
             rules={[{ required: true, message: "Không được bỏ trống ô này" }]}

@@ -36,6 +36,10 @@ const items: MenuProps["items"] = [
     label: "Report",
     key: "admin/report",
   },
+  {
+    label: "Thống kê",
+    key: "admin/statistics",
+  },
 ];
 
 const MainAdminHeader = () => {
