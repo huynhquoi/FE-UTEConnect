@@ -1,3 +1,4 @@
+import ImgCrop from "antd-img-crop";
 import React, { useState } from "react";
 import { Flex, Input, Modal, Upload, message } from "antd";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
@@ -5,6 +6,7 @@ import { storage } from "@/firebase/firebase-config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useDispatch, useSelector } from "react-redux";
 import { clearImageUrl, setImageUrl } from "@/store/slice";
+import XImage from "./XImage";
 import { RootState } from "@/store";
 
 const XUploadAvatar = () => {
@@ -84,16 +86,18 @@ const XUploadAvatar = () => {
 
   return (
     <>
-      <Upload
-        action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-        listType="picture-card"
-        fileList={fileList}
-        onChange={onChange}
-        onPreview={onPreview}
-        maxCount={1}
-      >
-        {fileList.length < 1 && "+ Upload"}
-      </Upload>
+      <ImgCrop rotationSlider>
+        <Upload
+          action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+          listType="picture-card"
+          fileList={fileList}
+          onChange={onChange}
+          onPreview={onPreview}
+          maxCount={1}
+        >
+          {fileList.length < 1 && "+ Upload"}
+        </Upload>
+      </ImgCrop>
     </>
   );
 };

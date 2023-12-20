@@ -7,3 +7,10 @@ query GetAllTopic {
     isdelete
   }
 }
+mutation CreateTag($userid: String, $topicname: String) {
+  create_topic(userid: $userid, topicname: $topicname)
+}
+
+mutation DeleteTopic($topicid: Int) {
+  delete_topic(topicid: $topicid)
+}

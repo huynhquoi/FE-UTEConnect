@@ -79,6 +79,27 @@ export type Follow = {
   user_follower?: Maybe<User>;
 };
 
+export type Group = {
+  __typename?: 'Group';
+  admin?: Maybe<User>;
+  createday?: Maybe<Scalars['LocalDateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  groupid?: Maybe<Scalars['Int']['output']>;
+  groupname?: Maybe<Scalars['String']['output']>;
+  image?: Maybe<Scalars['String']['output']>;
+  reputaion?: Maybe<Scalars['Int']['output']>;
+};
+
+export type GroupRequest = {
+  admin?: InputMaybe<Scalars['String']['input']>;
+  createday?: InputMaybe<Scalars['LocalDateTime']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+  groupname?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  reputaion?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type Icon = {
   __typename?: 'Icon';
   iconid: Scalars['Int']['output'];
@@ -110,6 +131,8 @@ export type Mutation = {
   create_comment_in_comment?: Maybe<Scalars['String']['output']>;
   /**     Follow */
   create_follow?: Maybe<Scalars['String']['output']>;
+  /**    Group */
+  create_group?: Maybe<Scalars['String']['output']>;
   /**     CommentLike */
   create_icon_for_commentlike?: Maybe<Scalars['String']['output']>;
   /**     PostLike */
@@ -117,6 +140,7 @@ export type Mutation = {
   /**     Notice */
   create_notice?: Maybe<Notice>;
   create_post?: Maybe<Scalars['String']['output']>;
+  create_post_in_group?: Maybe<Scalars['String']['output']>;
   create_report_comment?: Maybe<Scalars['String']['output']>;
   create_report_post?: Maybe<Scalars['String']['output']>;
   /**      Report */
@@ -126,6 +150,7 @@ export type Mutation = {
   delete_bookmark?: Maybe<Scalars['String']['output']>;
   delete_comment_by_pk?: Maybe<Scalars['String']['output']>;
   delete_follow?: Maybe<Scalars['String']['output']>;
+  delete_group?: Maybe<Scalars['String']['output']>;
   delete_icon_for_commentlike?: Maybe<Scalars['String']['output']>;
   delete_icon_for_postlike?: Maybe<Scalars['String']['output']>;
   delete_notice?: Maybe<Scalars['String']['output']>;
@@ -135,9 +160,14 @@ export type Mutation = {
   delete_report_by_userid?: Maybe<Scalars['String']['output']>;
   delete_topic?: Maybe<Scalars['String']['output']>;
   hide_post?: Maybe<Scalars['String']['output']>;
+  /**    User_Group */
+  join_group?: Maybe<Scalars['String']['output']>;
+  leave_group?: Maybe<Scalars['String']['output']>;
   logout?: Maybe<Scalars['String']['output']>;
+  update_check?: Maybe<Scalars['String']['output']>;
   /**     Comment */
   update_comment_by_pk?: Maybe<Scalars['String']['output']>;
+  update_group?: Maybe<Scalars['String']['output']>;
   update_isseen_false?: Maybe<Notice>;
   update_isseen_true?: Maybe<Notice>;
   /**     Post */
@@ -189,6 +219,12 @@ export type MutationCreate_FollowArgs = {
 };
 
 
+export type MutationCreate_GroupArgs = {
+  admin?: InputMaybe<Scalars['String']['input']>;
+  group?: InputMaybe<GroupRequest>;
+};
+
+
 export type MutationCreate_Icon_For_CommentlikeArgs = {
   commentid?: InputMaybe<Scalars['Int']['input']>;
   iconid?: InputMaybe<Scalars['Int']['input']>;
@@ -212,6 +248,14 @@ export type MutationCreate_NoticeArgs = {
 
 
 export type MutationCreate_PostArgs = {
+  post?: InputMaybe<PostRequest>;
+  topic?: InputMaybe<TopicRequest>;
+  user?: InputMaybe<UserRequest>;
+};
+
+
+export type MutationCreate_Post_In_GroupArgs = {
+  groupid?: InputMaybe<Scalars['Int']['input']>;
   post?: InputMaybe<PostRequest>;
   topic?: InputMaybe<TopicRequest>;
   user?: InputMaybe<UserRequest>;
@@ -259,6 +303,11 @@ export type MutationDelete_Comment_By_PkArgs = {
 export type MutationDelete_FollowArgs = {
   followerid?: InputMaybe<Scalars['String']['input']>;
   userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationDelete_GroupArgs = {
+  groupid?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -311,13 +360,37 @@ export type MutationHide_PostArgs = {
 };
 
 
+export type MutationJoin_GroupArgs = {
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationLeave_GroupArgs = {
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationLogoutArgs = {
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationUpdate_CheckArgs = {
+  check?: InputMaybe<Scalars['Int']['input']>;
+  groupid?: InputMaybe<Scalars['Int']['input']>;
   userid?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type MutationUpdate_Comment_By_PkArgs = {
   comment?: InputMaybe<CommentRequest>;
+};
+
+
+export type MutationUpdate_GroupArgs = {
+  group?: InputMaybe<GroupRequest>;
 };
 
 
@@ -366,6 +439,7 @@ export type Post = {
   __typename?: 'Post';
   content?: Maybe<Scalars['String']['output']>;
   createday?: Maybe<Scalars['LocalDateTime']['output']>;
+  group_post?: Maybe<Group>;
   image?: Maybe<Scalars['String']['output']>;
   isdelete?: Maybe<Scalars['Int']['output']>;
   ishide?: Maybe<Scalars['Int']['output']>;
@@ -381,6 +455,7 @@ export type Post = {
 export type PostRequest = {
   content?: InputMaybe<Scalars['String']['input']>;
   createday?: InputMaybe<Scalars['LocalDateTime']['input']>;
+  group_post?: InputMaybe<Scalars['Int']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   isdelete?: InputMaybe<Scalars['Int']['input']>;
   ishide?: InputMaybe<Scalars['Int']['input']>;
@@ -430,11 +505,14 @@ export type Query = {
   find_all_notice_by_userid?: Maybe<Array<Maybe<Notice>>>;
   find_commentlike_by_commentid_and_userid?: Maybe<Comment_Like>;
   find_commentlike_byuserid?: Maybe<Array<Maybe<Comment_Like>>>;
+  /**    Group */
+  find_group_by_keyword?: Maybe<Array<Maybe<Group>>>;
   find_notice_by_userid_type_subject?: Maybe<Notice>;
   find_post_by_id?: Maybe<Post>;
   find_post_by_keyword?: Maybe<Array<Maybe<Post>>>;
   find_post_by_topicid?: Maybe<Array<Maybe<Post>>>;
   find_post_by_userid?: Maybe<Array<Maybe<Post>>>;
+  find_post_in_group?: Maybe<Array<Maybe<Post>>>;
   find_postlike_by_postid_and_userid?: Maybe<Post_Like>;
   find_postlike_byuserid?: Maybe<Array<Maybe<Post_Like>>>;
   /**    Follow */
@@ -445,6 +523,8 @@ export type Query = {
   /**     Report */
   get_report_by_type?: Maybe<Array<Maybe<Report>>>;
   get_top_reputation_user?: Maybe<Array<Maybe<User>>>;
+  /**    User_Group */
+  get_user_in_group?: Maybe<Array<Maybe<User_Group>>>;
   iconList?: Maybe<Array<Maybe<Icon>>>;
   list_commentdislike_by_commentid?: Maybe<Array<Maybe<Comment_Like>>>;
   /**     Comment_Like */
@@ -530,6 +610,11 @@ export type QueryFind_Commentlike_ByuseridArgs = {
 };
 
 
+export type QueryFind_Group_By_KeywordArgs = {
+  keyword?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryFind_Notice_By_Userid_Type_SubjectArgs = {
   subject?: InputMaybe<Scalars['Int']['input']>;
   typee?: InputMaybe<Scalars['Int']['input']>;
@@ -557,6 +642,11 @@ export type QueryFind_Post_By_UseridArgs = {
 };
 
 
+export type QueryFind_Post_In_GroupArgs = {
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryFind_Postlike_By_Postid_And_UseridArgs = {
   postid?: InputMaybe<Scalars['Int']['input']>;
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -580,6 +670,11 @@ export type QueryGet_All_User_By_FollowerArgs = {
 
 export type QueryGet_Report_By_TypeArgs = {
   type?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGet_User_In_GroupArgs = {
+  groupid?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -674,6 +769,7 @@ export type User = {
   gender?: Maybe<Scalars['String']['output']>;
   image?: Maybe<Scalars['String']['output']>;
   isbanid?: Maybe<IsBan>;
+  mssv?: Maybe<Scalars['String']['output']>;
   phone?: Maybe<Scalars['String']['output']>;
   reputation?: Maybe<Scalars['Int']['output']>;
   role?: Maybe<Role>;
@@ -691,12 +787,22 @@ export type UserRequest = {
   gender?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   isbanid?: InputMaybe<Scalars['Int']['input']>;
+  mssv?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
   reputation?: InputMaybe<Scalars['Int']['input']>;
   roleid?: InputMaybe<Scalars['Int']['input']>;
   status?: InputMaybe<Scalars['Int']['input']>;
   userid?: InputMaybe<Scalars['String']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type User_Group = {
+  __typename?: 'User_Group';
+  checked?: Maybe<Scalars['Int']['output']>;
+  createday?: Maybe<Scalars['LocalDateTime']['output']>;
+  group_usergroup?: Maybe<Group>;
+  user_groupid?: Maybe<Scalars['Int']['output']>;
+  user_usergroup?: Maybe<User>;
 };
 
 export type ViewPost = {
@@ -935,6 +1041,21 @@ export type GetAllTopicQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllTopicQuery = { __typename?: 'Query', topic?: Array<{ __typename?: 'Topic', topicid: number, topicname?: string | null, createday?: any | null, ishide?: number | null, isdelete?: number | null } | null> | null };
+
+export type CreateTagMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  topicname?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type CreateTagMutation = { __typename?: 'Mutation', create_topic?: string | null };
+
+export type DeleteTopicMutationVariables = Exact<{
+  topicid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteTopicMutation = { __typename?: 'Mutation', delete_topic?: string | null };
 
 export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2153,6 +2274,69 @@ export type GetAllTopicQueryHookResult = ReturnType<typeof useGetAllTopicQuery>;
 export type GetAllTopicLazyQueryHookResult = ReturnType<typeof useGetAllTopicLazyQuery>;
 export type GetAllTopicSuspenseQueryHookResult = ReturnType<typeof useGetAllTopicSuspenseQuery>;
 export type GetAllTopicQueryResult = Apollo.QueryResult<GetAllTopicQuery, GetAllTopicQueryVariables>;
+export const CreateTagDocument = gql`
+    mutation CreateTag($userid: String, $topicname: String) {
+  create_topic(userid: $userid, topicname: $topicname)
+}
+    `;
+export type CreateTagMutationFn = Apollo.MutationFunction<CreateTagMutation, CreateTagMutationVariables>;
+
+/**
+ * __useCreateTagMutation__
+ *
+ * To run a mutation, you first call `useCreateTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTagMutation, { data, loading, error }] = useCreateTagMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      topicname: // value for 'topicname'
+ *   },
+ * });
+ */
+export function useCreateTagMutation(baseOptions?: Apollo.MutationHookOptions<CreateTagMutation, CreateTagMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTagMutation, CreateTagMutationVariables>(CreateTagDocument, options);
+      }
+export type CreateTagMutationHookResult = ReturnType<typeof useCreateTagMutation>;
+export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutation>;
+export type CreateTagMutationOptions = Apollo.BaseMutationOptions<CreateTagMutation, CreateTagMutationVariables>;
+export const DeleteTopicDocument = gql`
+    mutation DeleteTopic($topicid: Int) {
+  delete_topic(topicid: $topicid)
+}
+    `;
+export type DeleteTopicMutationFn = Apollo.MutationFunction<DeleteTopicMutation, DeleteTopicMutationVariables>;
+
+/**
+ * __useDeleteTopicMutation__
+ *
+ * To run a mutation, you first call `useDeleteTopicMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTopicMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTopicMutation, { data, loading, error }] = useDeleteTopicMutation({
+ *   variables: {
+ *      topicid: // value for 'topicid'
+ *   },
+ * });
+ */
+export function useDeleteTopicMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTopicMutation, DeleteTopicMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteTopicMutation, DeleteTopicMutationVariables>(DeleteTopicDocument, options);
+      }
+export type DeleteTopicMutationHookResult = ReturnType<typeof useDeleteTopicMutation>;
+export type DeleteTopicMutationResult = Apollo.MutationResult<DeleteTopicMutation>;
+export type DeleteTopicMutationOptions = Apollo.BaseMutationOptions<DeleteTopicMutation, DeleteTopicMutationVariables>;
 export const GetAccountDocument = gql`
     query GetAccount {
   account {
