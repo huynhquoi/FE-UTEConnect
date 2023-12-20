@@ -1,14 +1,18 @@
+"use client";
+
 import { Group, useFindUserInGroupQuery } from "@/graphql/controller-types";
 import { Avatar, Card, Flex } from "antd";
 import Meta from "antd/es/card/Meta";
 import dayjs from "dayjs";
 import JoinGroupForm from "./JoinGroupForm";
+import { useGlobalStore } from "@/hook/useUser";
 
 type GroupCardProps = {
   group: Group;
 };
 
 const GroupCard = ({ group }: GroupCardProps) => {
+  const user = useGlobalStore();
   const { data } = useFindUserInGroupQuery({
     variables: {
       groupid: group?.groupid,
@@ -23,7 +27,16 @@ const GroupCard = ({ group }: GroupCardProps) => {
             <>
               <Flex align="center" justify="space-between">
                 <div className="text-base font-bold">{group?.groupname}</div>
-                <JoinGroupForm groupId={group?.groupid as number} />
+                <JoinGroupForm
+                  typeSend={
+                    data?.get_user_in_group?.some(
+                      (e) => e?.user_usergroup?.userid === user?.userid
+                    )
+                      ? "join"
+                      : "leave"
+                  }
+                  groupId={group?.groupid as number}
+                />
               </Flex>
             </>
           }
