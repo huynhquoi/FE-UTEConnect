@@ -1,6 +1,15 @@
 "use client";
 
-import { Avatar, Card, CardProps, Col, ConfigProvider, Flex, Row, Space } from "antd";
+import {
+  Avatar,
+  Card,
+  CardProps,
+  Col,
+  ConfigProvider,
+  Flex,
+  Row,
+  Space,
+} from "antd";
 import {
   Group,
   User,
@@ -13,6 +22,7 @@ import ReportButton from "../shared/ReportButton";
 import { useEffect, useState } from "react";
 import GroupForm from "../group/GroupForm";
 import JoinGroupForm from "./JoinGroupForm";
+import DeleteGroupBtn from "./DeleteGroupBtn";
 
 type GroupCardHeaderProps = {
   group?: Group;
@@ -71,6 +81,7 @@ const GroupCardHeader = ({
                         : "join"
                     }
                   />
+                  <DeleteGroupBtn groupId={group?.groupid as number} />
                 </Space>
               </div>
             </Col>

@@ -28,9 +28,11 @@ import { useParams } from "next/navigation";
 import "./styles.scss";
 import { useGlobalStore } from "@/hook/useUser";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 
 const AccountDetailPage = () => {
   const params = useParams();
+  const router = useRouter();
   const accountUser = useGlobalStore();
   const { data, loading } = useGetPostByUserIdQuery({
     variables: { userId: params.accountId as string },
@@ -102,7 +104,12 @@ const AccountDetailPage = () => {
                         {adminGroup?.get_group_by_admin?.length ? (
                           adminGroup?.get_group_by_admin?.map((e) => (
                             <div className="mt-2" key={e?.groupid}>
-                              <Card>
+                              <Card
+                                onClick={() =>
+                                  router?.push(`/home/group/${e?.groupid}`)
+                                }
+                                className="cursor-pointer"
+                              >
                                 <Flex>
                                   <Avatar src={e?.image} size={48} />
                                   <Space direction="vertical" className="ml-3">
@@ -139,46 +146,38 @@ const AccountDetailPage = () => {
                             Nhóm bạn đang tham gia
                           </div>
                         </Card>
-                        {userGroup?.get_group_by_userid?.filter((e) =>
-                          adminGroup?.get_group_by_admin?.some(
-                            (f) => f?.groupid !== e?.groupid
-                          )
-                        )?.length ? (
-                          userGroup?.get_group_by_userid
-                            ?.filter((e) =>
-                              adminGroup?.get_group_by_admin?.some(
-                                (f) => f?.groupid !== e?.groupid
-                              )
-                            )
-                            .map((e) => (
-                              <div className="mt-2" key={e?.groupid}>
-                                <Card>
-                                  <Flex>
-                                    <Avatar src={e?.image} size={48} />
-                                    <Space
-                                      direction="vertical"
-                                      className="ml-3"
-                                    >
-                                      <div className="font-bold text-base">
-                                        {e?.groupname}
-                                      </div>
-                                      <div className="">
-                                        {dayjs(e?.createday as string)?.format(
-                                          "DD/MM/YYYY, HH:mm"
-                                        )}
-                                      </div>
-                                      <div className="">{e?.reputaion}</div>
-                                      <div
-                                        className=""
-                                        dangerouslySetInnerHTML={{
-                                          __html: e?.description || "",
-                                        }}
-                                      ></div>
-                                    </Space>
-                                  </Flex>
-                                </Card>
-                              </div>
-                            ))
+                        {userGroup?.get_group_by_userid?.length ? (
+                          userGroup?.get_group_by_userid?.map((e) => (
+                            <div className="mt-2" key={e?.groupid}>
+                              <Card
+                                onClick={() =>
+                                  router.push(`/home/group/${e?.groupid}`)
+                                }
+                                className="cursor-pointer"
+                              >
+                                <Flex>
+                                  <Avatar src={e?.image} size={48} />
+                                  <Space direction="vertical" className="ml-3">
+                                    <div className="font-bold text-base">
+                                      {e?.groupname}
+                                    </div>
+                                    <div className="">
+                                      {dayjs(e?.createday as string)?.format(
+                                        "DD/MM/YYYY, HH:mm"
+                                      )}
+                                    </div>
+                                    <div className="">{e?.reputaion}</div>
+                                    <div
+                                      className=""
+                                      dangerouslySetInnerHTML={{
+                                        __html: e?.description || "",
+                                      }}
+                                    ></div>
+                                  </Space>
+                                </Flex>
+                              </Card>
+                            </div>
+                          ))
                         ) : (
                           <Empty
                             className="mt-2"

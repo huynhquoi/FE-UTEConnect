@@ -1,5 +1,6 @@
 "use client";
 
+import DeleteGroupBtn from "@/components/group/DeleteGroupBtn";
 import GroupCardHeader from "@/components/group/GroupCardHeader";
 import ActionMenu from "@/components/home/ActionMenu";
 import PostCard from "@/components/post/PostCard";

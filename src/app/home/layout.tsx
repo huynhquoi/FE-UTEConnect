@@ -16,17 +16,15 @@ export const metadata = {
 };
 
 const HomeLayout = ({ children }: React.PropsWithChildren) => (
-  <StyledComponentsRegistry>
-    <Layout>
-      <MainHeader />
-      <Content
-        className="bg-gray-100 pt-6"
-        style={{ minHeight: "95vh", width: "99w" }}
-      >
-        {children}
-      </Content>
-    </Layout>
-  </StyledComponentsRegistry>
+  <Layout>
+    <MainHeader />
+    <Content
+      className="bg-gray-100 pt-6"
+      style={{ minHeight: "95vh", width: "99w" }}
+    >
+      {children}
+    </Content>
+  </Layout>
 );
 
 export default HomeLayout;
