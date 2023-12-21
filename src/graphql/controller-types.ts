@@ -172,6 +172,7 @@ export type Mutation = {
   update_isseen_true?: Maybe<Notice>;
   /**     Post */
   update_post_by_pk?: Maybe<Scalars['String']['output']>;
+  update_reputation?: Maybe<Scalars['String']['output']>;
   update_totalread_post?: Maybe<Scalars['String']['output']>;
 };
 
@@ -410,6 +411,12 @@ export type MutationUpdate_Post_By_PkArgs = {
 };
 
 
+export type MutationUpdate_ReputationArgs = {
+  reputation?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationUpdate_Totalread_PostArgs = {
   postid?: InputMaybe<Scalars['Int']['input']>;
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -519,6 +526,7 @@ export type Query = {
   get_all_follower_by_user?: Maybe<Array<Maybe<User>>>;
   get_all_user_by_follower?: Maybe<Array<Maybe<User>>>;
   get_group_by_admin?: Maybe<Array<Maybe<Group>>>;
+  get_group_by_groupid?: Maybe<Group>;
   get_group_by_userid?: Maybe<Array<Maybe<Group>>>;
   get_list_ban_user?: Maybe<Array<Maybe<User>>>;
   get_list_low_reputation?: Maybe<Array<Maybe<User>>>;
@@ -533,6 +541,9 @@ export type Query = {
   list_commentlike_by_commentid?: Maybe<Array<Maybe<Comment_Like>>>;
   /**     Post */
   post?: Maybe<Array<Maybe<Post>>>;
+  statistic_post?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
+  /**    Statistic */
+  statistic_user?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
   /**     Topic */
   topic?: Maybe<Array<Maybe<Topic>>>;
 };
@@ -675,6 +686,11 @@ export type QueryGet_Group_By_AdminArgs = {
 };
 
 
+export type QueryGet_Group_By_GroupidArgs = {
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryGet_Group_By_UseridArgs = {
   userid?: InputMaybe<Scalars['String']['input']>;
 };
@@ -703,6 +719,16 @@ export type QueryList_Commentlike_By_CommentidArgs = {
 export type QueryPostArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   pacing?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryStatistic_PostArgs = {
+  year?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryStatistic_UserArgs = {
+  year?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Report = {
@@ -930,6 +956,20 @@ export type GetGroupByUserPkQueryVariables = Exact<{
 
 
 export type GetGroupByUserPkQuery = { __typename?: 'Query', get_group_by_userid?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null> | null };
+
+export type GetGroupByAdminQueryVariables = Exact<{
+  admin?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetGroupByAdminQuery = { __typename?: 'Query', get_group_by_admin?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null> | null };
+
+export type GetGroupByPkQueryVariables = Exact<{
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetGroupByPkQuery = { __typename?: 'Query', get_group_by_groupid?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null };
 
 export type FindUserInGroupQueryVariables = Exact<{
   groupid?: InputMaybe<Scalars['Int']['input']>;
@@ -1874,6 +1914,86 @@ export type GetGroupByUserPkQueryHookResult = ReturnType<typeof useGetGroupByUse
 export type GetGroupByUserPkLazyQueryHookResult = ReturnType<typeof useGetGroupByUserPkLazyQuery>;
 export type GetGroupByUserPkSuspenseQueryHookResult = ReturnType<typeof useGetGroupByUserPkSuspenseQuery>;
 export type GetGroupByUserPkQueryResult = Apollo.QueryResult<GetGroupByUserPkQuery, GetGroupByUserPkQueryVariables>;
+export const GetGroupByAdminDocument = gql`
+    query getGroupByAdmin($admin: String) {
+  get_group_by_admin(admin: $admin) {
+    ...Group
+  }
+}
+    ${GroupFragmentDoc}`;
+
+/**
+ * __useGetGroupByAdminQuery__
+ *
+ * To run a query within a React component, call `useGetGroupByAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupByAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupByAdminQuery({
+ *   variables: {
+ *      admin: // value for 'admin'
+ *   },
+ * });
+ */
+export function useGetGroupByAdminQuery(baseOptions?: Apollo.QueryHookOptions<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>(GetGroupByAdminDocument, options);
+      }
+export function useGetGroupByAdminLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>(GetGroupByAdminDocument, options);
+        }
+export function useGetGroupByAdminSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>(GetGroupByAdminDocument, options);
+        }
+export type GetGroupByAdminQueryHookResult = ReturnType<typeof useGetGroupByAdminQuery>;
+export type GetGroupByAdminLazyQueryHookResult = ReturnType<typeof useGetGroupByAdminLazyQuery>;
+export type GetGroupByAdminSuspenseQueryHookResult = ReturnType<typeof useGetGroupByAdminSuspenseQuery>;
+export type GetGroupByAdminQueryResult = Apollo.QueryResult<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>;
+export const GetGroupByPkDocument = gql`
+    query getGroupByPk($groupid: Int) {
+  get_group_by_groupid(groupid: $groupid) {
+    ...Group
+  }
+}
+    ${GroupFragmentDoc}`;
+
+/**
+ * __useGetGroupByPkQuery__
+ *
+ * To run a query within a React component, call `useGetGroupByPkQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupByPkQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupByPkQuery({
+ *   variables: {
+ *      groupid: // value for 'groupid'
+ *   },
+ * });
+ */
+export function useGetGroupByPkQuery(baseOptions?: Apollo.QueryHookOptions<GetGroupByPkQuery, GetGroupByPkQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupByPkQuery, GetGroupByPkQueryVariables>(GetGroupByPkDocument, options);
+      }
+export function useGetGroupByPkLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupByPkQuery, GetGroupByPkQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupByPkQuery, GetGroupByPkQueryVariables>(GetGroupByPkDocument, options);
+        }
+export function useGetGroupByPkSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetGroupByPkQuery, GetGroupByPkQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetGroupByPkQuery, GetGroupByPkQueryVariables>(GetGroupByPkDocument, options);
+        }
+export type GetGroupByPkQueryHookResult = ReturnType<typeof useGetGroupByPkQuery>;
+export type GetGroupByPkLazyQueryHookResult = ReturnType<typeof useGetGroupByPkLazyQuery>;
+export type GetGroupByPkSuspenseQueryHookResult = ReturnType<typeof useGetGroupByPkSuspenseQuery>;
+export type GetGroupByPkQueryResult = Apollo.QueryResult<GetGroupByPkQuery, GetGroupByPkQueryVariables>;
 export const FindUserInGroupDocument = gql`
     query findUserInGroup($groupid: Int) {
   get_user_in_group(groupid: $groupid) {

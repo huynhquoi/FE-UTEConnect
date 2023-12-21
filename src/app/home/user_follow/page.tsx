@@ -25,7 +25,7 @@ const FollowUserPage = () => {
       <ConfigProvider
         theme={{
           token: {
-            fontSize: 16,
+            fontSize: 16,  
             colorPrimary: "#000000",
           },
           components: {

@@ -7,22 +7,49 @@ import {
   Post,
   User,
   useGetAccountByPkQuery,
+  useGetGroupByAdminQuery,
+  useGetGroupByUserPkQuery,
   useGetPostByUserIdQuery,
   useGetPostQuery,
 } from "@/graphql/controller-types";
-import { Avatar, Card, Col, ConfigProvider, Empty, Row, Skeleton } from "antd";
+import {
+  Avatar,
+  Card,
+  Col,
+  ConfigProvider,
+  Empty,
+  Flex,
+  Row,
+  Skeleton,
+  Space,
+} from "antd";
 import Meta from "antd/es/card/Meta";
 import { useParams } from "next/navigation";
 import "./styles.scss";
+import { useGlobalStore } from "@/hook/useUser";
+import dayjs from "dayjs";
 
 const AccountDetailPage = () => {
   const params = useParams();
+  const accountUser = useGlobalStore();
   const { data, loading } = useGetPostByUserIdQuery({
     variables: { userId: params.accountId as string },
   });
 
   const { data: user, fetchMore } = useGetAccountByPkQuery({
     variables: { userId: params.accountId as string },
+  });
+
+  const { data: adminGroup } = useGetGroupByAdminQuery({
+    variables: {
+      admin: accountUser?.userid,
+    },
+  });
+
+  const { data: userGroup } = useGetGroupByUserPkQuery({
+    variables: {
+      userid: accountUser?.userid,
+    },
   });
 
   const loadMore = () => {
@@ -60,12 +87,112 @@ const AccountDetailPage = () => {
               />
             </div>
             <Row>
-              <Col span={4}>
+              <Col span={7}>
                 <div className="mt-5">
-                  <ActionMenu className="w-full flex items-center justify-start" />
+                  <ActionMenu
+                    inAccount={true}
+                    className="w-full flex items-center justify-start"
+                  />
+                  {accountUser?.userid === user?.find_account_by_id?.userid && (
+                    <>
+                      <div className="mt-4">
+                        <Card>
+                          <div className="text base">Nhóm bạn đang quản lý</div>
+                        </Card>
+                        {adminGroup?.get_group_by_admin?.length ? (
+                          adminGroup?.get_group_by_admin?.map((e) => (
+                            <div className="mt-2" key={e?.groupid}>
+                              <Card>
+                                <Flex>
+                                  <Avatar src={e?.image} size={48} />
+                                  <Space direction="vertical" className="ml-3">
+                                    <div className="font-bold text-base">
+                                      {e?.groupname}
+                                    </div>
+                                    <div className="">
+                                      {dayjs(e?.createday as string)?.format(
+                                        "DD/MM/YYYY, HH:mm"
+                                      )}
+                                    </div>
+                                    <div className="">{e?.reputaion}</div>
+                                    <div
+                                      className=""
+                                      dangerouslySetInnerHTML={{
+                                        __html: e?.description || "",
+                                      }}
+                                    ></div>
+                                  </Space>
+                                </Flex>
+                              </Card>
+                            </div>
+                          ))
+                        ) : (
+                          <Empty
+                            className="mt-2"
+                            description={"Bạn chưa quản lý nhóm nào"}
+                          />
+                        )}
+                      </div>
+                      <div className="mt-4">
+                        <Card>
+                          <div className="text base">
+                            Nhóm bạn đang tham gia
+                          </div>
+                        </Card>
+                        {userGroup?.get_group_by_userid?.filter((e) =>
+                          adminGroup?.get_group_by_admin?.some(
+                            (f) => f?.groupid !== e?.groupid
+                          )
+                        )?.length ? (
+                          userGroup?.get_group_by_userid
+                            ?.filter((e) =>
+                              adminGroup?.get_group_by_admin?.some(
+                                (f) => f?.groupid !== e?.groupid
+                              )
+                            )
+                            .map((e) => (
+                              <div className="mt-2" key={e?.groupid}>
+                                <Card>
+                                  <Flex>
+                                    <Avatar src={e?.image} size={48} />
+                                    <Space
+                                      direction="vertical"
+                                      className="ml-3"
+                                    >
+                                      <div className="font-bold text-base">
+                                        {e?.groupname}
+                                      </div>
+                                      <div className="">
+                                        {dayjs(e?.createday as string)?.format(
+                                          "DD/MM/YYYY, HH:mm"
+                                        )}
+                                      </div>
+                                      <div className="">{e?.reputaion}</div>
+                                      <div
+                                        className=""
+                                        dangerouslySetInnerHTML={{
+                                          __html: e?.description || "",
+                                        }}
+                                      ></div>
+                                    </Space>
+                                  </Flex>
+                                </Card>
+                              </div>
+                            ))
+                        ) : (
+                          <Empty
+                            className="mt-2"
+                            description={
+                              "Bạn chưa tham gia nhóm nào với vài trò thành viên"
+                            }
+                          />
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
               </Col>
-              <Col span={20}>
+              <Col span={17}>
                 <div
                   className={`w-full flex-col flex ${
                     data?.find_post_by_userid?.length
@@ -76,7 +203,7 @@ const AccountDetailPage = () => {
                   {!loading ? (
                     data?.find_post_by_userid?.length ? (
                       data?.find_post_by_userid
-                        ?.filter((e) => !e?.isdelete)
+                        ?.filter((e) => !e?.isdelete && !e?.group_post?.groupid)
                         .map((p) => (
                           <PostCard key={p?.postid} post={p as Post} />
                         ))

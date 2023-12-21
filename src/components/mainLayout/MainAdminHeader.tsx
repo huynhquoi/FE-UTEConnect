@@ -25,8 +25,8 @@ import XNotification from "../core/XNotification";
 
 const items: MenuProps["items"] = [
   {
-    label: "Chủ đề",
-    key: "admin/tag",
+    label: "Nguời dùng",
+    key: "admin/user",
   },
   {
     label: "Diễn đàn",
@@ -35,6 +35,10 @@ const items: MenuProps["items"] = [
   {
     label: "Report",
     key: "admin/report",
+  },
+  {
+    label: "Chủ đề",
+    key: "admin/tag",
   },
   {
     label: "Thống kê",

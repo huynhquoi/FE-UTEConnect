@@ -41,6 +41,18 @@ query getGroupByUserPk($userid: String) {
   }
 }
 
+query getGroupByAdmin($admin: String) {
+  get_group_by_admin(admin: $admin) {
+    ...Group
+  }
+}
+
+query getGroupByPk($groupid: Int) {
+  get_group_by_groupid(groupid: $groupid) {
+    ...Group
+  }
+}
+
 query findUserInGroup($groupid: Int) {
   get_user_in_group(groupid: $groupid) {
     ...GroupUser

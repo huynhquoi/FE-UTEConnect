@@ -6,24 +6,27 @@ import PostCard from "@/components/post/PostCard";
 import {
   Group,
   Post,
+  useGetGroupByPkQuery,
   useGetGroupByUserPkQuery,
   useGetPostInGroupQuery,
 } from "@/graphql/controller-types";
 import { useGlobalStore } from "@/hook/useUser";
 import { Avatar, Card, Col, ConfigProvider, Empty, Row, Skeleton } from "antd";
 import Meta from "antd/es/card/Meta";
+import { useParams } from "next/navigation";
 
 const GroupDetailPage = () => {
+  const param = useParams();
   const user = useGlobalStore();
-  const { data, fetchMore } = useGetGroupByUserPkQuery({
+  const { data, fetchMore } = useGetGroupByPkQuery({
     variables: {
-      userid: user?.userid,
+      groupid: parseInt(param?.groupId as string),
     },
   });
 
   const { data: post, loading } = useGetPostInGroupQuery({
     variables: {
-      groupid: data?.get_group_by_userid[0]?.groupid,
+      groupid: data?.get_group_by_groupid?.groupid,
     },
   });
   return (
@@ -49,7 +52,7 @@ const GroupDetailPage = () => {
             >
               <GroupCardHeader
                 style={{ width: "100%" }}
-                group={data?.get_group_by_userid[0] as Group}
+                group={data?.get_group_by_groupid as Group}
                 onReload={() =>
                   fetchMore({
                     variables: {

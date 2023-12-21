@@ -43,9 +43,10 @@ const items: MenuItem[] = [
 
 type ActionMenuProps = {
   className: string;
+  inAccount?: boolean;
 };
 
-const ActionMenu = ({ className }: ActionMenuProps) => {
+const ActionMenu = ({ className, inAccount }: ActionMenuProps) => {
   const [id, setId] = useState("");
   const user = useGlobalStore();
 
@@ -77,7 +78,7 @@ const ActionMenu = ({ className }: ActionMenuProps) => {
           <div className={className}>
             <Menu
               onClick={onClick}
-              style={{ width: 256, maxHeight: 256 }}
+              style={{ width: `${inAccount ? "100%" : 256}`, maxHeight: 256 }}
               mode="vertical"
               items={items}
               className="rounded-lg"
