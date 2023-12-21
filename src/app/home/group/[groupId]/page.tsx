@@ -12,9 +12,21 @@ import {
   useGetPostInGroupQuery,
 } from "@/graphql/controller-types";
 import { useGlobalStore } from "@/hook/useUser";
-import { Avatar, Card, Col, ConfigProvider, Empty, Row, Skeleton } from "antd";
+import {
+  Avatar,
+  Card,
+  Col,
+  ConfigProvider,
+  Empty,
+  Flex,
+  Row,
+  Skeleton,
+} from "antd";
 import Meta from "antd/es/card/Meta";
 import { useParams } from "next/navigation";
+import "./styles.scss";
+import XImage from "@/components/core/XImage";
+import GroupImageHeader from "@/components/group/GroupImageHeader";
 
 const GroupDetailPage = () => {
   const param = useParams();
@@ -40,6 +52,19 @@ const GroupDetailPage = () => {
           },
         }}
       >
+        <GroupImageHeader image={data?.get_group_by_groupid?.image || ""} />
+        <GroupCardHeader
+          bordered={false}
+          style={{ borderRadius: 0 }}
+          group={data?.get_group_by_groupid as Group}
+          onReload={() =>
+            fetchMore({
+              variables: {
+                userid: user?.userid,
+              },
+            })
+          }
+        />
         <Row style={{ width: "full-width" }}>
           <Col
             span={4}
@@ -47,26 +72,10 @@ const GroupDetailPage = () => {
             className="justify-end"
           ></Col>
           <Col span={16}>
-            <div
-              style={{ width: "100%" }}
-              className=" flex flex-col items-center justify-center"
-            >
-              <GroupCardHeader
-                style={{ width: "100%" }}
-                group={data?.get_group_by_groupid as Group}
-                onReload={() =>
-                  fetchMore({
-                    variables: {
-                      userid: user?.userid,
-                    },
-                  })
-                }
-              />
-            </div>
             <Row>
               <Col span={4}>
                 <div className="mt-5">
-                  <ActionMenu className="w-full flex items-center justify-start" />
+                  
                 </div>
               </Col>
               <Col span={20}>

@@ -22,6 +22,7 @@ import { useImageStore } from "@/hook/useImage";
 import XImage from "../core/XImage";
 import { ReloadOutlined, CloseOutlined } from "@ant-design/icons";
 import XEditor from "../core/XEditor";
+import XUploadGroup from "../core/XUploadGroup";
 
 const { Option } = Select;
 
@@ -55,6 +56,7 @@ const GroupForm = ({ groupId }: GroupFormType) => {
           groupname: e?.groupname,
           reputaion: e?.reputaion,
           image: e?.image,
+          admin: user?.userid,
         },
         admin: user?.userid,
       },
@@ -121,7 +123,7 @@ const GroupForm = ({ groupId }: GroupFormType) => {
                   </>
                 ) : (
                   <>
-                    <XUploadAvatar />
+                    <XUploadGroup />
                     <Flex style={{ height: 200, marginLeft: 4 }} align="start">
                       <Tooltip title={"Hủy"}>
                         <Button

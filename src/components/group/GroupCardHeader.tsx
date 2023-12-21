@@ -1,28 +1,18 @@
 "use client";
 
-import {
-  Avatar,
-  Card,
-  CardProps,
-  Col,
-  ConfigProvider,
-  Flex,
-  Row,
-  Space,
-} from "antd";
+import { Affix, Card, CardProps, ConfigProvider, Flex, Space } from "antd";
 import {
   Group,
-  User,
+  User_Group,
   useFindUserInGroupQuery,
 } from "@/graphql/controller-types";
-import FollowButton from "../shared/FollowButon";
 import { useGlobalStore } from "@/hook/useUser";
 import PostForm from "../post/PostForm";
-import ReportButton from "../shared/ReportButton";
 import { useEffect, useState } from "react";
-import GroupForm from "../group/GroupForm";
 import JoinGroupForm from "./JoinGroupForm";
 import DeleteGroupBtn from "./DeleteGroupBtn";
+import { GlobalOutlined } from "@ant-design/icons";
+import GroupCheckUser from "./GroupCheckUser";
 
 type GroupCardHeaderProps = {
   group?: Group;
@@ -51,42 +41,73 @@ const GroupCardHeader = ({
   return (
     <>
       <ConfigProvider>
-        <Card {...props}>
-          <Row>
-            <Col span={4}>
-              <div className="ml-5">
-                <Avatar size={172} src={group?.image} />
-              </div>
-            </Col>
-            <Col span={20}>
+        <Affix offsetTop={70}>
+          <Card {...props}>
+            <Flex justify="center">
               <div
                 className="flex items-center justify-between"
-                style={{ height: "100%" }}
+                style={{ height: "100%", width: "70%" }}
               >
                 <div className="flex flex-col items-start">
-                  <div className="font-bold text-4xl ml-4">
+                  <div className="font-bold text-2xl ml-4">
                     {group?.groupname}
                   </div>
+                  <div className="text-base ml-4 mt-2">
+                    <GlobalOutlined /> Diễn đàn có{" "}
+                    {data?.get_user_in_group?.filter((e) => e?.checked)?.length}{" "}
+                    thành viên
+                  </div>
                 </div>
-                <Space direction="vertical">
+                <Space>
                   <PostForm groupId={group?.groupid as number} />
-                  <JoinGroupForm
-                    groupId={group?.groupid as number}
-                    onReload={() => onReload()}
-                    typeSend={
-                      data?.get_user_in_group?.some(
-                        (e) => e?.user_usergroup?.userid === user?.userid
-                      )
-                        ? "leave"
-                        : "join"
-                    }
-                  />
+                  {group?.admin?.userid !== user?.userid ? (
+                    // <JoinGroupForm
+                    //   groupId={group?.groupid as number}
+                    //   onReload={() => onReload()}
+                    //   typeSend={
+                    //     data?.get_user_in_group?.some(
+                    //       (e) => e?.user_usergroup?.userid === user?.userid
+                    //     )
+                    //       ? "leave"
+                    //       : "join"
+                    //   }
+                    // />
+                    <GroupCheckUser
+                      groupUser={
+                        data?.get_user_in_group?.filter(
+                          (e) => !e?.checked
+                        ) as User_Group[]
+                      }
+                      onCheck={() =>
+                        fetchMore({
+                          variables: {
+                            groupid: group?.groupid,
+                          },
+                        })
+                      }
+                    />
+                  ) : (
+                    <GroupCheckUser
+                      groupUser={
+                        data?.get_user_in_group?.filter(
+                          (e) => !e?.checked
+                        ) as User_Group[]
+                      }
+                      onCheck={() =>
+                        fetchMore({
+                          variables: {
+                            groupid: group?.groupid,
+                          },
+                        })
+                      }
+                    />
+                  )}
                   <DeleteGroupBtn groupId={group?.groupid as number} />
                 </Space>
               </div>
-            </Col>
-          </Row>
-        </Card>
+            </Flex>
+          </Card>
+        </Affix>
       </ConfigProvider>
     </>
   );

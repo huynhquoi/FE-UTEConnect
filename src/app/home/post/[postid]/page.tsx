@@ -22,6 +22,7 @@ import { useParams } from "next/navigation";
 import "./style.scss";
 import PostAction from "@/components/post/PostAction";
 import ReportButton from "@/components/shared/ReportButton";
+import XDescription from "@/components/core/XDescription";
 
 const PostDetailPage = () => {
   const params = useParams();
@@ -92,10 +93,13 @@ const PostDetailPage = () => {
                     {data?.find_post_by_id?.topic_post?.topicname}
                   </Tag>
                 ) : null}
-                <div
+                {/* <div
                   dangerouslySetInnerHTML={{
                     __html: data?.find_post_by_id?.content as string,
                   }}
+                /> */}
+                <XDescription
+                  value={data?.find_post_by_id?.content as string}
                 />
                 <Divider style={{ marginBottom: "4px" }} />
                 <PostAction

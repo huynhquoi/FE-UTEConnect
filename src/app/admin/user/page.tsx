@@ -6,7 +6,12 @@ import Link from "next/link";
 import { EyeOutlined } from "@ant-design/icons";
 
 const AdminUserPage = () => {
-  const { data, loading } = useGetAccountQuery({});
+  const { data, loading } = useGetAccountQuery({
+    variables: {
+      limit: 100,
+      pacing: 1,
+    },
+  });
   const columns = [
     {
       title: "",

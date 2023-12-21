@@ -1262,7 +1262,10 @@ export type DeleteTopicMutationVariables = Exact<{
 
 export type DeleteTopicMutation = { __typename?: 'Mutation', delete_topic?: string | null };
 
-export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAccountQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
+}>;
 
 
 export type GetAccountQuery = { __typename?: 'Query', account?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
@@ -3361,8 +3364,8 @@ export type DeleteTopicMutationHookResult = ReturnType<typeof useDeleteTopicMuta
 export type DeleteTopicMutationResult = Apollo.MutationResult<DeleteTopicMutation>;
 export type DeleteTopicMutationOptions = Apollo.BaseMutationOptions<DeleteTopicMutation, DeleteTopicMutationVariables>;
 export const GetAccountDocument = gql`
-    query GetAccount {
-  account {
+    query GetAccount($limit: Int, $pacing: Int) {
+  account(limit: $limit, pacing: $pacing) {
     userid
     username
     fullname
@@ -3392,6 +3395,8 @@ export const GetAccountDocument = gql`
  * @example
  * const { data, loading, error } = useGetAccountQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      pacing: // value for 'pacing'
  *   },
  * });
  */
