@@ -7,12 +7,14 @@ import PostCard from "@/components/post/PostCard";
 import {
   Group,
   Post,
+  User,
   useGetGroupByPkQuery,
   useGetGroupByUserPkQuery,
   useGetPostInGroupQuery,
 } from "@/graphql/controller-types";
 import { useGlobalStore } from "@/hook/useUser";
 import {
+  Affix,
   Avatar,
   Card,
   Col,
@@ -27,6 +29,9 @@ import { useParams } from "next/navigation";
 import "./styles.scss";
 import XImage from "@/components/core/XImage";
 import GroupImageHeader from "@/components/group/GroupImageHeader";
+import XDescription from "@/components/core/XDescription";
+import dayjs from "dayjs";
+import UserDisplay from "@/components/shared/UserDisplay";
 
 const GroupDetailPage = () => {
   const param = useParams();
@@ -60,61 +65,81 @@ const GroupDetailPage = () => {
           onReload={() =>
             fetchMore({
               variables: {
-                userid: user?.userid,
+                groupid: parseInt(param?.groupId as string),
               },
             })
           }
         />
         <Row style={{ width: "full-width" }}>
+          <Col span={4}></Col>
           <Col
-            span={4}
+            span={6}
             style={{ display: "flex !important" }}
             className="justify-end"
-          ></Col>
-          <Col span={16}>
-            <Row>
-              <Col span={4}>
-                <div className="mt-5">
-                  
-                </div>
-              </Col>
-              <Col span={20}>
-                <div
-                  className={`w-full flex-col flex ${
-                    post?.find_post_in_group?.length
-                      ? "items-end  justify-end"
-                      : "items-center  justify-center"
-                  }`}
-                >
-                  {!loading ? (
-                    post?.find_post_in_group?.length ? (
-                      post?.find_post_in_group
-                        ?.filter((e) => !e?.isdelete)
-                        .map((p) => (
-                          <PostCard key={p?.postid} post={p as Post} />
-                        ))
-                    ) : (
-                      <Empty
-                        style={{ marginTop: 20 }}
-                        description={"Bạn chưa có bài viết nào"}
-                      />
-                    )
-                  ) : (
-                    <Card style={{ width: "94%", marginTop: 20 }}>
-                      <Skeleton loading={loading} avatar active>
-                        <Meta
-                          avatar={
-                            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
-                          }
-                          title="Card title"
-                          description="This is the description"
-                        />
-                      </Skeleton>
-                    </Card>
-                  )}
-                </div>
-              </Col>
-            </Row>
+          >
+            <Affix offsetTop={180}>
+              <div className="mt-5">
+                <Card>
+                  <div className="text-xl font-bold">Thông tin nhóm</div>
+                  <div className="text-base font-semibold mt-2">
+                    Thành lập ngày
+                  </div>
+                  <div className="text-base mt-2 ml-4">
+                    {dayjs(
+                      data?.get_group_by_groupid?.createday as string
+                    ).format("DD/MM/YYYY, HH:mm")}
+                  </div>
+                  <div className="text-base font-semibold mt-2">
+                    Quản lý của nhóm
+                  </div>
+                  <div className="text-base mt-2 ml-4">
+                    <UserDisplay
+                      user={data?.get_group_by_groupid?.user_group as User}
+                    />
+                  </div>
+                  <div className="text-base font-semibold mt-2">Giới thiệu</div>
+                  <div className="text-base">
+                    <XDescription
+                      value={data?.get_group_by_groupid?.description as string}
+                    />
+                  </div>
+                </Card>
+              </div>
+            </Affix>
+          </Col>
+          <Col span={10}>
+            <div
+              className={`w-full flex-col flex ${
+                post?.find_post_in_group?.length
+                  ? "items-end  justify-end"
+                  : "items-center  justify-center"
+              }`}
+            >
+              {!loading ? (
+                post?.find_post_in_group?.length ? (
+                  post?.find_post_in_group
+                    ?.filter((e) => !e?.isdelete)
+                    .map((p) => <PostCard key={p?.postid} post={p as Post} />)
+                ) : (
+                  <Empty
+                    style={{ marginTop: 20 }}
+                    description={"Bạn chưa có bài viết nào"}
+                  />
+                )
+              ) : (
+                <Card style={{ width: "94%", marginTop: 20 }}>
+                  <Skeleton loading={loading} avatar active>
+                    <Meta
+                      avatar={
+                        <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
+                      }
+                      title="Card title"
+                      description="This is the description"
+                    />
+                  </Skeleton>
+                </Card>
+              )}
+            </div>
           </Col>
           <Col span={4}></Col>
         </Row>

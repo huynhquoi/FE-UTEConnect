@@ -41,7 +41,7 @@ const FollowUserPage = () => {
       >
         <Row style={{ width: "full-width" }}>
           <Col span={6}>
-            <ActionMenu className="w-full flex items-center justify-end" />
+            <ActionMenu className="w-full ml-4" />
           </Col>
           <Col span={12}>
             <div

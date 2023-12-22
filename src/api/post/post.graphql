@@ -28,6 +28,38 @@ query GetPost {
   }
 }
 
+query PostLikedByUserPk($userid: String) {
+  find_postlike_byuserid(userid: $userid) {
+    postlikeid
+    post_postlike {
+      ...Post
+    }
+    user_postlike {
+      userid
+    }
+    icon_postlike {
+      iconid
+    }
+    createday
+  }
+}
+
+query FindPosLike($postid: Int, $userid: String) {
+  find_postlike_by_postid_and_userid(postid: $postid, userid: $userid) {
+    postlikeid
+    post_postlike {
+      ...Post
+    }
+    user_postlike {
+      userid
+    }
+    icon_postlike {
+      iconid
+    }
+    createday
+  }
+}
+
 query GetPostByUserId($userId: String) {
   find_post_by_userid(userid: $userId) {
     ...Post

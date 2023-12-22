@@ -1048,6 +1048,21 @@ export type GetPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null } | null> | null };
 
+export type PostLikedByUserPkQueryVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type PostLikedByUserPkQuery = { __typename?: 'Query', find_postlike_byuserid?: Array<{ __typename?: 'Post_Like', postlikeid: number, createday?: any | null, post_postlike?: { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null } | null, user_postlike?: { __typename?: 'User', userid: string } | null, icon_postlike?: { __typename?: 'Icon', iconid: number } | null } | null> | null };
+
+export type FindPosLikeQueryVariables = Exact<{
+  postid?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type FindPosLikeQuery = { __typename?: 'Query', find_postlike_by_postid_and_userid?: { __typename?: 'Post_Like', postlikeid: number, createday?: any | null, post_postlike?: { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null } | null, user_postlike?: { __typename?: 'User', userid: string } | null, icon_postlike?: { __typename?: 'Icon', iconid: number } | null } | null };
+
 export type GetPostByUserIdQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -2349,6 +2364,107 @@ export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
 export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
 export type GetPostSuspenseQueryHookResult = ReturnType<typeof useGetPostSuspenseQuery>;
 export type GetPostQueryResult = Apollo.QueryResult<GetPostQuery, GetPostQueryVariables>;
+export const PostLikedByUserPkDocument = gql`
+    query PostLikedByUserPk($userid: String) {
+  find_postlike_byuserid(userid: $userid) {
+    postlikeid
+    post_postlike {
+      ...Post
+    }
+    user_postlike {
+      userid
+    }
+    icon_postlike {
+      iconid
+    }
+    createday
+  }
+}
+    ${PostFragmentDoc}`;
+
+/**
+ * __usePostLikedByUserPkQuery__
+ *
+ * To run a query within a React component, call `usePostLikedByUserPkQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostLikedByUserPkQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostLikedByUserPkQuery({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function usePostLikedByUserPkQuery(baseOptions?: Apollo.QueryHookOptions<PostLikedByUserPkQuery, PostLikedByUserPkQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PostLikedByUserPkQuery, PostLikedByUserPkQueryVariables>(PostLikedByUserPkDocument, options);
+      }
+export function usePostLikedByUserPkLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostLikedByUserPkQuery, PostLikedByUserPkQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PostLikedByUserPkQuery, PostLikedByUserPkQueryVariables>(PostLikedByUserPkDocument, options);
+        }
+export function usePostLikedByUserPkSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PostLikedByUserPkQuery, PostLikedByUserPkQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PostLikedByUserPkQuery, PostLikedByUserPkQueryVariables>(PostLikedByUserPkDocument, options);
+        }
+export type PostLikedByUserPkQueryHookResult = ReturnType<typeof usePostLikedByUserPkQuery>;
+export type PostLikedByUserPkLazyQueryHookResult = ReturnType<typeof usePostLikedByUserPkLazyQuery>;
+export type PostLikedByUserPkSuspenseQueryHookResult = ReturnType<typeof usePostLikedByUserPkSuspenseQuery>;
+export type PostLikedByUserPkQueryResult = Apollo.QueryResult<PostLikedByUserPkQuery, PostLikedByUserPkQueryVariables>;
+export const FindPosLikeDocument = gql`
+    query FindPosLike($postid: Int, $userid: String) {
+  find_postlike_by_postid_and_userid(postid: $postid, userid: $userid) {
+    postlikeid
+    post_postlike {
+      ...Post
+    }
+    user_postlike {
+      userid
+    }
+    icon_postlike {
+      iconid
+    }
+    createday
+  }
+}
+    ${PostFragmentDoc}`;
+
+/**
+ * __useFindPosLikeQuery__
+ *
+ * To run a query within a React component, call `useFindPosLikeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindPosLikeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindPosLikeQuery({
+ *   variables: {
+ *      postid: // value for 'postid'
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useFindPosLikeQuery(baseOptions?: Apollo.QueryHookOptions<FindPosLikeQuery, FindPosLikeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindPosLikeQuery, FindPosLikeQueryVariables>(FindPosLikeDocument, options);
+      }
+export function useFindPosLikeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindPosLikeQuery, FindPosLikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindPosLikeQuery, FindPosLikeQueryVariables>(FindPosLikeDocument, options);
+        }
+export function useFindPosLikeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FindPosLikeQuery, FindPosLikeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindPosLikeQuery, FindPosLikeQueryVariables>(FindPosLikeDocument, options);
+        }
+export type FindPosLikeQueryHookResult = ReturnType<typeof useFindPosLikeQuery>;
+export type FindPosLikeLazyQueryHookResult = ReturnType<typeof useFindPosLikeLazyQuery>;
+export type FindPosLikeSuspenseQueryHookResult = ReturnType<typeof useFindPosLikeSuspenseQuery>;
+export type FindPosLikeQueryResult = Apollo.QueryResult<FindPosLikeQuery, FindPosLikeQueryVariables>;
 export const GetPostByUserIdDocument = gql`
     query GetPostByUserId($userId: String) {
   find_post_by_userid(userid: $userId) {

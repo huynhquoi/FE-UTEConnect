@@ -13,6 +13,7 @@ import JoinGroupForm from "./JoinGroupForm";
 import DeleteGroupBtn from "./DeleteGroupBtn";
 import { GlobalOutlined } from "@ant-design/icons";
 import GroupCheckUser from "./GroupCheckUser";
+import GroupForm from "./GroupForm";
 
 type GroupCardHeaderProps = {
   group?: Group;
@@ -59,6 +60,11 @@ const GroupCardHeader = ({
                   </div>
                 </div>
                 <Space>
+                  <GroupForm
+                    groupId={group?.groupid as number}
+                    group={group}
+                    onReload={() => onReload()}
+                  />
                   <PostForm groupId={group?.groupid as number} />
                   {group?.user_group?.userid !== user?.userid ? (
                     <JoinGroupForm

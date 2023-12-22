@@ -3,22 +3,11 @@
 import XInput from "@/components/core/XInput";
 import ActionMenu from "@/components/home/ActionMenu";
 import PostCard from "@/components/post/PostCard";
-import {
-  Avatar,
-  Card,
-  Col,
-  ConfigProvider,
-  Empty,
-  Row,
-  Skeleton,
-} from "antd";
-import {
-  Post,
-  useGetAllFollowPostQuery,
-} from "@/graphql/controller-types";
+import { Avatar, Card, Col, ConfigProvider, Empty, Row, Skeleton } from "antd";
+import { Post, useGetAllFollowPostQuery } from "@/graphql/controller-types";
 import { useGlobalStore } from "@/hook/useUser";
 import Meta from "antd/es/card/Meta";
-import "./style.scss"
+import "./style.scss";
 
 const FollowPostPage = () => {
   const user = useGlobalStore();
@@ -46,7 +35,7 @@ const FollowPostPage = () => {
       >
         <Row style={{ width: "full-width" }}>
           <Col span={6}>
-            <ActionMenu className="w-full flex items-center justify-end" />
+            <ActionMenu className="w-full ml-4" />
           </Col>
           <Col span={12}>
             <div

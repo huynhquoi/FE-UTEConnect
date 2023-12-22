@@ -13,7 +13,9 @@ import {
 } from "antd";
 import XInput from "../core/XInput";
 import {
+  Group,
   useCreateGroupMutation,
+  useUpdateGroupMutation,
 } from "@/graphql/controller-types";
 import { useEffect, useState } from "react";
 import { useGlobalStore } from "@/hook/useUser";
@@ -27,21 +29,31 @@ import XUploadGroup from "../core/XUploadGroup";
 const { Option } = Select;
 
 type GroupFormType = {
-  //   onReload: () => void;
+  onReload: () => void;
   groupId?: number;
+  group?: Group;
 };
 
-const GroupForm = ({ groupId }: GroupFormType) => {
+const GroupForm = ({ groupId, group, onReload }: GroupFormType) => {
   const user = useGlobalStore();
   const [form] = Form.useForm();
   const [editImage, setEditImage] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [CreateGroup] = useCreateGroupMutation();
+  const [UpdateGroup] = useUpdateGroupMutation();
 
   const image = useImageStore();
 
   useEffect(() => {
-    if (!form.getFieldValue("image")) {
+    if (!groupId) {
+      return;
+    }
+    form.setFieldValue("image", group?.image);
+    form.setFieldValue("description", group?.description);
+  }, [form, group?.description, group?.image, groupId]);
+
+  useEffect(() => {
+    if (!image) {
       return;
     }
     form.setFieldValue("image", image);
@@ -49,34 +61,59 @@ const GroupForm = ({ groupId }: GroupFormType) => {
   }, [form, image]);
 
   const onFinish = (e: any) => {
-    CreateGroup({
-      variables: {
-        group: {
-          description: e?.description,
-          groupname: e?.groupname,
-          reputaion: e?.reputaion,
-          image: e?.image,
+    if (!groupId) {
+      CreateGroup({
+        variables: {
+          group: {
+            description: e?.description,
+            groupname: e?.groupname,
+            reputaion: e?.reputaion,
+            image: e?.image,
+          },
+          admin: user?.userid,
         },
-        admin: user?.userid,
-      },
-    })
-      .then(() => setEditVisible(false))
-    //   .then(() => onReload())
-      .catch((err) => {
-        console.log(err.message);
-      });
+      })
+        .then(() => {
+          setEditVisible(false);
+          void onReload();
+        })
+        //   .then(() => onReload())
+        .catch((err) => {
+          console.log(err.message);
+        });
+    } else {
+      UpdateGroup({
+        variables: {
+          group: {
+            groupid: groupId,
+            description: e?.description,
+            groupname: e?.groupname,
+            reputaion: e?.reputaion,
+            image: e?.image,
+          },
+        },
+      })
+        .then(() => {
+          setEditVisible(false);
+          void onReload();
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
   };
-  useEffect(() => {
-    form.setFieldValue("image", user?.image);
-  }, [form, user]);
   return (
     <>
       <Button className="ml-2" onClick={() => setEditVisible(true)}>
-        Tạo group
+        {!groupId ? "Tạo group" : "Chỉnh sửa Group"}
       </Button>
       <Modal
         open={editVisible}
-        title={<div className="font-bold text-xl">Tạo group</div>}
+        title={
+          <div className="font-bold text-xl">
+            {!groupId ? "Tạo group" : "Chỉnh sửa Group"}
+          </div>
+        }
         maskClosable={false}
         width={800}
         centered
@@ -94,7 +131,12 @@ const GroupForm = ({ groupId }: GroupFormType) => {
           id="group_form"
           form={form}
           onFinish={onFinish}
-          initialValues={{}}
+          initialValues={{
+            ["image"]: group?.image || "",
+            ["groupname"]: group?.groupname || "",
+            ["reputaion"]: group?.reputaion || 0,
+            ["description"]: group?.description || "",
+          }}
         >
           <Form.Item
             name="image"
@@ -197,7 +239,7 @@ const GroupForm = ({ groupId }: GroupFormType) => {
                     color: "#fff",
                   }}
                 >
-                  Tạo
+                  {!groupId ? "Tạo" : "Chỉnh sửa"}
                 </Button>
               </Form.Item>
             </Space>

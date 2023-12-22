@@ -19,8 +19,13 @@ import { Header } from "antd/es/layout/layout";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import XImage from "../core/XImage";
-import { User, useGetAccountByPkQuery } from "@/graphql/controller-types";
-import { getProfileUser } from "@/store/slice";
+import {
+  Post_Like,
+  User,
+  useGetAccountByPkQuery,
+  usePostLikedByUserPkQuery,
+} from "@/graphql/controller-types";
+import { getProfileUser, setPostReaction } from "@/store/slice";
 import UserDisplay from "../shared/UserDisplay";
 import { useEffect, useState } from "react";
 import XNotification from "../core/XNotification";
@@ -57,6 +62,13 @@ const MainHeader = () => {
     variables: { userId: id },
   });
 
+  const { data: postReaction, fetchMore: getReaction } =
+    usePostLikedByUserPkQuery({
+      variables: {
+        userid: id,
+      },
+    });
+
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -72,8 +84,20 @@ const MainHeader = () => {
       return;
     }
     getMe({ variables: { userId: id } });
+    getReaction({ variables: { userId: id } });
     dispatch(getProfileUser(data?.find_account_by_id as User));
-  }, [loading, id, getMe, dispatch, data?.find_account_by_id]);
+    dispatch(
+      setPostReaction(postReaction?.find_postlike_byuserid as Post_Like[])
+    );
+  }, [
+    loading,
+    id,
+    getMe,
+    dispatch,
+    data?.find_account_by_id,
+    getReaction,
+    postReaction?.find_postlike_byuserid,
+  ]);
 
   const profileUser = useSelector(
     (state: RootState) => state.sliceReducer.profileUser
@@ -97,12 +121,12 @@ const MainHeader = () => {
           },
         }}
       >
-        <Affix offsetTop={0} style={{zIndex: 999}}>
+        <Affix offsetTop={0} style={{ zIndex: 999 }}>
           <div style={{ width: "99vw" }}>
             <Card
               bordered={false}
               className="card_header"
-              style={{ borderRadius: 0, zIndex: 9999}}
+              style={{ borderRadius: 0, zIndex: 9999 }}
             >
               <Flex align="center" justify="space-between">
                 <div className="flex items-center">

@@ -36,7 +36,7 @@ const AccountCardHeader = ({
       <ConfigProvider>
         <Card {...props}>
           <Flex justify="center">
-            <div style={{width: "70%"}}>
+            <div style={{ width: "70%" }}>
               <Row>
                 <Col span={4}>
                   <div className="ml-5">
@@ -64,7 +64,7 @@ const AccountCardHeader = ({
                         <div className="flex items-start">
                           <PostForm />
                           <AccountForm onReload={() => setReload(true)} />
-                          <GroupForm />
+                          <GroupForm onReload={() => onReload()} />
                         </div>
                       </>
                     ) : (
