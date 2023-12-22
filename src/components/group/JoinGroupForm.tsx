@@ -14,13 +14,19 @@ type JoinGroupFormProps = {
   typeSend: "join" | "leave";
   groupId: number;
   onReload: () => void;
+  loading?: boolean;
 };
 
-const JoinGroupForm = ({ groupId, typeSend, onReload }: JoinGroupFormProps) => {
+const JoinGroupForm = ({
+  groupId,
+  typeSend,
+  onReload,
+  loading,
+}: JoinGroupFormProps) => {
   const user = useGlobalStore();
   const [submit, setSubmit] = useState(false);
-  const [joinGroup] = useJoinGroupMutation({});
-  const [leaveGroup] = useLeaveGroupMutation({});
+  const [joinGroup, { loading: joinLoading }] = useJoinGroupMutation({});
+  const [leaveGroup, { loading: leaveLoading }] = useLeaveGroupMutation({});
 
   useEffect(() => {
     if (!submit) {
@@ -59,7 +65,10 @@ const JoinGroupForm = ({ groupId, typeSend, onReload }: JoinGroupFormProps) => {
 
   return (
     <>
-      <Button onClick={() => setSubmit(true)}>
+      <Button
+        onClick={() => setSubmit(true)}
+        disabled={loading || leaveLoading || joinLoading}
+      >
         <Flex align="center">
           {typeSend === "join" ? <UsergroupAddOutlined /> : <LogoutOutlined />}
         </Flex>

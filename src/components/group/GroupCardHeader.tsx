@@ -27,9 +27,11 @@ const GroupCardHeader = ({
 }: CardProps & GroupCardHeaderProps) => {
   const user = useGlobalStore();
   const [reload, setReload] = useState(false);
-  const { data, fetchMore } = useFindUserInGroupQuery({
+  const { data, loading, fetchMore } = useFindUserInGroupQuery({
     variables: {
       groupid: group?.groupid,
+      limit: 100,
+      pacing: 1,
     },
   });
   useEffect(() => {
@@ -60,41 +62,54 @@ const GroupCardHeader = ({
                   </div>
                 </div>
                 <Space>
-                  <GroupForm
-                    groupId={group?.groupid as number}
-                    group={group}
-                    onReload={() => onReload()}
-                  />
                   <PostForm groupId={group?.groupid as number} />
                   {group?.user_group?.userid !== user?.userid ? (
-                    <JoinGroupForm
-                      groupId={group?.groupid as number}
-                      onReload={() => onReload()}
-                      typeSend={
-                        data?.get_user_in_group?.some(
-                          (e) => e?.user_usergroup?.userid === user?.userid
-                        )
-                          ? "leave"
-                          : "join"
-                      }
-                    />
+                    <>
+                      <JoinGroupForm
+                        loading={loading}
+                        groupId={group?.groupid as number}
+                        onReload={() =>
+                          fetchMore({
+                            variables: {
+                              groupid: group?.groupid,
+                              limit: 100,
+                              pacing: 1,
+                            },
+                          })
+                        }
+                        typeSend={
+                          data?.get_user_in_group?.some(
+                            (e) => e?.user_usergroup?.userid === user?.userid
+                          )
+                            ? "leave"
+                            : "join"
+                        }
+                      />
+                    </>
                   ) : (
-                    <GroupCheckUser
-                      groupUser={
-                        data?.get_user_in_group?.filter(
-                          (e) => !e?.checked
-                        ) as User_Group[]
-                      }
-                      onCheck={() =>
-                        fetchMore({
-                          variables: {
-                            groupid: group?.groupid,
-                          },
-                        })
-                      }
-                    />
+                    <>
+                      <GroupCheckUser
+                        groupUser={
+                          data?.get_user_in_group?.filter(
+                            (e) => !e?.checked
+                          ) as User_Group[]
+                        }
+                        onCheck={() =>
+                          fetchMore({
+                            variables: {
+                              groupid: group?.groupid,
+                            },
+                          })
+                        }
+                      />
+                      <GroupForm
+                        groupId={group?.groupid as number}
+                        group={group}
+                        onReload={() => onReload()}
+                      />
+                      <DeleteGroupBtn groupId={group?.groupid as number} />
+                    </>
                   )}
-                  <DeleteGroupBtn groupId={group?.groupid as number} />
                 </Space>
               </div>
             </Flex>

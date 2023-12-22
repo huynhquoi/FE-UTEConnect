@@ -3,6 +3,7 @@
 import ActionMenu from "@/components/home/ActionMenu";
 import PostComment from "@/components/post/PostComment";
 import {
+  Post,
   useGetAccountByPkQuery,
   useGetPostByPkQuery,
 } from "@/graphql/controller-types";
@@ -23,9 +24,13 @@ import "./style.scss";
 import PostAction from "@/components/post/PostAction";
 import ReportButton from "@/components/shared/ReportButton";
 import XDescription from "@/components/core/XDescription";
+import { useAllBookmark, useGlobalStore } from "@/hook/useUser";
+import PostForm from "@/components/post/PostForm";
 
 const PostDetailPage = () => {
   const params = useParams();
+  const user = useGlobalStore();
+  const bookmark = useAllBookmark();
   const { data, loading } = useGetPostByPkQuery({
     variables: { postid: parseInt(params.postid as string) },
   });
@@ -67,9 +72,14 @@ const PostDetailPage = () => {
                         <div className="text-base">
                           {data?.find_post_by_id?.user_post?.fullname}
                         </div>
-                        <ReportButton
-                          postReportId={data?.find_post_by_id?.postid}
-                        />
+                        {data?.find_post_by_id?.user_post?.userid ===
+                        user?.userid ? (
+                          <PostForm post={data?.find_post_by_id} />
+                        ) : (
+                          <ReportButton
+                            postReportId={data?.find_post_by_id?.postid}
+                          />
+                        )}
                       </Flex>
                     </>
                   }
@@ -93,18 +103,17 @@ const PostDetailPage = () => {
                     {data?.find_post_by_id?.topic_post?.topicname}
                   </Tag>
                 ) : null}
-                {/* <div
-                  dangerouslySetInnerHTML={{
-                    __html: data?.find_post_by_id?.content as string,
-                  }}
-                /> */}
                 <XDescription
                   value={data?.find_post_by_id?.content as string}
                 />
                 <Divider style={{ marginBottom: "4px" }} />
                 <PostAction
+                  isFollow={bookmark
+                    ?.map((e) => e?.post_bookmark?.postid)
+                    .some((e) => e === data?.find_post_by_id?.postid)}
                   postId={data?.find_post_by_id?.postid as number}
                   userId={data?.find_post_by_id?.user_post?.userid as string}
+                  post={data?.find_post_by_id as Post}
                 />
                 <Divider style={{ marginTop: "4px" }} />
                 <PostComment postId={parseInt(params.postid as string)} />

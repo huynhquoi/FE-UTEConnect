@@ -1,4 +1,5 @@
 import {
+  Post,
   useCreatePostReactionMutation,
   useDeletePostReactionMutation,
   useFindPosLikeQuery,
@@ -9,22 +10,24 @@ import { Button, Flex, Space } from "antd";
 import { useEffect, useState } from "react";
 
 import {
-  FlagFilled,
-  FlagOutlined,
   LikeOutlined,
   DislikeFilled,
   LikeFilled,
   DislikeOutlined,
 } from "@ant-design/icons";
 import { TYPE_DISLIKE, TYPE_LIKE } from "@/graphql/default-types";
-import { usePostReaction } from "@/hook/useUser";
+import { useGlobalStore } from "@/hook/useUser";
+import PostFollow from "./PostFollow";
 
 type PostActionProps = {
   postId: number;
   userId: string;
+  post: Post;
+  isFollow: boolean;
 };
 
-const PostAction = ({ postId, userId }: PostActionProps) => {
+const PostAction = ({ postId, userId, post, isFollow }: PostActionProps) => {
+  const user = useGlobalStore();
   const [reaction, setReaction] = useState(0);
 
   const [CreateReaction, { loading: loadingCreate }] =
@@ -162,17 +165,14 @@ const PostAction = ({ postId, userId }: PostActionProps) => {
               )}
             </Flex>
           </Button>
+          {user?.userid !== post?.user_post?.userid && (
+            <PostFollow
+              isFollow={isFollow as boolean}
+              post={post}
+              user={user}
+            />
+          )}
         </Space>
-        {/* <Button>
-          <Flex align="center" justify="space-between">
-            <FlagFilled className="pr-2"></FlagFilled> Theo dõi
-          </Flex>
-        </Button>
-        <Button style={{ background: "#000", color: "#fff" }}>
-          <Flex align="center" justify="space-between">
-            <FlagFilled className="pr-2"></FlagFilled> Bỏ theo dõi
-          </Flex>
-        </Button> */}
       </Flex>
     </>
   );

@@ -975,6 +975,8 @@ export type GetGroupByPkQuery = { __typename?: 'Query', get_group_by_groupid?: {
 
 export type FindUserInGroupQueryVariables = Exact<{
   groupid?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
@@ -2015,8 +2017,8 @@ export type GetGroupByPkLazyQueryHookResult = ReturnType<typeof useGetGroupByPkL
 export type GetGroupByPkSuspenseQueryHookResult = ReturnType<typeof useGetGroupByPkSuspenseQuery>;
 export type GetGroupByPkQueryResult = Apollo.QueryResult<GetGroupByPkQuery, GetGroupByPkQueryVariables>;
 export const FindUserInGroupDocument = gql`
-    query findUserInGroup($groupid: Int) {
-  get_user_in_group(groupid: $groupid) {
+    query findUserInGroup($groupid: Int, $limit: Int, $pacing: Int) {
+  get_user_in_group(groupid: $groupid, limit: $limit, pacing: $pacing) {
     ...GroupUser
   }
 }
@@ -2035,6 +2037,8 @@ export const FindUserInGroupDocument = gql`
  * const { data, loading, error } = useFindUserInGroupQuery({
  *   variables: {
  *      groupid: // value for 'groupid'
+ *      limit: // value for 'limit'
+ *      pacing: // value for 'pacing'
  *   },
  * });
  */

@@ -1,29 +1,34 @@
 "use client";
 
 import { useGlobalStore } from "@/hook/useUser";
-import { Button, Flex, Form, Modal, Select, Space } from "antd";
+import { Button, Flex, Form, Modal, Select, Space, Tooltip } from "antd";
 import XInput from "../core/XInput";
 import XUpload from "../core/XUpload";
 import XEditor from "../core/XEditor";
 import { useEffect, useState } from "react";
 import {
   Group,
+  Post,
   useCreatePostInGroupMutation,
   useCreatePostMutation,
   useGetAllTopicQuery,
   useGetPostByUserIdQuery,
 } from "@/graphql/controller-types";
 import { useImageStore } from "@/hook/useImage";
+import XImage from "../core/XImage";
 const { Option } = Select;
+import { ReloadOutlined, CloseOutlined } from "@ant-design/icons";
 
 type PostFormProps = {
   groupId?: number;
+  post?: Post;
 };
 
-const PostForm = ({ groupId }: PostFormProps) => {
+const PostForm = ({ groupId, post }: PostFormProps) => {
   const user = useGlobalStore();
   const [formPost] = Form.useForm();
   const [createVisible, setCreateVisible] = useState(false);
+  const [editImage, setEditImage] = useState(!!!post?.postid);
   const [selectTopic, setSelectTopic] = useState(0);
   const [createPost] = useCreatePostMutation();
   const [createPostInGroup] = useCreatePostInGroupMutation();
@@ -32,11 +37,26 @@ const PostForm = ({ groupId }: PostFormProps) => {
   const image = useImageStore();
 
   useEffect(() => {
-    if (!formPost.getFieldValue("image")) {
+    if (!post?.postid) {
+      return;
+    }
+    formPost.setFieldValue("content", post?.content);
+    formPost.setFieldValue("image", post?.image);
+    setSelectTopic(post?.topic_post?.topicid as number);
+  }, [
+    formPost,
+    post?.content,
+    post?.image,
+    post?.postid,
+    post?.topic_post?.topicid,
+  ]);
+
+  useEffect(() => {
+    if (!formPost.getFieldValue("image") || !editImage) {
       return;
     }
     formPost.setFieldValue("image", image);
-  }, [formPost, image]);
+  }, [editImage, formPost, image]);
 
   const onFinishCreate = (e: any) => {
     if (!groupId) {
@@ -95,10 +115,16 @@ const PostForm = ({ groupId }: PostFormProps) => {
 
   return (
     <>
-      <Button onClick={() => setCreateVisible(true)}>Đăng bài viết</Button>
+      <Button onClick={() => setCreateVisible(true)}>
+        {post?.postid ? "Chỉnh sửa" : "Đăng bài viết"}
+      </Button>
       <Modal
         open={createVisible}
-        title={<div className="font-bold text-xl">Đăng bài viết</div>}
+        title={
+          <div className="font-bold text-xl">
+            {post?.postid ? "Sửa bài viết" : "Đăng bài viết"}
+          </div>
+        }
         maskClosable={false}
         width={800}
         centered
@@ -116,6 +142,7 @@ const PostForm = ({ groupId }: PostFormProps) => {
           <div className="font-bold flex mb-1">Chủ đề</div>
           <Select
             placeholder={"Chọn chủ đề cho bài viết"}
+            defaultValue={post?.topic_post?.topicid || 0}
             allowClear
             onChange={(e) => {
               setSelectTopic(e as number);
@@ -129,7 +156,17 @@ const PostForm = ({ groupId }: PostFormProps) => {
             ))}
           </Select>
         </div>
-        <Form id="post_form" form={formPost} onFinish={onFinishCreate}>
+        <Form
+          id="post_form"
+          form={formPost}
+          onFinish={onFinishCreate}
+          initialValues={{
+            ["title"]: post?.title || "",
+            ["requiredreputation"]: post?.requiredreputation || 0,
+            ["image"]: post?.image || "",
+            ["content"]: post?.content || "",
+          }}
+        >
           <Form.Item
             name="title"
             rules={[{ required: true, message: "Không được bỏ trống ô này" }]}
@@ -159,7 +196,41 @@ const PostForm = ({ groupId }: PostFormProps) => {
             <div style={{ width: "100%" }}>
               <div className="font-bold flex mb-1">Ảnh</div>
               <Flex align="center" justify="center">
-                <XUpload />
+                {!!formPost?.getFieldValue("image") && !editImage ? (
+                  <>
+                    <XImage width={200} src={formPost.getFieldValue("image")} />
+                    <Flex style={{ height: 200, marginLeft: 4 }} align="start">
+                      <Tooltip title={"Đăng lại"}>
+                        <Button
+                          onClick={() => {
+                            setEditImage(true);
+                          }}
+                        >
+                          <Flex align="center">
+                            <ReloadOutlined />
+                          </Flex>
+                        </Button>
+                      </Tooltip>
+                    </Flex>
+                  </>
+                ) : (
+                  <>
+                    <XUpload />
+                    <Flex style={{ height: 200, marginLeft: 4 }} align="start">
+                      <Tooltip title={"Hủy"}>
+                        <Button
+                          onClick={() => {
+                            setEditImage(false);
+                          }}
+                        >
+                          <Flex align="center">
+                            <CloseOutlined className="text-red" />
+                          </Flex>
+                        </Button>
+                      </Tooltip>
+                    </Flex>
+                  </>
+                )}
               </Flex>
             </div>
           </Form.Item>
@@ -202,7 +273,7 @@ const PostForm = ({ groupId }: PostFormProps) => {
                     color: "#fff",
                   }}
                 >
-                  Tạo
+                  Ok
                 </Button>
               </Form.Item>
             </Space>

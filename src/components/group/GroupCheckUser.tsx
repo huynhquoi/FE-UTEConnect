@@ -1,9 +1,17 @@
 "use client";
 
 import { Avatar, Button, Flex, List, Modal } from "antd";
-import { UsergroupAddOutlined, CheckOutlined } from "@ant-design/icons";
+import {
+  UsergroupAddOutlined,
+  CheckOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { User_Group, useAcceptUserMutation } from "@/graphql/controller-types";
+import {
+  User_Group,
+  useAcceptUserMutation,
+  useLeaveGroupMutation,
+} from "@/graphql/controller-types";
 import Link from "next/link";
 
 type GroupCheckUserProps = {
@@ -15,28 +23,50 @@ const GroupCheckUser = ({ groupUser, onCheck }: GroupCheckUserProps) => {
   const [open, setOpen] = useState(false);
   const [submit, setSubmit] = useState(false);
   const [userAccept, setUserAccept] = useState<User_Group>();
+  const [userReject, setUserReject] = useState<User_Group>();
   const [checkUser] = useAcceptUserMutation();
+  const [leaveGroup] = useLeaveGroupMutation();
 
   useEffect(() => {
     if (!submit) {
       return;
     }
-    checkUser({
-      variables: {
-        userid: userAccept?.user_usergroup?.userid,
-        groupid: userAccept?.group_usergroup?.groupid,
-        check: 1,
-      },
-    }).then(() => {
-      setSubmit(false);
-      void onCheck();
-    });
+    if (userAccept?.user_groupid) {
+      checkUser({
+        variables: {
+          userid: userAccept?.user_usergroup?.userid,
+          groupid: userAccept?.group_usergroup?.groupid,
+          check: 1,
+        },
+      }).then(() => {
+        setSubmit(false);
+        setUserAccept(undefined);
+        void onCheck();
+      });
+    }
+    if (userReject?.user_groupid) {
+      leaveGroup({
+        variables: {
+          groupid: userReject?.group_usergroup?.groupid,
+          userid: userReject?.user_usergroup?.userid,
+        },
+      }).then(() => {
+        setSubmit(false);
+        setUserReject(undefined);
+        void onCheck();
+      });
+    }
   }, [
     checkUser,
+    leaveGroup,
     onCheck,
     submit,
     userAccept?.group_usergroup?.groupid,
+    userAccept?.user_groupid,
     userAccept?.user_usergroup?.userid,
+    userReject?.group_usergroup?.groupid,
+    userReject?.user_groupid,
+    userReject?.user_usergroup?.userid,
   ]);
   return (
     <>
@@ -62,10 +92,21 @@ const GroupCheckUser = ({ groupUser, onCheck }: GroupCheckUserProps) => {
                     setUserAccept(item);
                     setSubmit(true);
                   }}
-                  key={item?.user_groupid}
+                  key={1}
                 >
                   <Flex>
                     <CheckOutlined />
+                  </Flex>
+                </Button>,
+                <Button
+                  onClick={() => {
+                    setUserReject(item);
+                    setSubmit(true);
+                  }}
+                  key={2}
+                >
+                  <Flex>
+                    <DeleteOutlined />
                   </Flex>
                 </Button>,
               ]}

@@ -1,4 +1,4 @@
-import { Post_Like, User } from "@/graphql/controller-types";
+import { Bookmark, Post_Like, User } from "@/graphql/controller-types";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 
@@ -14,4 +14,10 @@ export const usePostReaction = () => {
   return useSelector(
     (state: RootState) => state.sliceReducer.postReaction
   ) as Post_Like[];
+};
+
+export const useAllBookmark = () => {
+  return useSelector(
+    (state: RootState) => state.sliceReducer.postFollow
+  ) as Bookmark[];
 };

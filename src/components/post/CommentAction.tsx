@@ -9,7 +9,14 @@ import {
 import { Button, Flex, Space } from "antd";
 import { useEffect, useState } from "react";
 
-import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  UpOutlined,
+  LikeFilled,
+  LikeOutlined,
+  DislikeFilled,
+  DislikeOutlined,
+} from "@ant-design/icons";
 import { TYPE_DISLIKE, TYPE_LIKE } from "@/graphql/default-types";
 
 type CommentActionProps = {
@@ -131,13 +138,15 @@ const CommentAction = ({ commentId, userId }: CommentActionProps) => {
             style={{
               fontSize: "12px",
               padding: 0,
-              color: `${isReactioned === TYPE_LIKE ? "#ef4444" : "#000000"}`,
-              ...(isReactioned === TYPE_LIKE ? { fontWeight: "bold" } : null),
             }}
           >
             <Flex align="center" justify="space-between">
               {like?.list_commentlike_by_commentid?.length}
-              <UpOutlined className="ml-2" />
+              {isReactioned === TYPE_LIKE ? (
+                <LikeFilled className="ml-2" />
+              ) : (
+                <LikeOutlined className="ml-2" />
+              )}
             </Flex>
           </Button>
           <Button
@@ -146,15 +155,15 @@ const CommentAction = ({ commentId, userId }: CommentActionProps) => {
             style={{
               fontSize: "12px",
               padding: 0,
-              color: `${isReactioned === TYPE_DISLIKE ? "#ef4444" : "#000000"}`,
-              ...(isReactioned === TYPE_DISLIKE
-                ? { fontWeight: "bold" }
-                : null),
             }}
           >
             <Flex align="center" justify="space-between">
               {dislike?.list_commentdislike_by_commentid?.length}
-              <DownOutlined className="ml-2" />
+              {isReactioned === TYPE_DISLIKE ? (
+                <DislikeFilled className="ml-2" />
+              ) : (
+                <DislikeOutlined className="ml-2" />
+              )}
             </Flex>
           </Button>
         </Space>

@@ -20,12 +20,15 @@ import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import XImage from "../core/XImage";
 import {
+  Bookmark,
+  Post,
   Post_Like,
   User,
   useGetAccountByPkQuery,
+  useGetAllFollowPostQuery,
   usePostLikedByUserPkQuery,
 } from "@/graphql/controller-types";
-import { getProfileUser, setPostReaction } from "@/store/slice";
+import { getProfileUser, setPostFollow, setPostReaction } from "@/store/slice";
 import UserDisplay from "../shared/UserDisplay";
 import { useEffect, useState } from "react";
 import XNotification from "../core/XNotification";
@@ -62,6 +65,13 @@ const MainHeader = () => {
     variables: { userId: id },
   });
 
+  const { data: followPost, fetchMore: getFollowPost } =
+    useGetAllFollowPostQuery({
+      variables: {
+        userid: id,
+      },
+    });
+
   const { data: postReaction, fetchMore: getReaction } =
     usePostLikedByUserPkQuery({
       variables: {
@@ -85,9 +95,13 @@ const MainHeader = () => {
     }
     getMe({ variables: { userId: id } });
     getReaction({ variables: { userId: id } });
+    getFollowPost({ variables: { userId: id } });
     dispatch(getProfileUser(data?.find_account_by_id as User));
     dispatch(
       setPostReaction(postReaction?.find_postlike_byuserid as Post_Like[])
+    );
+    dispatch(
+      setPostFollow(followPost?.find_all_bookmark_by_userid as Bookmark[])
     );
   }, [
     loading,
@@ -97,6 +111,8 @@ const MainHeader = () => {
     data?.find_account_by_id,
     getReaction,
     postReaction?.find_postlike_byuserid,
+    getFollowPost,
+    followPost?.find_all_bookmark_by_userid,
   ]);
 
   const profileUser = useSelector(

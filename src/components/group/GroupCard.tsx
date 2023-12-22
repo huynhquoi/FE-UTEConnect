@@ -19,6 +19,8 @@ const GroupCard = ({ group }: GroupCardProps) => {
   const { data, fetchMore } = useFindUserInGroupQuery({
     variables: {
       groupid: group?.groupid,
+      limit: 100,
+      pacing: 1,
     },
   });
   return (

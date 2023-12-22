@@ -53,8 +53,8 @@ query getGroupByPk($groupid: Int) {
   }
 }
 
-query findUserInGroup($groupid: Int) {
-  get_user_in_group(groupid: $groupid) {
+query findUserInGroup($groupid: Int, $limit: Int, $pacing: Int) {
+  get_user_in_group(groupid: $groupid, limit: $limit, pacing: $pacing) {
     ...GroupUser
   }
 }

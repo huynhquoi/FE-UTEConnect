@@ -5,19 +5,17 @@ import Meta from "antd/es/card/Meta";
 import "./style.scss";
 import {
   Post,
-  useCreateFollowMutation,
-  useDeleteFollowMutation,
   useDeletePostByPkMutation,
-  useGetAllFollowPostQuery,
   useGetPostByKeyWordsQuery,
   useGetPostByUserIdQuery,
 } from "@/graphql/controller-types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { useGlobalStore } from "@/hook/useUser";
+import { useAllBookmark, useGlobalStore } from "@/hook/useUser";
 import XImage from "../core/XImage";
 import PostAction from "./PostAction";
+import PostFollow from "./PostFollow";
 
 type PostCardProps = {
   src?: string;
@@ -34,14 +32,11 @@ const PostCard = ({
 }: PostCardProps & CardProps) => {
   const router = useRouter();
   const user = useGlobalStore();
+  const bookmark = useAllBookmark();
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
-  const [followStatus, setFollowStatus] = useState("");
 
   const [DeletePost] = useDeletePostByPkMutation();
-
-  const [CreateFollow] = useCreateFollowMutation();
-  const [DeleteFollow] = useDeleteFollowMutation();
 
   const { fetchMore: fetchPost } = useGetPostByUserIdQuery({
     variables: { userId: post?.user_post?.userid as string },
@@ -49,12 +44,6 @@ const PostCard = ({
 
   const { fetchMore: fetchKeywordPost } = useGetPostByKeyWordsQuery({
     variables: { keyword: "" },
-  });
-
-  const { fetchMore: getFollowPost } = useGetAllFollowPostQuery({
-    variables: {
-      userid: user?.userid,
-    },
   });
 
   useEffect(() => {
@@ -87,46 +76,6 @@ const PostCard = ({
     user?.userid,
   ]);
 
-  useEffect(() => {
-    if (!followStatus) {
-      return;
-    }
-    if (followStatus === "follow") {
-      CreateFollow({
-        variables: {
-          postid: post?.postid,
-          userid: user?.userid,
-        },
-      }).then(() => {
-        getFollowPost({
-          variables: {
-            userid: user?.userid,
-          },
-        });
-      });
-    } else if (followStatus === "unFollow") {
-      DeleteFollow({
-        variables: {
-          postid: post?.postid,
-          userid: user?.userid,
-        },
-      }).then(() => {
-        getFollowPost({
-          variables: {
-            userid: user?.userid,
-          },
-        });
-      });
-    }
-    setFollowStatus("");
-  }, [
-    CreateFollow,
-    DeleteFollow,
-    followStatus,
-    getFollowPost,
-    post?.postid,
-    user?.userid,
-  ]);
   return (
     <>
       <Card
@@ -193,6 +142,10 @@ const PostCard = ({
           <PostAction
             postId={post?.postid}
             userId={post?.user_post?.userid as string}
+            post={post}
+            isFollow={bookmark
+              ?.map((e) => e?.post_bookmark?.postid)
+              .some((e) => e === post?.postid)}
           />
           <Button
             onClick={() => {
@@ -201,28 +154,6 @@ const PostCard = ({
           >
             Xem chi tiết
           </Button>
-          {user?.userid !== post?.user_post?.userid &&
-            (!isFollow ? (
-              <Button
-                onClick={() => {
-                  setFollowStatus("follow");
-                }}
-              >
-                Theo dõi
-              </Button>
-            ) : (
-              <Button
-                style={{
-                  background: "#000",
-                  color: "#fff",
-                }}
-                onClick={() => {
-                  setFollowStatus("unFollow");
-                }}
-              >
-                Bỏ theo dõi
-              </Button>
-            ))}
         </div>
       </Card>
       <Modal
