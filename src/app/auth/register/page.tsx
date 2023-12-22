@@ -19,6 +19,7 @@ import "./style.scss";
 import { useEffect, useState } from "react";
 import { registerApi } from "@/api/auth";
 import { useRouter } from "next/navigation";
+import XImage from "@/components/core/XImage";
 
 const { Option } = Select;
 
@@ -46,7 +47,7 @@ const RegisterPage = () => {
       username: value.username,
       password: value.password,
       fullname: value.fullname,
-      email: value.email,
+      email: `${value.email}@student.hcmute.edu.vn`,
       gender: value.gender,
     });
     console.log("Success", value);
@@ -78,7 +79,7 @@ const RegisterPage = () => {
       <ConfigProvider theme={theme}>
         <XCard title="" className="max-w-[60vw] w-[50vw]">
           <div className="flex justify-between">
-            <Image
+            <XImage
               width={450}
               src={LOGIN_IMAGE}
               preview={false}
@@ -138,8 +139,8 @@ const RegisterPage = () => {
                   ]}
                 >
                   <XInput
-                    label="Email"
-                    placeholder="Nhập email của bạn"
+                    label="Mã số sinh viên"
+                    placeholder="Nhập mã số sinh viên của bạn"
                     useLabel={true}
                     required={true}
                   ></XInput>

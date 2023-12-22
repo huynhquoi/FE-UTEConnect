@@ -202,7 +202,7 @@ const AccountForm = ({ onReload }: AccountFormType) => {
             <div>
               <div className="font-bold flex mb-1">Ngày sinh</div>
               <DatePicker
-                defaultValue={dayjs(user?.birthday, "YYYY-MM-DD") || ""}
+                defaultValue={dayjs(user?.birthday || new Date())}
                 onChange={onBirthdayChange}
                 placeholder="Chọn ngày sinh của bạn"
                 style={{ width: "100%" }}

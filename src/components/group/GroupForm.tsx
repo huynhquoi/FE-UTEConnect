@@ -56,7 +56,6 @@ const GroupForm = ({ groupId }: GroupFormType) => {
           groupname: e?.groupname,
           reputaion: e?.reputaion,
           image: e?.image,
-          admin: user?.userid,
         },
         admin: user?.userid,
       },

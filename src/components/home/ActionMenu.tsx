@@ -1,45 +1,28 @@
 "use client";
 
 import { useGlobalStore } from "@/hook/useUser";
-import { Affix, Card, ConfigProvider, Menu, MenuProps } from "antd";
+import {
+  Affix,
+  Avatar,
+  Button,
+  Card,
+  ConfigProvider,
+  Flex,
+  Menu,
+  MenuProps,
+  Space,
+} from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-type MenuItem = Required<MenuProps>["items"][number];
-
-function getItem(
-  label: React.ReactNode,
-  key?: React.Key | null,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: "group"
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  } as MenuItem;
-}
-
-const items: MenuItem[] = [
-  getItem("Tài khoản của bạn", "account", null, [
-    getItem("Quản lý tài khoản", "/home/account_manager"),
-    getItem("Tài khoản tôi đang theo dõi", "/home/follow_user"),
-    getItem("Tài khoản đang theo dõi tôi", "/home/user_follow"),
-    getItem("Đăng xuất", "/auth/logout"),
-  ]),
-
-  getItem("Bài đăng", "post", null, [
-    getItem("Đang theo dõi", "/home/follow_post"),
-    getItem("Bài đăng của tôi", "/home/my_post"),
-  ]),
-
-  // getItem("Diễn đàn", "forum", null, [
-  //   getItem("Đang tham gia", "/home/participate_forum"),
-  // ]),
-];
+import {
+  HeartOutlined,
+  UserAddOutlined,
+  FileDoneOutlined,
+  CloudOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
+import AccountShortcuts from "../account/AccountShortcuts";
+import "./styles.scss";
 
 type ActionMenuProps = {
   className: string;
@@ -50,19 +33,68 @@ const ActionMenu = ({ className, inAccount }: ActionMenuProps) => {
   const [id, setId] = useState("");
   const user = useGlobalStore();
 
+  const MenuItems = [
+    {
+      label: <p style={{ marginLeft: "-8px" }}>{user?.fullname}</p>,
+      icon: (
+        <>
+          <Avatar src={user?.image} size={34} />
+        </>
+      ),
+      href: `home/account_manager/${user?.userid}`,
+    },
+    {
+      label: "Đang theo dõi",
+      icon: (
+        <>
+          <HeartOutlined style={{ color: "red" }} />
+        </>
+      ),
+      href: `/home/follow_user`,
+    },
+    {
+      label: "Người theo dõi",
+      icon: (
+        <>
+          <UserAddOutlined style={{ color: "green" }} />
+        </>
+      ),
+      href: `/home/user_follow`,
+    },
+    {
+      label: "Đã lưu",
+      icon: (
+        <>
+          <FileDoneOutlined style={{ color: "purple" }} />
+        </>
+      ),
+      href: `/home/follow_post`,
+    },
+    {
+      label: "Bài đăng của tôi",
+      icon: (
+        <>
+          <CloudOutlined />
+        </>
+      ),
+      href: `/home/my_post`,
+    },
+    {
+      label: <p style={{ color: "red" }}>Đăng xuất</p>,
+      icon: (
+        <>
+          <LogoutOutlined style={{ color: "red" }} />
+        </>
+      ),
+      href: `/auth/logout`,
+    },
+  ];
+
   useEffect(() => {
     setId(user?.userid);
   }, [user?.userid]);
 
   const router = useRouter();
-  const onClick: MenuProps["onClick"] = (e) => {
-    if (e.key === "/home/account_manager") {
-      router.push(`${e.key}/${id}`);
-    } else {
-      router.push(`${e.key}`);
-    }
-    console.log("click", e);
-  };
   return (
     <>
       <ConfigProvider
@@ -74,15 +106,35 @@ const ActionMenu = ({ className, inAccount }: ActionMenuProps) => {
           },
         }}
       >
-        <Affix offsetTop={60}>
-          <div className={className}>
-            <Menu
-              onClick={onClick}
-              style={{ width: `${inAccount ? "100%" : 256}`, maxHeight: 256 }}
-              mode="vertical"
-              items={items}
-              className="rounded-lg"
-            />
+        <Affix offsetTop={80}>
+          <div
+            className={className}
+            style={{ overflow: "auto", height: "92vh", width: 400 }}
+          >
+            <Flex vertical className="" align="start" justify="start">
+              {MenuItems?.map((e) => (
+                <Button
+                  type="text"
+                  key={e?.href}
+                  style={{ width: 348, height: 56 }}
+                  onClick={() => router.push(e?.href)}
+                >
+                  <Flex align="center" justify="start">
+                    <Space>
+                      <Flex align="center" style={{ fontSize: "26px" }}>
+                        {e?.icon}
+                      </Flex>
+                      <div className="text-black font-semibold text-base ml-2">
+                        {" "}
+                        {e?.label}
+                      </div>
+                    </Space>
+                  </Flex>
+                </Button>
+              ))}
+              <div className="ml-4 w-[348px] border-b-gray-300 border-b-[1px] mt-2 mb-2" />
+              <AccountShortcuts />
+            </Flex>
           </div>
         </Affix>
       </ConfigProvider>

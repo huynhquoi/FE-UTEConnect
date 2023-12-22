@@ -1,4 +1,4 @@
-export const API = "https://forum-be-1fdw.onrender.com";
+export const API = "https://be-forum.onrender.com";
 
 //auth
 export const API_AUTH_LOGIN = `${API}/login`;

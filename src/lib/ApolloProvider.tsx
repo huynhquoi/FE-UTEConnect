@@ -10,7 +10,7 @@ import {
 
 function makeClient() {
   const httpLink = new HttpLink({
-      uri: "https://forum-be-1fdw.onrender.com/graphql",
+      uri: "https://be-forum.onrender.com/graphql",
   });
 
   return new NextSSRApolloClient({

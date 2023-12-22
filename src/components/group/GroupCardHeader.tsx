@@ -60,30 +60,16 @@ const GroupCardHeader = ({
                 </div>
                 <Space>
                   <PostForm groupId={group?.groupid as number} />
-                  {group?.admin?.userid !== user?.userid ? (
-                    // <JoinGroupForm
-                    //   groupId={group?.groupid as number}
-                    //   onReload={() => onReload()}
-                    //   typeSend={
-                    //     data?.get_user_in_group?.some(
-                    //       (e) => e?.user_usergroup?.userid === user?.userid
-                    //     )
-                    //       ? "leave"
-                    //       : "join"
-                    //   }
-                    // />
-                    <GroupCheckUser
-                      groupUser={
-                        data?.get_user_in_group?.filter(
-                          (e) => !e?.checked
-                        ) as User_Group[]
-                      }
-                      onCheck={() =>
-                        fetchMore({
-                          variables: {
-                            groupid: group?.groupid,
-                          },
-                        })
+                  {group?.user_group?.userid !== user?.userid ? (
+                    <JoinGroupForm
+                      groupId={group?.groupid as number}
+                      onReload={() => onReload()}
+                      typeSend={
+                        data?.get_user_in_group?.some(
+                          (e) => e?.user_usergroup?.userid === user?.userid
+                        )
+                          ? "leave"
+                          : "join"
                       }
                     />
                   ) : (

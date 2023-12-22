@@ -81,23 +81,23 @@ export type Follow = {
 
 export type Group = {
   __typename?: 'Group';
-  admin?: Maybe<User>;
   createday?: Maybe<Scalars['LocalDateTime']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   groupid?: Maybe<Scalars['Int']['output']>;
   groupname?: Maybe<Scalars['String']['output']>;
   image?: Maybe<Scalars['String']['output']>;
   reputaion?: Maybe<Scalars['Int']['output']>;
+  user_group?: Maybe<User>;
 };
 
 export type GroupRequest = {
-  admin?: InputMaybe<Scalars['String']['input']>;
   createday?: InputMaybe<Scalars['LocalDateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   groupid?: InputMaybe<Scalars['Int']['input']>;
   groupname?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   reputaion?: InputMaybe<Scalars['Int']['input']>;
+  user_group?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Icon = {
@@ -703,6 +703,8 @@ export type QueryGet_Report_By_TypeArgs = {
 
 export type QueryGet_User_In_GroupArgs = {
   groupid?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -939,44 +941,44 @@ export type GetAllFollowPostQueryVariables = Exact<{
 
 export type GetAllFollowPostQuery = { __typename?: 'Query', find_all_bookmark_by_userid?: Array<{ __typename?: 'Bookmark', bookmarkid: number, createday?: any | null, post_bookmark?: { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string } | null } | null, user_bookmark?: { __typename?: 'User', userid: string } | null } | null> | null };
 
-export type GroupFragment = { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null };
+export type GroupFragment = { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null };
 
-export type GroupUserFragment = { __typename?: 'User_Group', user_groupid?: number | null, createday?: any | null, checked?: number | null, user_usergroup?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, reputation?: number | null, email?: string | null } | null, group_usergroup?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null };
+export type GroupUserFragment = { __typename?: 'User_Group', user_groupid?: number | null, createday?: any | null, checked?: number | null, user_usergroup?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, reputation?: number | null, email?: string | null } | null, group_usergroup?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null };
 
 export type GetGroupQueryVariables = Exact<{
   keyword?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetGroupQuery = { __typename?: 'Query', find_group_by_keyword?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null> | null };
+export type GetGroupQuery = { __typename?: 'Query', find_group_by_keyword?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null> | null };
 
 export type GetGroupByUserPkQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetGroupByUserPkQuery = { __typename?: 'Query', get_group_by_userid?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null> | null };
+export type GetGroupByUserPkQuery = { __typename?: 'Query', get_group_by_userid?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null> | null };
 
 export type GetGroupByAdminQueryVariables = Exact<{
   admin?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetGroupByAdminQuery = { __typename?: 'Query', get_group_by_admin?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null> | null };
+export type GetGroupByAdminQuery = { __typename?: 'Query', get_group_by_admin?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null> | null };
 
 export type GetGroupByPkQueryVariables = Exact<{
   groupid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetGroupByPkQuery = { __typename?: 'Query', get_group_by_groupid?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null };
+export type GetGroupByPkQuery = { __typename?: 'Query', get_group_by_groupid?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null };
 
 export type FindUserInGroupQueryVariables = Exact<{
   groupid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type FindUserInGroupQuery = { __typename?: 'Query', get_user_in_group?: Array<{ __typename?: 'User_Group', user_groupid?: number | null, createday?: any | null, checked?: number | null, user_usergroup?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, reputation?: number | null, email?: string | null } | null, group_usergroup?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, admin?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null } | null> | null };
+export type FindUserInGroupQuery = { __typename?: 'Query', get_user_in_group?: Array<{ __typename?: 'User_Group', user_groupid?: number | null, createday?: any | null, checked?: number | null, user_usergroup?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, reputation?: number | null, email?: string | null } | null, group_usergroup?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, image?: string | null, fullname?: string | null, email?: string | null } | null } | null } | null> | null };
 
 export type CreateGroupMutationVariables = Exact<{
   group?: InputMaybe<GroupRequest>;
@@ -1306,7 +1308,7 @@ export const GroupFragmentDoc = gql`
   groupname
   image
   createday
-  admin {
+  user_group {
     userid
     image
     fullname

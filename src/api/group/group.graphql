@@ -3,7 +3,7 @@ fragment Group on Group {
   groupname
   image
   createday
-  admin {
+  user_group {
     userid
     image
     fullname

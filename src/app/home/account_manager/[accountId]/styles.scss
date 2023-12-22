@@ -1,3 +1,8 @@
 .post_card:last-child {
   margin-bottom: 20px;
 }
+.card_image_header {
+  .ant-card-body {
+    padding: 0 !important;
+  }
+}

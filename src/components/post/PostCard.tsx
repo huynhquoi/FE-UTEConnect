@@ -133,6 +133,7 @@ const PostCard = ({
         style={{ width: "94%", marginTop: 20 }}
         {...props}
         className={`post_card ${className}`}
+        bordered={false}
       >
         <Meta
           avatar={
@@ -189,7 +190,10 @@ const PostCard = ({
           ></div>
         </div>
         <div className="flex items-center justify-between">
-          <PostAction postId={post?.postid} userId={post?.user_post?.userid as string} />
+          <PostAction
+            postId={post?.postid}
+            userId={post?.user_post?.userid as string}
+          />
           <Button
             onClick={() => {
               router.push(`/home/post/${post.postid}`);
