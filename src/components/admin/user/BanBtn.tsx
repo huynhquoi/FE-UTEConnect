@@ -10,6 +10,37 @@ type BanBtnProps = {
 
 const { Option } = Select;
 
+const BanList = [
+  {
+    id: 0,
+    title: "Tài khoản bình thường / Gỡ bỏ lệnh cấm",
+  },
+  {
+    id: 1,
+    title: "Cấm bình luận trong 3 ngày",
+  },
+  {
+    id: 2,
+    title: "Cấm bình luận trong 5 ngày",
+  },
+  {
+    id: 3,
+    title: "Cấm hoạt động của tài khoản trong 3 ngày",
+  },
+  {
+    id: 4,
+    title: "Cấm hoạt động của tài khoản trong 5 ngày",
+  },
+  {
+    id: 5,
+    title: "Cấm hoạt động của tài khoản trong 10 ngày",
+  },
+  {
+    id: 6,
+    title: "Cấm hoạt động của tài khoản vĩnh viễn",
+  },
+];
+
 const BanBtn = ({ userId, onReload }: BanBtnProps) => {
   const [open, setOpen] = useState(false);
   const [isBan, setIsBan] = useState(false);
@@ -54,16 +85,16 @@ const BanBtn = ({ userId, onReload }: BanBtnProps) => {
           setBanLevel(0);
           setOpen(false);
         }}
-        width={400}
+        width={800}
       >
         <Select
           style={{ width: "100%" }}
           onChange={(e) => setBanLevel(e)}
           placeholder="Chọn mức độ cấm"
         >
-          {[1, 2, 3, 4, 5, 6, 7].map((e, index) => (
-            <Option value={e} key={index}>
-              {e}
+          {BanList.map((e, index) => (
+            <Option value={e?.id} key={e?.id}>
+              {e?.title}
             </Option>
           ))}
         </Select>

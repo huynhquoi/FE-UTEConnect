@@ -4,20 +4,24 @@ import {
   Post,
   User,
   useGetAccountQuery,
+  useGetPostByKeyWordsQuery,
   useGetPostQuery,
 } from "@/graphql/controller-types";
 import { Avatar, Card, Flex, Space, Table } from "antd";
 import Link from "next/link";
 import { EyeOutlined } from "@ant-design/icons";
 import BanBtn from "@/components/admin/user/BanBtn";
+import { useEffect, useState } from "react";
+import XInput from "@/components/core/XInput";
 
 const AdminPostPage = () => {
-  const { data, loading, fetchMore } = useGetPostQuery({
+  const [keyword, setKeyword] = useState("");
+  const { data, loading, fetchMore } = useGetPostByKeyWordsQuery({
     variables: {
-      limit: 100,
-      pacing: 1,
+      keyword: keyword,
     },
   });
+
   const columns = [
     {
       title: "",
@@ -46,6 +50,22 @@ const AdminPostPage = () => {
       key: "title",
     },
     {
+      title: "Chủ đề",
+      dataIndex: "topic",
+      key: "topic",
+      render: (_: any, record: Post) => (
+        <>
+          <Link
+            href={`/home/post/topic/${record?.topic_post?.topicid}`}
+            style={{ color: "black", cursor: "pointer" }}
+            target="__blank"
+          >
+            {record?.topic_post?.topicname}
+          </Link>
+        </>
+      ),
+    },
+    {
       title: "Reputation",
       dataIndex: "requiredreputation",
       key: "requiredreputation",
@@ -71,8 +91,20 @@ const AdminPostPage = () => {
     <>
       <Flex justify="center" style={{ width: "100%" }}>
         <Card style={{ width: "94%" }}>
+          <Flex align="center" justify="start">
+            <XInput
+              style={{
+                width: "500px",
+                height: "40px",
+                marginBottom: "24px",
+                border: "1px solid #000",
+              }}
+              placeholder="Tìm kiếm bài viết theo tiêu đề"
+              onChange={(e) => setKeyword(e?.target?.value)}
+            />
+          </Flex>
           <Table
-            dataSource={data?.post as Post[]}
+            dataSource={data?.find_post_by_keyword as Post[]}
             columns={columns}
             loading={loading}
           />
