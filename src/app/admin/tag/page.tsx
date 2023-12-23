@@ -11,6 +11,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { useGlobalStore } from "@/hook/useUser";
 import { useEffect, useState } from "react";
 import XInput from "@/components/core/XInput";
+import Link from "next/link";
 
 const AdminTagPage = () => {
   const user = useGlobalStore();
@@ -28,6 +29,15 @@ const AdminTagPage = () => {
       title: "Tên",
       dataIndex: "topicname",
       key: "topicname",
+      render: (_: any, record: Topic) => (
+        <Link
+          href={`/home/post/topic/${record?.topicid}`}
+          style={{ color: "black", cursor: "pointer" }}
+          target="__blank"
+        >
+          {record?.topicname}
+        </Link>
+      ),
     },
     {
       title: "Ngày tạo",

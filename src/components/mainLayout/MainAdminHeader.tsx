@@ -29,6 +29,10 @@ const items: MenuProps["items"] = [
     key: "admin/user",
   },
   {
+    label: "Bài viết",
+    key: "admin/post",
+  },
+  {
     label: "Diễn đàn",
     key: "admin/forum",
   },

@@ -22,8 +22,8 @@ fragment Post on Post {
   }
 }
 
-query GetPost {
-  post {
+query GetPost($limit: Int, $pacing: Int) {
+  post(limit: $limit, pacing: $pacing) {
     ...Post
   }
 }

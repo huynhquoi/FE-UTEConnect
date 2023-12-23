@@ -1,6 +1,10 @@
 "use client";
 
 import LineChart from "@/components/admin/chart/LineChart";
+import {
+  useGetStatisticPostQuery,
+  useGetStatisticUserQuery,
+} from "@/graphql/controller-types";
 import { Col, Row } from "antd";
 
 import {
@@ -25,6 +29,17 @@ ChartJS.register(
 );
 
 const StatisticsPage = () => {
+  const { data: user } = useGetStatisticUserQuery({
+    variables: {
+      year: 2023,
+    },
+  });
+
+  const { data: post } = useGetStatisticPostQuery({
+    variables: {
+      year: 2023,
+    },
+  });
   return (
     <>
       <Row>
@@ -40,7 +55,7 @@ const StatisticsPage = () => {
               "May",
               "Jul",
               "Jun",
-              "Aprl",
+              "Apr",
               "Sep",
               "Otc",
               "Nov",
@@ -51,7 +66,7 @@ const StatisticsPage = () => {
                 id: 1,
                 label: "User",
                 color: "#000",
-                data: [10, 30, 40, 60],
+                data: user?.statistic_user as Array<number>,
               },
             ]}
           />
@@ -67,7 +82,7 @@ const StatisticsPage = () => {
               "May",
               "Jul",
               "Jun",
-              "Aprl",
+              "Apr",
               "Sep",
               "Otc",
               "Nov",
@@ -78,7 +93,7 @@ const StatisticsPage = () => {
                 id: 1,
                 label: "Post",
                 color: "#000",
-                data: [10, 15, 40, 100],
+                data: post?.statistic_post as Array<number>,
               },
             ]}
           />

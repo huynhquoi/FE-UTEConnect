@@ -87,6 +87,7 @@ const ReportPage = () => {
       key: "action",
       render: (_: any, record: Report) => (
         <ReportAction
+          report={record}
           onReload={() =>
             fetchMore({
               variables: { type: reportType },
@@ -102,6 +103,11 @@ const ReportPage = () => {
           }
           postReportId={
             reportType === REPORT_POST ? record?.post_report?.postid : 0
+          }
+          userId={
+            reportType === REPORT_POST
+              ? record?.post_report?.user_post?.userid
+              : ""
           }
         />
       ),

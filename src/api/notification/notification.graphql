@@ -11,6 +11,29 @@ query GetNotification($userid: String) {
   }
 }
 
+mutation CreateNotification(
+  $userid: String
+  $content: String
+  $type: Int
+  $subject: Int
+) {
+  create_notice(
+    userid: $userid
+    content: $content
+    type: $type
+    subject: $subject
+  ) {
+    noiticeid
+    createday
+    user_notice {
+      userid
+      fullname
+    }
+    content
+    isseen
+  }
+}
+
 mutation UpdateSeenNotification($noticeid: Int) {
   update_isseen_true(noticeid: $noticeid) {
     noiticeid

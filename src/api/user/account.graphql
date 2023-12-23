@@ -34,8 +34,32 @@ query GetAccountByPk($userId: String!) {
   }
 }
 
+query GetAllBanAccount {
+  get_list_ban_user {
+    username
+    fullname
+    email
+    address
+    role {
+      roleid
+    }
+    phone
+    image
+    gender
+    birthday
+    userid
+    reputation
+  }
+}
+
 mutation UpdateAccount($user: UserRequest) {
   account_update(user: $user) {
+    userid
+  }
+}
+
+mutation BanUser($userid: String, $isbanid: Int) {
+  ban_user(userid: $userid, isbanid: $isbanid) {
     userid
   }
 }

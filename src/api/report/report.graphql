@@ -12,6 +12,9 @@ fragment Report on Report {
   post_report {
     postid
     title
+    user_post {
+      userid
+    }
   }
   comment_report {
     commentid
@@ -68,4 +71,8 @@ mutation DeletePostReport($postid: Int) {
 
 mutation DeleteCommentReport($commentid: Int) {
   delete_report_by_commentid(commentid: $commentid)
+}
+
+mutation UpdateReputation($userid: String, $reputation: Int) {
+  update_reputation(userid: $userid, reputation: $reputation)
 }

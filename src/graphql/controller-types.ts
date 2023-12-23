@@ -1036,6 +1036,16 @@ export type GetNotificationQueryVariables = Exact<{
 
 export type GetNotificationQuery = { __typename?: 'Query', find_all_notice_by_userid?: Array<{ __typename?: 'Notice', noiticeid: number, createday?: any | null, content?: string | null, isseen?: number | null, user_notice?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
 
+export type CreateNotificationMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  content?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['Int']['input']>;
+  subject?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreateNotificationMutation = { __typename?: 'Mutation', create_notice?: { __typename?: 'Notice', noiticeid: number, createday?: any | null, content?: string | null, isseen?: number | null, user_notice?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null };
+
 export type UpdateSeenNotificationMutationVariables = Exact<{
   noticeid?: InputMaybe<Scalars['Int']['input']>;
 }>;
@@ -1045,7 +1055,10 @@ export type UpdateSeenNotificationMutation = { __typename?: 'Mutation', update_i
 
 export type PostFragment = { __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null };
 
-export type GetPostQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetPostQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
+}>;
 
 
 export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'Post', postid: number, title?: string | null, content?: string | null, createday?: any | null, updateday?: any | null, ishide?: number | null, isdelete?: number | null, image?: string | null, requiredreputation?: number | null, user_post?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null, topic_post?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null } | null } | null> | null };
@@ -1204,14 +1217,14 @@ export type DeleteCommentReactionMutationVariables = Exact<{
 
 export type DeleteCommentReactionMutation = { __typename?: 'Mutation', delete_icon_for_commentlike?: string | null };
 
-export type ReportFragment = { __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, title?: string | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null };
+export type ReportFragment = { __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, title?: string | null, user_post?: { __typename?: 'User', userid: string } | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null };
 
 export type GetReportByTypeQueryVariables = Exact<{
   type?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetReportByTypeQuery = { __typename?: 'Query', get_report_by_type?: Array<{ __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, title?: string | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
+export type GetReportByTypeQuery = { __typename?: 'Query', get_report_by_type?: Array<{ __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, title?: string | null, user_post?: { __typename?: 'User', userid: string } | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
 
 export type CreateUserReportMutationVariables = Exact<{
   report?: InputMaybe<ReportRequest>;
@@ -1261,6 +1274,28 @@ export type DeleteCommentReportMutationVariables = Exact<{
 
 export type DeleteCommentReportMutation = { __typename?: 'Mutation', delete_report_by_commentid?: string | null };
 
+export type UpdateReputationMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  reputation?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type UpdateReputationMutation = { __typename?: 'Mutation', update_reputation?: string | null };
+
+export type GetStatisticUserQueryVariables = Exact<{
+  year?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetStatisticUserQuery = { __typename?: 'Query', statistic_user?: Array<number | null> | null };
+
+export type GetStatisticPostQueryVariables = Exact<{
+  year?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetStatisticPostQuery = { __typename?: 'Query', statistic_post?: Array<number | null> | null };
+
 export type GetAllTopicQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1296,12 +1331,25 @@ export type GetAccountByPkQueryVariables = Exact<{
 
 export type GetAccountByPkQuery = { __typename?: 'Query', find_account_by_id?: { __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null };
 
+export type GetAllBanAccountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllBanAccountQuery = { __typename?: 'Query', get_list_ban_user?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
+
 export type UpdateAccountMutationVariables = Exact<{
   user?: InputMaybe<UserRequest>;
 }>;
 
 
 export type UpdateAccountMutation = { __typename?: 'Mutation', account_update?: { __typename?: 'User', userid: string } | null };
+
+export type BanUserMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  isbanid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type BanUserMutation = { __typename?: 'Mutation', ban_user?: { __typename?: 'User', userid: string } | null };
 
 export const CommentFragmentDoc = gql`
     fragment Comment on Comment {
@@ -1392,6 +1440,9 @@ export const ReportFragmentDoc = gql`
   post_report {
     postid
     title
+    user_post {
+      userid
+    }
   }
   comment_report {
     commentid
@@ -2296,6 +2347,54 @@ export type GetNotificationQueryHookResult = ReturnType<typeof useGetNotificatio
 export type GetNotificationLazyQueryHookResult = ReturnType<typeof useGetNotificationLazyQuery>;
 export type GetNotificationSuspenseQueryHookResult = ReturnType<typeof useGetNotificationSuspenseQuery>;
 export type GetNotificationQueryResult = Apollo.QueryResult<GetNotificationQuery, GetNotificationQueryVariables>;
+export const CreateNotificationDocument = gql`
+    mutation CreateNotification($userid: String, $content: String, $type: Int, $subject: Int) {
+  create_notice(
+    userid: $userid
+    content: $content
+    type: $type
+    subject: $subject
+  ) {
+    noiticeid
+    createday
+    user_notice {
+      userid
+      fullname
+    }
+    content
+    isseen
+  }
+}
+    `;
+export type CreateNotificationMutationFn = Apollo.MutationFunction<CreateNotificationMutation, CreateNotificationMutationVariables>;
+
+/**
+ * __useCreateNotificationMutation__
+ *
+ * To run a mutation, you first call `useCreateNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNotificationMutation, { data, loading, error }] = useCreateNotificationMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      content: // value for 'content'
+ *      type: // value for 'type'
+ *      subject: // value for 'subject'
+ *   },
+ * });
+ */
+export function useCreateNotificationMutation(baseOptions?: Apollo.MutationHookOptions<CreateNotificationMutation, CreateNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateNotificationMutation, CreateNotificationMutationVariables>(CreateNotificationDocument, options);
+      }
+export type CreateNotificationMutationHookResult = ReturnType<typeof useCreateNotificationMutation>;
+export type CreateNotificationMutationResult = Apollo.MutationResult<CreateNotificationMutation>;
+export type CreateNotificationMutationOptions = Apollo.BaseMutationOptions<CreateNotificationMutation, CreateNotificationMutationVariables>;
 export const UpdateSeenNotificationDocument = gql`
     mutation UpdateSeenNotification($noticeid: Int) {
   update_isseen_true(noticeid: $noticeid) {
@@ -2330,8 +2429,8 @@ export type UpdateSeenNotificationMutationHookResult = ReturnType<typeof useUpda
 export type UpdateSeenNotificationMutationResult = Apollo.MutationResult<UpdateSeenNotificationMutation>;
 export type UpdateSeenNotificationMutationOptions = Apollo.BaseMutationOptions<UpdateSeenNotificationMutation, UpdateSeenNotificationMutationVariables>;
 export const GetPostDocument = gql`
-    query GetPost {
-  post {
+    query GetPost($limit: Int, $pacing: Int) {
+  post(limit: $limit, pacing: $pacing) {
     ...Post
   }
 }
@@ -2349,6 +2448,8 @@ export const GetPostDocument = gql`
  * @example
  * const { data, loading, error } = useGetPostQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      pacing: // value for 'pacing'
  *   },
  * });
  */
@@ -3379,6 +3480,114 @@ export function useDeleteCommentReportMutation(baseOptions?: Apollo.MutationHook
 export type DeleteCommentReportMutationHookResult = ReturnType<typeof useDeleteCommentReportMutation>;
 export type DeleteCommentReportMutationResult = Apollo.MutationResult<DeleteCommentReportMutation>;
 export type DeleteCommentReportMutationOptions = Apollo.BaseMutationOptions<DeleteCommentReportMutation, DeleteCommentReportMutationVariables>;
+export const UpdateReputationDocument = gql`
+    mutation UpdateReputation($userid: String, $reputation: Int) {
+  update_reputation(userid: $userid, reputation: $reputation)
+}
+    `;
+export type UpdateReputationMutationFn = Apollo.MutationFunction<UpdateReputationMutation, UpdateReputationMutationVariables>;
+
+/**
+ * __useUpdateReputationMutation__
+ *
+ * To run a mutation, you first call `useUpdateReputationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateReputationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateReputationMutation, { data, loading, error }] = useUpdateReputationMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      reputation: // value for 'reputation'
+ *   },
+ * });
+ */
+export function useUpdateReputationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateReputationMutation, UpdateReputationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateReputationMutation, UpdateReputationMutationVariables>(UpdateReputationDocument, options);
+      }
+export type UpdateReputationMutationHookResult = ReturnType<typeof useUpdateReputationMutation>;
+export type UpdateReputationMutationResult = Apollo.MutationResult<UpdateReputationMutation>;
+export type UpdateReputationMutationOptions = Apollo.BaseMutationOptions<UpdateReputationMutation, UpdateReputationMutationVariables>;
+export const GetStatisticUserDocument = gql`
+    query getStatisticUser($year: Int) {
+  statistic_user(year: $year)
+}
+    `;
+
+/**
+ * __useGetStatisticUserQuery__
+ *
+ * To run a query within a React component, call `useGetStatisticUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStatisticUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStatisticUserQuery({
+ *   variables: {
+ *      year: // value for 'year'
+ *   },
+ * });
+ */
+export function useGetStatisticUserQuery(baseOptions?: Apollo.QueryHookOptions<GetStatisticUserQuery, GetStatisticUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetStatisticUserQuery, GetStatisticUserQueryVariables>(GetStatisticUserDocument, options);
+      }
+export function useGetStatisticUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStatisticUserQuery, GetStatisticUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetStatisticUserQuery, GetStatisticUserQueryVariables>(GetStatisticUserDocument, options);
+        }
+export function useGetStatisticUserSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetStatisticUserQuery, GetStatisticUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetStatisticUserQuery, GetStatisticUserQueryVariables>(GetStatisticUserDocument, options);
+        }
+export type GetStatisticUserQueryHookResult = ReturnType<typeof useGetStatisticUserQuery>;
+export type GetStatisticUserLazyQueryHookResult = ReturnType<typeof useGetStatisticUserLazyQuery>;
+export type GetStatisticUserSuspenseQueryHookResult = ReturnType<typeof useGetStatisticUserSuspenseQuery>;
+export type GetStatisticUserQueryResult = Apollo.QueryResult<GetStatisticUserQuery, GetStatisticUserQueryVariables>;
+export const GetStatisticPostDocument = gql`
+    query getStatisticPost($year: Int) {
+  statistic_post(year: $year)
+}
+    `;
+
+/**
+ * __useGetStatisticPostQuery__
+ *
+ * To run a query within a React component, call `useGetStatisticPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStatisticPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStatisticPostQuery({
+ *   variables: {
+ *      year: // value for 'year'
+ *   },
+ * });
+ */
+export function useGetStatisticPostQuery(baseOptions?: Apollo.QueryHookOptions<GetStatisticPostQuery, GetStatisticPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetStatisticPostQuery, GetStatisticPostQueryVariables>(GetStatisticPostDocument, options);
+      }
+export function useGetStatisticPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStatisticPostQuery, GetStatisticPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetStatisticPostQuery, GetStatisticPostQueryVariables>(GetStatisticPostDocument, options);
+        }
+export function useGetStatisticPostSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetStatisticPostQuery, GetStatisticPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetStatisticPostQuery, GetStatisticPostQueryVariables>(GetStatisticPostDocument, options);
+        }
+export type GetStatisticPostQueryHookResult = ReturnType<typeof useGetStatisticPostQuery>;
+export type GetStatisticPostLazyQueryHookResult = ReturnType<typeof useGetStatisticPostLazyQuery>;
+export type GetStatisticPostSuspenseQueryHookResult = ReturnType<typeof useGetStatisticPostSuspenseQuery>;
+export type GetStatisticPostQueryResult = Apollo.QueryResult<GetStatisticPostQuery, GetStatisticPostQueryVariables>;
 export const GetAllTopicDocument = gql`
     query GetAllTopic {
   topic {
@@ -3590,6 +3799,57 @@ export type GetAccountByPkQueryHookResult = ReturnType<typeof useGetAccountByPkQ
 export type GetAccountByPkLazyQueryHookResult = ReturnType<typeof useGetAccountByPkLazyQuery>;
 export type GetAccountByPkSuspenseQueryHookResult = ReturnType<typeof useGetAccountByPkSuspenseQuery>;
 export type GetAccountByPkQueryResult = Apollo.QueryResult<GetAccountByPkQuery, GetAccountByPkQueryVariables>;
+export const GetAllBanAccountDocument = gql`
+    query GetAllBanAccount {
+  get_list_ban_user {
+    username
+    fullname
+    email
+    address
+    role {
+      roleid
+    }
+    phone
+    image
+    gender
+    birthday
+    userid
+    reputation
+  }
+}
+    `;
+
+/**
+ * __useGetAllBanAccountQuery__
+ *
+ * To run a query within a React component, call `useGetAllBanAccountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllBanAccountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllBanAccountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllBanAccountQuery(baseOptions?: Apollo.QueryHookOptions<GetAllBanAccountQuery, GetAllBanAccountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllBanAccountQuery, GetAllBanAccountQueryVariables>(GetAllBanAccountDocument, options);
+      }
+export function useGetAllBanAccountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllBanAccountQuery, GetAllBanAccountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllBanAccountQuery, GetAllBanAccountQueryVariables>(GetAllBanAccountDocument, options);
+        }
+export function useGetAllBanAccountSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllBanAccountQuery, GetAllBanAccountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllBanAccountQuery, GetAllBanAccountQueryVariables>(GetAllBanAccountDocument, options);
+        }
+export type GetAllBanAccountQueryHookResult = ReturnType<typeof useGetAllBanAccountQuery>;
+export type GetAllBanAccountLazyQueryHookResult = ReturnType<typeof useGetAllBanAccountLazyQuery>;
+export type GetAllBanAccountSuspenseQueryHookResult = ReturnType<typeof useGetAllBanAccountSuspenseQuery>;
+export type GetAllBanAccountQueryResult = Apollo.QueryResult<GetAllBanAccountQuery, GetAllBanAccountQueryVariables>;
 export const UpdateAccountDocument = gql`
     mutation UpdateAccount($user: UserRequest) {
   account_update(user: $user) {
@@ -3623,3 +3883,37 @@ export function useUpdateAccountMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateAccountMutationHookResult = ReturnType<typeof useUpdateAccountMutation>;
 export type UpdateAccountMutationResult = Apollo.MutationResult<UpdateAccountMutation>;
 export type UpdateAccountMutationOptions = Apollo.BaseMutationOptions<UpdateAccountMutation, UpdateAccountMutationVariables>;
+export const BanUserDocument = gql`
+    mutation BanUser($userid: String, $isbanid: Int) {
+  ban_user(userid: $userid, isbanid: $isbanid) {
+    userid
+  }
+}
+    `;
+export type BanUserMutationFn = Apollo.MutationFunction<BanUserMutation, BanUserMutationVariables>;
+
+/**
+ * __useBanUserMutation__
+ *
+ * To run a mutation, you first call `useBanUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBanUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [banUserMutation, { data, loading, error }] = useBanUserMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      isbanid: // value for 'isbanid'
+ *   },
+ * });
+ */
+export function useBanUserMutation(baseOptions?: Apollo.MutationHookOptions<BanUserMutation, BanUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BanUserMutation, BanUserMutationVariables>(BanUserDocument, options);
+      }
+export type BanUserMutationHookResult = ReturnType<typeof useBanUserMutation>;
+export type BanUserMutationResult = Apollo.MutationResult<BanUserMutation>;
+export type BanUserMutationOptions = Apollo.BaseMutationOptions<BanUserMutation, BanUserMutationVariables>;

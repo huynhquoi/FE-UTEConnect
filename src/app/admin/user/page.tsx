@@ -1,12 +1,14 @@
 "use client";
 
 import { User, useGetAccountQuery } from "@/graphql/controller-types";
-import { Avatar, Card, Flex, Table } from "antd";
+import { Avatar, Card, Flex, Space, Table } from "antd";
 import Link from "next/link";
 import { EyeOutlined } from "@ant-design/icons";
+import BanBtn from "@/components/admin/user/BanBtn";
+import UpdateReputation from "@/components/admin/user/UpdateReputation";
 
 const AdminUserPage = () => {
-  const { data, loading } = useGetAccountQuery({
+  const { data, loading, fetchMore } = useGetAccountQuery({
     variables: {
       limit: 100,
       pacing: 1,
@@ -42,15 +44,50 @@ const AdminUserPage = () => {
       key: "email",
     },
     {
+      title: "Reputation",
+      dataIndex: "reputation",
+      key: "reputation",
+      sorter: (a: User, b: User) => (a?.reputation || 0) - (b?.reputation || 0),
+    },
+    {
       title: "",
       dataIndex: "action",
       key: "action",
       render: (_: any, record: User) => (
-        <Link href={`/home/account_manager/${record?.userid}`} target="__blank">
-          <Flex align="center">
-            <EyeOutlined style={{ fontSize: "20px", color: "#000" }} />
-          </Flex>
-        </Link>
+        <>
+          <Space size={"middle"}>
+            <Link
+              href={`/home/account_manager/${record?.userid}`}
+              target="__blank"
+            >
+              <Flex align="center">
+                <EyeOutlined style={{ fontSize: "20px", color: "#000" }} />
+              </Flex>
+            </Link>
+            <BanBtn
+              userId={record?.userid as string}
+              onReload={() =>
+                fetchMore({
+                  variables: {
+                    limit: 100,
+                    pacing: 1,
+                  },
+                })
+              }
+            />
+            <UpdateReputation
+              userId={record?.userid as string}
+              onReload={() =>
+                fetchMore({
+                  variables: {
+                    limit: 100,
+                    pacing: 1,
+                  },
+                })
+              }
+            />
+          </Space>
+        </>
       ),
     },
   ];

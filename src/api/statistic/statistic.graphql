@@ -1,0 +1,7 @@
+query getStatisticUser($year: Int) {
+  statistic_user(year: $year)
+}
+
+query getStatisticPost($year: Int) {
+  statistic_post(year: $year)
+}
