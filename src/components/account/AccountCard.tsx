@@ -14,7 +14,7 @@ const AccountCard = ({ user }: AccountCardProps) => {
   const accountUser = useGlobalStore();
   return (
     <>
-      <Card style={{ width: "94%" }}>
+      <Card style={{ width: "94%", marginTop: "20px" }}>
         <Flex justify="space-between">
           <Flex>
             <Avatar src={user?.image} size={64} />

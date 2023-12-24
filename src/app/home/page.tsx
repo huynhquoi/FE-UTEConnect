@@ -19,12 +19,15 @@ import {
 import "./style.scss";
 import {
   Post,
+  User,
+  useFindUserByKeywordQuery,
   useGetAllFollowPostQuery,
   useGetPostByKeyWordsQuery,
 } from "@/graphql/controller-types";
 import { useEffect, useState } from "react";
 import { useGlobalStore } from "@/hook/useUser";
 import Meta from "antd/es/card/Meta";
+import AccountCard from "@/components/account/AccountCard";
 
 const HomePage = () => {
   const user = useGlobalStore();
@@ -32,6 +35,12 @@ const HomePage = () => {
   const [keywords, setKeywords] = useState("");
   const { data, loading, fetchMore } = useGetPostByKeyWordsQuery({
     variables: { keyword: keywords },
+  });
+
+  const { data: searchUser } = useFindUserByKeywordQuery({
+    variables: {
+      keyword: keywords,
+    },
   });
 
   const { data: followPost } = useGetAllFollowPostQuery({
@@ -80,7 +89,7 @@ const HomePage = () => {
                   className="flex items-center justify-between"
                   onFinish={onFinish}
                 >
-                  <Form.Item name="keyword" className="w-[640px]">
+                  <Form.Item name="keyword" className="w-[560px]">
                     <XInput placeholder="Nhập từ khóa tìm kiếm"></XInput>
                   </Form.Item>
                   <Form.Item>
@@ -88,6 +97,11 @@ const HomePage = () => {
                   </Form.Item>
                 </Form>
               </Card>
+              {!loading &&
+                !!keywords &&
+                searchUser?.get_user_by_keyword?.map((u) => (
+                  <AccountCard key={u?.userid} user={u as User} />
+                ))}
 
               {!loading
                 ? data?.find_post_by_keyword

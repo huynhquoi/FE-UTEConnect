@@ -38,10 +38,10 @@ const MyPostPage = () => {
         }}
       >
         <Row style={{ width: "full-width" }}>
-          <Col span={6}>
+          <Col span={7}>
             <ActionMenu className="w-full ml-4" />
           </Col>
-          <Col span={12}>
+          <Col span={10}>
             <div
               style={{ width: "100%" }}
               className=" flex flex-col items-center justify-center"
@@ -77,7 +77,7 @@ const MyPostPage = () => {
               )}
             </div>
           </Col>
-          <Col span={6}></Col>
+          <Col span={7}></Col>
         </Row>
       </ConfigProvider>
     </>

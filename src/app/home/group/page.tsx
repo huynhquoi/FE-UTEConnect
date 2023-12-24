@@ -76,7 +76,7 @@ const GroupPage = () => {
                   className="flex items-center justify-between"
                   onFinish={onFinish}
                 >
-                  <Form.Item name="keyword" className="w-[640px]">
+                  <Form.Item name="keyword" className="w-[560px]">
                     <XInput placeholder="Nhập từ khóa tìm kiếm"></XInput>
                   </Form.Item>
                   <Form.Item>
