@@ -533,6 +533,7 @@ export type Query = {
   /**     Report */
   get_report_by_type?: Maybe<Array<Maybe<Report>>>;
   get_top_reputation_user?: Maybe<Array<Maybe<User>>>;
+  get_user_by_keyword?: Maybe<Array<Maybe<User>>>;
   /**    User_Group */
   get_user_in_group?: Maybe<Array<Maybe<User_Group>>>;
   iconList?: Maybe<Array<Maybe<Icon>>>;
@@ -542,6 +543,7 @@ export type Query = {
   /**     Post */
   post?: Maybe<Array<Maybe<Post>>>;
   statistic_post?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
+  statistic_post_in_topic?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
   /**    Statistic */
   statistic_user?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
   /**     Topic */
@@ -698,6 +700,11 @@ export type QueryGet_Group_By_UseridArgs = {
 
 export type QueryGet_Report_By_TypeArgs = {
   type?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGet_User_By_KeywordArgs = {
+  keyword?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1335,6 +1342,13 @@ export type GetAllBanAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllBanAccountQuery = { __typename?: 'Query', get_list_ban_user?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
+
+export type FindUserByKeywordQueryVariables = Exact<{
+  keyword?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type FindUserByKeywordQuery = { __typename?: 'Query', get_user_by_keyword?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
 
 export type UpdateAccountMutationVariables = Exact<{
   user?: InputMaybe<UserRequest>;
@@ -3850,6 +3864,58 @@ export type GetAllBanAccountQueryHookResult = ReturnType<typeof useGetAllBanAcco
 export type GetAllBanAccountLazyQueryHookResult = ReturnType<typeof useGetAllBanAccountLazyQuery>;
 export type GetAllBanAccountSuspenseQueryHookResult = ReturnType<typeof useGetAllBanAccountSuspenseQuery>;
 export type GetAllBanAccountQueryResult = Apollo.QueryResult<GetAllBanAccountQuery, GetAllBanAccountQueryVariables>;
+export const FindUserByKeywordDocument = gql`
+    query FindUserByKeyword($keyword: String) {
+  get_user_by_keyword(keyword: $keyword) {
+    username
+    fullname
+    email
+    address
+    role {
+      roleid
+    }
+    phone
+    image
+    gender
+    birthday
+    userid
+    reputation
+  }
+}
+    `;
+
+/**
+ * __useFindUserByKeywordQuery__
+ *
+ * To run a query within a React component, call `useFindUserByKeywordQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindUserByKeywordQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindUserByKeywordQuery({
+ *   variables: {
+ *      keyword: // value for 'keyword'
+ *   },
+ * });
+ */
+export function useFindUserByKeywordQuery(baseOptions?: Apollo.QueryHookOptions<FindUserByKeywordQuery, FindUserByKeywordQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindUserByKeywordQuery, FindUserByKeywordQueryVariables>(FindUserByKeywordDocument, options);
+      }
+export function useFindUserByKeywordLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindUserByKeywordQuery, FindUserByKeywordQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindUserByKeywordQuery, FindUserByKeywordQueryVariables>(FindUserByKeywordDocument, options);
+        }
+export function useFindUserByKeywordSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FindUserByKeywordQuery, FindUserByKeywordQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindUserByKeywordQuery, FindUserByKeywordQueryVariables>(FindUserByKeywordDocument, options);
+        }
+export type FindUserByKeywordQueryHookResult = ReturnType<typeof useFindUserByKeywordQuery>;
+export type FindUserByKeywordLazyQueryHookResult = ReturnType<typeof useFindUserByKeywordLazyQuery>;
+export type FindUserByKeywordSuspenseQueryHookResult = ReturnType<typeof useFindUserByKeywordSuspenseQuery>;
+export type FindUserByKeywordQueryResult = Apollo.QueryResult<FindUserByKeywordQuery, FindUserByKeywordQueryVariables>;
 export const UpdateAccountDocument = gql`
     mutation UpdateAccount($user: UserRequest) {
   account_update(user: $user) {

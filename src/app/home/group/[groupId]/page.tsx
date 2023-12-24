@@ -77,9 +77,9 @@ const GroupDetailPage = () => {
             style={{ display: "flex !important" }}
             className="justify-end"
           >
-            <Affix offsetTop={180}>
-              <div className="mt-5">
-                <Card>
+            <Affix offsetTop={180} style={{width: "100%"}}>
+              <div className="mt-5" style={{width: "100%"}}>
+                <Card style={{width: "100%"}}>
                   <div className="text-xl font-bold">Thông tin nhóm</div>
                   <div className="text-base font-semibold mt-2">
                     Thành lập ngày

@@ -1,17 +1,23 @@
 "use client";
 
-import { User, useGetAccountQuery } from "@/graphql/controller-types";
+import {
+  User,
+  useFindUserByKeywordQuery,
+  useGetAccountQuery,
+} from "@/graphql/controller-types";
 import { Avatar, Card, Flex, Space, Table } from "antd";
 import Link from "next/link";
 import { EyeOutlined } from "@ant-design/icons";
 import BanBtn from "@/components/admin/user/BanBtn";
 import UpdateReputation from "@/components/admin/user/UpdateReputation";
+import { useState } from "react";
+import XInput from "@/components/core/XInput";
 
 const AdminUserPage = () => {
-  const { data, loading, fetchMore } = useGetAccountQuery({
+  const [keywords, setKeywords] = useState("");
+  const { data, loading, fetchMore } = useFindUserByKeywordQuery({
     variables: {
-      limit: 100,
-      pacing: 1,
+      keyword: keywords,
     },
   });
   const columns = [
@@ -95,8 +101,20 @@ const AdminUserPage = () => {
     <>
       <Flex justify="center" style={{ width: "100%" }}>
         <Card style={{ width: "94%" }}>
+          <Flex align="center" justify="start">
+            <XInput
+              style={{
+                width: "500px",
+                height: "40px",
+                marginBottom: "24px",
+                border: "1px solid #000",
+              }}
+              placeholder="Tìm kiếm bài viết theo tiêu đề"
+              onChange={(e) => setKeywords(e?.target?.value)}
+            />
+          </Flex>
           <Table
-            dataSource={data?.account as User[]}
+            dataSource={data?.get_user_by_keyword as User[]}
             columns={columns}
             loading={loading}
           />

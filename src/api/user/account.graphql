@@ -52,6 +52,24 @@ query GetAllBanAccount {
   }
 }
 
+query FindUserByKeyword($keyword: String) {
+  get_user_by_keyword(keyword: $keyword) {
+    username
+    fullname
+    email
+    address
+    role {
+      roleid
+    }
+    phone
+    image
+    gender
+    birthday
+    userid
+    reputation
+  }
+}
+
 mutation UpdateAccount($user: UserRequest) {
   account_update(user: $user) {
     userid

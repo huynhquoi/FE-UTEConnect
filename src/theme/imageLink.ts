@@ -1,2 +1,2 @@
 export const LOGIN_IMAGE =
-  " https://www.architectureartdesigns.com/wp-content/uploads/2013/03/Huga-Fab-III-and-Headquarters-Building-1.jpg";
+  "https://tuyensinh.tvu.edu.vn/uploads/news/2021_09/quy-trinh-1.jpg";
