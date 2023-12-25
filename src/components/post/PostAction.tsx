@@ -5,6 +5,7 @@ import {
   useFindPosLikeQuery,
   useGetPostDislikeQuery,
   useGetPostLikeQuery,
+  usePostLikedByUserPkQuery,
 } from "@/graphql/controller-types";
 import { Button, Flex, Space } from "antd";
 import { useEffect, useState } from "react";
@@ -38,10 +39,9 @@ const PostAction = ({ postId, userId, post, isFollow }: PostActionProps) => {
   const [isReact, setIsReact] = useState(false);
   const [reacted, setReacted] = useState(0);
 
-  const { data: postReaction, fetchMore } = useFindPosLikeQuery({
+  const { data: postReaction, fetchMore } = usePostLikedByUserPkQuery({
     variables: {
-      postid: postId,
-      userid: userId,
+      userid: user?.userid,
     },
   });
 
@@ -61,13 +61,15 @@ const PostAction = ({ postId, userId, post, isFollow }: PostActionProps) => {
       return;
     }
     if (
-      postReaction?.find_postlike_by_postid_and_userid?.post_postlike
-        ?.postid === postId
+      postReaction?.find_postlike_byuserid?.some(
+        (e) => e?.post_postlike?.postid === postId
+      )
     ) {
       setIsReact(true);
       setReacted(
-        postReaction?.find_postlike_by_postid_and_userid?.icon_postlike
-          ?.iconid as number
+        postReaction?.find_postlike_byuserid?.filter(
+          (e) => e?.post_postlike?.postid === postId
+        )[0]?.icon_postlike?.iconid as number
       );
     } else {
       setIsReact(false);
@@ -93,7 +95,7 @@ const PostAction = ({ postId, userId, post, isFollow }: PostActionProps) => {
       fetchMore({
         variables: {
           postid: postId,
-          userid: userId,
+          userid: user?.userid,
         },
       });
     };
@@ -101,7 +103,7 @@ const PostAction = ({ postId, userId, post, isFollow }: PostActionProps) => {
       CreateReaction({
         variables: {
           postid: postId,
-          userid: userId,
+          userid: user?.userid,
           iconid: reaction,
         },
       }).then(() => {
@@ -112,7 +114,7 @@ const PostAction = ({ postId, userId, post, isFollow }: PostActionProps) => {
         variables: {
           iconid: reacted,
           postid: postId,
-          userid: userId,
+          userid: user?.userid,
         },
       }).then(() => {
         fetchData();
