@@ -1,17 +1,71 @@
 "use client";
 
-import { User } from "@/graphql/controller-types";
+import {
+  User,
+  useCreateNotificationMutation,
+  useLeaveGroupMutation,
+} from "@/graphql/controller-types";
 import { useGlobalStore } from "@/hook/useUser";
-import { Avatar, Card, Flex, Space } from "antd";
+import { Avatar, Button, Card, Flex, Space } from "antd";
 import FollowButton from "../shared/FollowButon";
 import ReportButton from "../shared/ReportButton";
+import { useEffect, useState } from "react";
 
 type AccountCardProps = {
   user: User;
+  inGroup?: boolean;
+  groupId?: number;
+  groupName?: string;
+  onReload?: () => void;
 };
 
-const AccountCard = ({ user }: AccountCardProps) => {
+const AccountCard = ({
+  user,
+  inGroup,
+  groupId,
+  groupName,
+  onReload,
+}: AccountCardProps) => {
   const accountUser = useGlobalStore();
+  const [removeUser] = useLeaveGroupMutation();
+  const [submit, setSubmit] = useState(false);
+  const [createNoti] = useCreateNotificationMutation();
+
+  useEffect(() => {
+    if (!submit) {
+      return;
+    }
+    removeUser({
+      variables: {
+        groupid: groupId,
+        userid: user?.userid,
+      },
+    })
+      .then(() => {
+        createNoti({
+          variables: {
+            content: `Bạn đã bị mời khỏi nhóm <div className={font-bold}>${groupName}</div>`,
+            subject: 0,
+            type: 10,
+            userid: user?.userid,
+          },
+        });
+      })
+      .then(() => {
+        setSubmit(false);
+        if (typeof onReload === "function") {
+          void onReload();
+        }
+      });
+  }, [
+    createNoti,
+    groupId,
+    groupName,
+    onReload,
+    removeUser,
+    submit,
+    user?.userid,
+  ]);
   return (
     <>
       <Card style={{ width: "94%", marginTop: "20px" }}>
@@ -30,6 +84,9 @@ const AccountCard = ({ user }: AccountCardProps) => {
               followerId={accountUser?.userid}
             />
             <ReportButton userReportId={user?.userid} />
+            {inGroup && (
+              <Button onClick={() => setSubmit(true)}>Xóa khỏi nhóm</Button>
+            )}
           </Space>
         </Flex>
       </Card>
