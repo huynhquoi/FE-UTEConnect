@@ -880,6 +880,13 @@ export type CreateCommentChildMutationVariables = Exact<{
 
 export type CreateCommentChildMutation = { __typename?: 'Mutation', create_comment_in_comment?: string | null };
 
+export type DeleteCommentByPkMutationVariables = Exact<{
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteCommentByPkMutation = { __typename?: 'Mutation', delete_comment_by_pk?: string | null };
+
 export type GetPostCommentQueryVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
 }>;
@@ -1539,6 +1546,37 @@ export function useCreateCommentChildMutation(baseOptions?: Apollo.MutationHookO
 export type CreateCommentChildMutationHookResult = ReturnType<typeof useCreateCommentChildMutation>;
 export type CreateCommentChildMutationResult = Apollo.MutationResult<CreateCommentChildMutation>;
 export type CreateCommentChildMutationOptions = Apollo.BaseMutationOptions<CreateCommentChildMutation, CreateCommentChildMutationVariables>;
+export const DeleteCommentByPkDocument = gql`
+    mutation DeleteCommentByPk($commentid: Int) {
+  delete_comment_by_pk(commentid: $commentid)
+}
+    `;
+export type DeleteCommentByPkMutationFn = Apollo.MutationFunction<DeleteCommentByPkMutation, DeleteCommentByPkMutationVariables>;
+
+/**
+ * __useDeleteCommentByPkMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentByPkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentByPkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentByPkMutation, { data, loading, error }] = useDeleteCommentByPkMutation({
+ *   variables: {
+ *      commentid: // value for 'commentid'
+ *   },
+ * });
+ */
+export function useDeleteCommentByPkMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommentByPkMutation, DeleteCommentByPkMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCommentByPkMutation, DeleteCommentByPkMutationVariables>(DeleteCommentByPkDocument, options);
+      }
+export type DeleteCommentByPkMutationHookResult = ReturnType<typeof useDeleteCommentByPkMutation>;
+export type DeleteCommentByPkMutationResult = Apollo.MutationResult<DeleteCommentByPkMutation>;
+export type DeleteCommentByPkMutationOptions = Apollo.BaseMutationOptions<DeleteCommentByPkMutation, DeleteCommentByPkMutationVariables>;
 export const GetPostCommentDocument = gql`
     query GetPostComment($postid: Int) {
   find_all_comment_by_postid(postid: $postid) {

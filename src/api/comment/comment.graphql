@@ -33,6 +33,10 @@ mutation CreateCommentChild(
   )
 }
 
+mutation DeleteCommentByPk($commentid: Int) {
+  delete_comment_by_pk(commentid: $commentid)
+}
+
 query GetPostComment($postid: Int) {
   find_all_comment_by_postid(postid: $postid) {
     ...Comment

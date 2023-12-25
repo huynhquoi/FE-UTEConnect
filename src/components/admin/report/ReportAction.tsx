@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import {
   Report,
   useCreateNotificationMutation,
+  useDeleteCommentByPkMutation,
   useDeleteCommentReportMutation,
   useDeletePostByPkMutation,
   useDeletePostReportMutation,
@@ -44,6 +45,7 @@ const ReportAction = ({
   const [deleteReportComment] = useDeleteCommentReportMutation();
 
   const [DeletePost] = useDeletePostByPkMutation();
+  const [DeleteComment] = useDeleteCommentByPkMutation();
   const [UpdateReputation] = useUpdateReputationMutation();
   const [CreateNotification] = useCreateNotificationMutation();
 
@@ -64,6 +66,22 @@ const ReportAction = ({
       UpdateReputation({
         variables: { userid: userReportId!, reputation: -reputation },
       })
+        .catch((error) => console.log(error))
+        .then(() => {
+          DeleteComment({
+            variables: {
+              commentid: commentReportId,
+            },
+          });
+          CreateNotification({
+            variables: {
+              type: 10,
+              subject: postReportId,
+              userid: userId,
+              content: `Binhf luận của bạn đã bị xóa vì vi phạm nội quy. Bạn sẽ bị trừ ${reputation} điểm reputation `,
+            },
+          });
+        })
         .catch((error) => console.log(error))
         .then(() => {
           setCheckDeleteDone(false);
@@ -96,6 +114,7 @@ const ReportAction = ({
     }
   }, [
     CreateNotification,
+    DeleteComment,
     DeletePost,
     UpdateReputation,
     checkDeleteDone,
