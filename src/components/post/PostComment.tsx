@@ -29,6 +29,7 @@ const PostComment = ({ postId }: PostCommentProps) => {
   });
 
   const [createComment] = useCreateCommentMutation();
+  console.log(user?.userid);
 
   useEffect(() => {
     if (!content) {
