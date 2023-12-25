@@ -1231,14 +1231,14 @@ export type DeleteCommentReactionMutationVariables = Exact<{
 
 export type DeleteCommentReactionMutation = { __typename?: 'Mutation', delete_icon_for_commentlike?: string | null };
 
-export type ReportFragment = { __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, title?: string | null, user_post?: { __typename?: 'User', userid: string } | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null };
+export type ReportFragment = { __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, title?: string | null, user_post?: { __typename?: 'User', userid: string } | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null, user_comment?: { __typename?: 'User', userid: string } | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null };
 
 export type GetReportByTypeQueryVariables = Exact<{
   type?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetReportByTypeQuery = { __typename?: 'Query', get_report_by_type?: Array<{ __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, title?: string | null, user_post?: { __typename?: 'User', userid: string } | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
+export type GetReportByTypeQuery = { __typename?: 'Query', get_report_by_type?: Array<{ __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, title?: string | null, user_post?: { __typename?: 'User', userid: string } | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null, user_comment?: { __typename?: 'User', userid: string } | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
 
 export type CreateUserReportMutationVariables = Exact<{
   report?: InputMaybe<ReportRequest>;
@@ -1468,6 +1468,9 @@ export const ReportFragmentDoc = gql`
   comment_report {
     commentid
     content
+    user_comment {
+      userid
+    }
   }
   user_reporter {
     userid

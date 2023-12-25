@@ -48,6 +48,7 @@ const ReportAction = ({
   const [DeleteComment] = useDeleteCommentByPkMutation();
   const [UpdateReputation] = useUpdateReputationMutation();
   const [CreateNotification] = useCreateNotificationMutation();
+  console.log(userId)
 
   useEffect(() => {
     if (!checkDeleteDone) {
@@ -64,7 +65,7 @@ const ReportAction = ({
         });
     } else if (commentReportId) {
       UpdateReputation({
-        variables: { userid: userId!, reputation: -reputation },
+        variables: { userid: userId, reputation: -reputation },
       })
         .catch((error) => console.log(error))
         .then(() => {
@@ -76,9 +77,9 @@ const ReportAction = ({
           CreateNotification({
             variables: {
               type: 10,
-              subject: postReportId,
+              subject: commentReportId,
               userid: userId,
-              content: `Binhf luận của bạn đã bị xóa vì vi phạm nội quy. Bạn sẽ bị trừ ${reputation} điểm reputation `,
+              content: `Bình luận của bạn đã bị xóa vì vi phạm nội quy. Bạn sẽ bị trừ ${reputation} điểm reputation `,
             },
           });
         })

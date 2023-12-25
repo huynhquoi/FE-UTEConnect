@@ -19,6 +19,9 @@ fragment Report on Report {
   comment_report {
     commentid
     content
+    user_comment {
+      userid
+    }
   }
   user_reporter {
     userid
