@@ -41,7 +41,7 @@ const ActionMenu = ({ className, inAccount }: ActionMenuProps) => {
           <Avatar src={user?.image} size={34} />
         </>
       ),
-      href: `home/account_manager/${user?.userid}`,
+      href: `/home/account_manager/${user?.userid}`,
     },
     {
       label: "Đang theo dõi",
