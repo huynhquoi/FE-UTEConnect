@@ -44,7 +44,7 @@ const AccountCard = ({
       .then(() => {
         createNoti({
           variables: {
-            content: `Bạn đã bị mời khỏi nhóm <div className={font-bold}>${groupName}</div>`,
+            content: `Bạn đã bị mời khỏi nhóm <p className="font-bold">${groupName}</p>`,
             subject: 0,
             type: 10,
             userid: user?.userid,

@@ -206,7 +206,7 @@ const GroupDetailPage = () => {
                   ) : (
                     <Empty
                       style={{ marginTop: 20 }}
-                      description={"Bạn chưa có bài viết nào"}
+                      description={"Chưa có thành viên nào"}
                     />
                   )
                 ) : (
