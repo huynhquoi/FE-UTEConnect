@@ -64,7 +64,7 @@ const ReportAction = ({
         });
     } else if (commentReportId) {
       UpdateReputation({
-        variables: { userid: userReportId!, reputation: -reputation },
+        variables: { userid: userId!, reputation: -reputation },
       })
         .catch((error) => console.log(error))
         .then(() => {

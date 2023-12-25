@@ -104,7 +104,11 @@ const ReportPage = () => {
           postReportId={
             reportType === REPORT_POST ? record?.post_report?.postid : 0
           }
-          userId={record?.post_report?.user_post?.userid}
+          userId={
+            reportType === REPORT_POST || reportType === REPORT_COMMENT
+              ? record?.post_report?.user_post?.userid
+              : ""
+          }
         />
       ),
     },
