@@ -31,13 +31,13 @@ ChartJS.register(
 const StatisticsPage = () => {
   const { data: user } = useGetStatisticUserQuery({
     variables: {
-      year: 2023,
+      year: 2024,
     },
   });
 
   const { data: post } = useGetStatisticPostQuery({
     variables: {
-      year: 2023,
+      year: 2024,
     },
   });
   return (

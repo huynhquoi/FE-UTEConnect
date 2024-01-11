@@ -5,13 +5,15 @@ import {
   useFindUserByKeywordQuery,
   useGetAccountQuery,
 } from "@/graphql/controller-types";
-import { Avatar, Card, Flex, Space, Table } from "antd";
+import { Avatar, Card, Flex, Select, Space, Table } from "antd";
 import Link from "next/link";
 import { EyeOutlined } from "@ant-design/icons";
 import BanBtn from "@/components/admin/user/BanBtn";
 import UpdateReputation from "@/components/admin/user/UpdateReputation";
 import { useState } from "react";
 import XInput from "@/components/core/XInput";
+
+const { Option } = Select;
 
 const AdminUserPage = () => {
   const [keywords, setKeywords] = useState("");
@@ -20,6 +22,7 @@ const AdminUserPage = () => {
       keyword: keywords,
     },
   });
+  const [filterRole, setFilterRole] = useState(2);
   const columns = [
     {
       title: "",
@@ -27,6 +30,15 @@ const AdminUserPage = () => {
       render: (_: any, record: User, index: number) => (
         <>
           <div className="">{index + 1}</div>
+        </>
+      ),
+    },
+    {
+      title: "Quyền",
+      dataIndex: "role",
+      render: (_: any, record: User, index: number) => (
+        <>
+          <div className="">{record?.role?.rolename}</div>
         </>
       ),
     },
@@ -109,12 +121,28 @@ const AdminUserPage = () => {
                 marginBottom: "24px",
                 border: "1px solid #000",
               }}
-              placeholder="Tìm kiếm bài viết theo tiêu đề"
+              placeholder="Tìm kiếm người dùng theo tên"
               onChange={(e) => setKeywords(e?.target?.value)}
             />
+            <Select
+              onChange={(value: any) => setFilterRole(value)}
+              defaultValue={filterRole}
+              style={{ width: "160px", height: "40px", marginBottom: "24px", marginLeft: "12px" }}
+            >
+              <Option key={1} value={1}>
+                Admin
+              </Option>
+              <Option key={2} value={2}>
+                User
+              </Option>
+            </Select>
           </Flex>
           <Table
-            dataSource={data?.get_user_by_keyword as User[]}
+            dataSource={
+              data?.get_user_by_keyword?.filter(
+                (e) => e?.role?.roleid === filterRole
+              ) as User[]
+            }
             columns={columns}
             loading={loading}
           />

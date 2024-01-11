@@ -31,6 +31,7 @@ import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import AccountShortcuts from "@/components/account/AccountShortcuts";
 import GroupImageHeader from "@/components/group/GroupImageHeader";
+import AccountCardInfo from "@/components/account/AccountCardInfo";
 
 const AccountDetailPage = () => {
   const params = useParams();
@@ -60,7 +61,7 @@ const AccountDetailPage = () => {
           },
         }}
       >
-        <GroupImageHeader image={accountUser?.image || ""} />
+        <GroupImageHeader image={user?.find_account_by_id?.image || ""} />
         <AccountCardHeader
           user={user?.find_account_by_id as User}
           style={{ width: "100%", borderRadius: 0 }}
@@ -77,12 +78,13 @@ const AccountDetailPage = () => {
           <Col span={16}>
             <Row>
               <Col span={7}>
-                <div className="mt-5">
-                  <ActionMenu
-                    inAccount={true}
-                    className="w-full"
-                  />
-                </div>
+                {user?.find_account_by_id?.userid === accountUser?.userid ? (
+                  <div className="mt-5">
+                    <ActionMenu inAccount={true} className="w-full" />
+                  </div>
+                ) : (
+                  <AccountCardInfo user={user?.find_account_by_id as User} />
+                )}
               </Col>
               <Col span={17}>
                 <div

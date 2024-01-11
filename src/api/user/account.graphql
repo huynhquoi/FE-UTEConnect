@@ -7,6 +7,7 @@ query GetAccount($limit: Int, $pacing: Int) {
     address
     role {
       roleid
+      rolename
     }
     phone
     image
@@ -24,6 +25,7 @@ query GetAccountByPk($userId: String!) {
     address
     role {
       roleid
+      rolename
     }
     phone
     image
@@ -42,6 +44,7 @@ query GetAllBanAccount {
     address
     role {
       roleid
+      rolename
     }
     phone
     image
@@ -60,6 +63,7 @@ query FindUserByKeyword($keyword: String) {
     address
     role {
       roleid
+      rolename
     }
     phone
     image

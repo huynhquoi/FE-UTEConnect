@@ -860,7 +860,7 @@ export type ViewPost = {
   viewid: Scalars['Int']['output'];
 };
 
-export type CommentFragment = { __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null };
+export type CommentFragment = { __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null };
 
 export type CreateCommentMutationVariables = Exact<{
   comment?: InputMaybe<CommentRequest>;
@@ -892,7 +892,7 @@ export type GetPostCommentQueryVariables = Exact<{
 }>;
 
 
-export type GetPostCommentQuery = { __typename?: 'Query', find_all_comment_by_postid?: Array<{ __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, comment_comment?: { __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null> | null };
+export type GetPostCommentQuery = { __typename?: 'Query', find_all_comment_by_postid?: Array<{ __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, comment_comment?: { __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null> | null };
 
 export type GetCommentChildQueryVariables = Exact<{
   commentparentid?: InputMaybe<Scalars['Int']['input']>;
@@ -900,7 +900,7 @@ export type GetCommentChildQueryVariables = Exact<{
 }>;
 
 
-export type GetCommentChildQuery = { __typename?: 'Query', find_all_comment_by_commentparentid?: Array<{ __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, comment_comment?: { __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null> | null };
+export type GetCommentChildQuery = { __typename?: 'Query', find_all_comment_by_commentparentid?: Array<{ __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, comment_comment?: { __typename?: 'Comment', commentid: number, createday?: any | null, updateday?: any | null, content?: string | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null> | null };
 
 export type CreateFollowMutationVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1336,26 +1336,26 @@ export type GetAccountQueryVariables = Exact<{
 }>;
 
 
-export type GetAccountQuery = { __typename?: 'Query', account?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
+export type GetAccountQuery = { __typename?: 'Query', account?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, reputation?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null } | null> | null };
 
 export type GetAccountByPkQueryVariables = Exact<{
   userId: Scalars['String']['input'];
 }>;
 
 
-export type GetAccountByPkQuery = { __typename?: 'Query', find_account_by_id?: { __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null };
+export type GetAccountByPkQuery = { __typename?: 'Query', find_account_by_id?: { __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null } | null };
 
 export type GetAllBanAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllBanAccountQuery = { __typename?: 'Query', get_list_ban_user?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
+export type GetAllBanAccountQuery = { __typename?: 'Query', get_list_ban_user?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null } | null> | null };
 
 export type FindUserByKeywordQueryVariables = Exact<{
   keyword?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type FindUserByKeywordQuery = { __typename?: 'Query', get_user_by_keyword?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number } | null } | null> | null };
+export type FindUserByKeywordQuery = { __typename?: 'Query', get_user_by_keyword?: Array<{ __typename?: 'User', username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, image?: string | null, gender?: string | null, birthday?: any | null, userid: string, reputation?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null } | null> | null };
 
 export type UpdateAccountMutationVariables = Exact<{
   user?: InputMaybe<UserRequest>;
@@ -1379,6 +1379,7 @@ export const CommentFragmentDoc = gql`
     userid
     username
     fullname
+    image
   }
   post_comment {
     postid
@@ -3759,6 +3760,7 @@ export const GetAccountDocument = gql`
     address
     role {
       roleid
+      rolename
     }
     phone
     image
@@ -3811,6 +3813,7 @@ export const GetAccountByPkDocument = gql`
     address
     role {
       roleid
+      rolename
     }
     phone
     image
@@ -3863,6 +3866,7 @@ export const GetAllBanAccountDocument = gql`
     address
     role {
       roleid
+      rolename
     }
     phone
     image
@@ -3914,6 +3918,7 @@ export const FindUserByKeywordDocument = gql`
     address
     role {
       roleid
+      rolename
     }
     phone
     image

@@ -12,6 +12,7 @@ import { loginApi } from "@/api/auth";
 
 const LoginPage = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const [formValue, setFormValue] = useState({
     username: "",
@@ -20,6 +21,7 @@ const LoginPage = () => {
   const [submit, setSubmit] = useState(false);
   const onFinish = (value: any) => {
     console.log("Success", value);
+    setLoading(true);
     setFormValue({
       username: value.email,
       password: value.password,
@@ -31,7 +33,7 @@ const LoginPage = () => {
     if (!submit) {
       return;
     }
-    if(typeof window === "undefined") {
+    if (typeof window === "undefined") {
       return;
     }
     const fetchData = async () => {
@@ -40,7 +42,9 @@ const LoginPage = () => {
         setSubmit(false);
         localStorage.setItem("response", responseLogin.id);
         router.push("/");
+        setLoading(false);
       } catch (error: any) {
+        setLoading(false);
         console.log(error.response.data);
       }
     };
@@ -102,6 +106,7 @@ const LoginPage = () => {
                     htmlType="submit"
                     style={{ background: "#000", color: "#fff" }}
                     className="w-full"
+                    loading={loading}
                   >
                     Đăng nhập
                   </Button>
@@ -111,6 +116,7 @@ const LoginPage = () => {
                     style={{ background: "#fff", color: "#000" }}
                     className="w-full"
                     href="register"
+                    disabled={loading}
                   >
                     Đăng ký
                   </Button>

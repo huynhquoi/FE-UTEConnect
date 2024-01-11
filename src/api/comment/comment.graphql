@@ -4,6 +4,7 @@ fragment Comment on Comment {
     userid
     username
     fullname
+    image
   }
   post_comment {
     postid

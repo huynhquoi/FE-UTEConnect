@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { DeleteOutlined, EyeOutlined, CheckOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import ReportAction from "@/components/admin/report/ReportAction";
+import dayjs from "dayjs";
 
 const { Option } = Select;
 
@@ -79,7 +80,9 @@ const ReportPage = () => {
     {
       title: "Ngày tạo",
       dataIndex: "createday",
-      key: "createday",
+      render: (_: any, record: Report) => (
+        <div className="">{dayjs(record?.createday).format("DD/MM/YYYY, HH:mm")}</div>
+      )
     },
     {
       title: "",

@@ -48,6 +48,12 @@ const GroupDetailPage = () => {
     },
   });
 
+  const { data: group } = useGetGroupByPkQuery({
+    variables: {
+      groupid: parseInt(param?.groupId as string),
+    },
+  });
+
   const {
     data: groupUser,
     loading: loadUser,
@@ -200,6 +206,10 @@ const GroupDetailPage = () => {
                         }
                         groupName={
                           data?.get_group_by_groupid?.groupname as string
+                        }
+                        isAdminGroup={
+                          group?.get_group_by_groupid?.user_group?.userid ===
+                          user?.userid
                         }
                       />
                     ))

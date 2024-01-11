@@ -7,6 +7,7 @@ import { EyeOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import XInput from "@/components/core/XInput";
+import dayjs from "dayjs";
 
 const ForumPage = () => {
   const router = useRouter();
@@ -35,7 +36,13 @@ const ForumPage = () => {
     {
       title: "Ngày tạo",
       dataIndex: "createday",
-      key: "createday",
+      render: (_: any, record: Group) => (
+        <>
+          <div className="">
+            {dayjs(record?.createday).format("DD/MM/YYYY, HH:mm")}
+          </div>
+        </>
+      ),
     },
     {
       title: "",

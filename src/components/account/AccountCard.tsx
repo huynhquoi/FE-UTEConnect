@@ -16,6 +16,7 @@ type AccountCardProps = {
   inGroup?: boolean;
   groupId?: number;
   groupName?: string;
+  isAdminGroup?: boolean;
   onReload?: () => void;
 };
 
@@ -24,6 +25,7 @@ const AccountCard = ({
   inGroup,
   groupId,
   groupName,
+  isAdminGroup,
   onReload,
 }: AccountCardProps) => {
   const accountUser = useGlobalStore();
@@ -84,7 +86,7 @@ const AccountCard = ({
               followerId={accountUser?.userid}
             />
             <ReportButton userReportId={user?.userid} />
-            {inGroup && (
+            {inGroup && isAdminGroup && (
               <Button onClick={() => setSubmit(true)}>Xóa khỏi nhóm</Button>
             )}
           </Space>

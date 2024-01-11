@@ -12,6 +12,7 @@ import { useGlobalStore } from "@/hook/useUser";
 import { useEffect, useState } from "react";
 import XInput from "@/components/core/XInput";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 const AdminTagPage = () => {
   const user = useGlobalStore();
@@ -42,7 +43,9 @@ const AdminTagPage = () => {
     {
       title: "Ngày tạo",
       dataIndex: "createday",
-      key: "createday",
+      render: (_: any, record: Topic) => (
+        <div className="">{dayjs(record?.createday).format("DD/MM/YYYY, HH:mm")}</div>
+      )
     },
     {
       title: "",
