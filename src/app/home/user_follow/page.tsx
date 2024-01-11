@@ -47,7 +47,7 @@ const FollowUserPage = () => {
               {!loading ? (
                 data?.get_all_follower_by_user?.length ? (
                   data?.get_all_follower_by_user?.map((p) => (
-                    <AccountCard key={p?.userid} user={p as User} />
+                    <AccountCard key={p?.userid} user={p as User} inUserFollow={true}/>
                   ))
                 ) : (
                   <Empty

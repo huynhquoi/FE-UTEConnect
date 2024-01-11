@@ -4,6 +4,7 @@ import {
   useCreateFollowUserMutation,
   useDeleteFollowUserMutation,
   useGetAllFollowUserQuery,
+  useGetAllUserFollowAccountQuery,
 } from "@/graphql/controller-types";
 import { Button, ButtonProps } from "antd";
 import { useEffect, useState } from "react";
@@ -28,6 +29,14 @@ const FollowButton = ({
     },
   });
 
+  const { data: userF, fetchMore: loadUserF } = useGetAllUserFollowAccountQuery(
+    {
+      variables: {
+        userid: userId as string,
+      },
+    }
+  );
+
   useEffect(() => {
     if (!follower) {
       return;
@@ -45,6 +54,11 @@ const FollowButton = ({
             followerid: followerId as string,
           },
         });
+        loadUserF({
+          variables: {
+            userid: userId as string,
+          },
+        });
       });
     } else {
       deleteFollowUser({
@@ -58,6 +72,11 @@ const FollowButton = ({
             followerid: followerId as string,
           },
         });
+        loadUserF({
+          variables: {
+            userid: userId as string,
+          },
+        });
       });
     }
     setFollower("");
@@ -67,6 +86,7 @@ const FollowButton = ({
     fetchMore,
     follower,
     followerId,
+    loadUserF,
     userId,
   ]);
 
