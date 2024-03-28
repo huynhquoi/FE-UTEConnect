@@ -9,7 +9,7 @@ export const { getClient } = registerApolloClient(() => {
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
     link: new HttpLink({
-      uri: "https://be-forum.onrender.com/graphql",
+      uri: "https://kltn2024.onrender.com/graphql",
     }),
   });
 });
